@@ -1,0 +1,200 @@
+https://docs.oracle.com/javase/tutorial/jaxb/intro/index.html
+XML célja: Adatok feldolgozása autómatikusan.
+
+Kategóriák: XML, Jól formál XML, Validációs eljárások.
+
+XSD: XML séma definíció.
+
+XSLT: Transzformációs nyelv: Adott egy XML doksi van hozzá egy XSLT file és az beformázza az XML-t.
+
+XML: Extensible Markup Language: Kiegészíthetõ: A tag-ek nincsenek ledefiniálva h mi lehet benne.
+	Cél: Egy point to point communication szabványosított protokoll segítségéval.
+	Csak az építõköveket specifikálja, a sorrendet nem. Az adat struktúráltsága ránk van bízva.
+	
+	Hol találkozhatunk vele?
+		Build tool. Ant, Maven is XML alapú.
+		XHTML: A HTML-t próbálták megfelelni XML elvárásoknak: Minden TAG-et le kell zárni.
+		WSDL, Web Services: 
+			XML-RPC: A háttérben xml-lel kommmunik a két végpont között a Java kód.
+			SOPA: Single Object Access Protocol: HTTP kommunikáció zajlik: xml doksi kerül be e lekérdezsbe: Van egy Header és egy kontent(envelop)
+			REST: Könnyen kezelhetõ interfész, böngészõvel is lehet debugolni.
+			RSS: xml alapú, viszont külön specifikációk vannak a verzióihoz.
+			
+	Szerkezet:
+		Prológus:
+			Hiba: idegen karakterek (rossz encoding megadás). 
+			
+TAG: kisebb és nyagobb jelek között van. CASE sensitive-k. Szóköz nem lehet a nevekben, mert az attribútumok közé teszünk szóközöket.
+	<elem attribútum="érték"></>
+	//Ha fenn áll a lehetõség h egy attribútum változni fog akkor inkább child tag-ként hozzuk létre.
+			
+	3 különbözõ típusú tag lehet:
+		Nyitó: 	<begintag>
+		Záró:	</endtag>
+		Üres:	<empty/>
+		
+XML Declaration(optional):
+	A document vagy a snippet tetjén:
+		<?xml version="1.0" encoding="UTF-8" ?>
+			
+Nevek:
+	Megengedett:
+		a-z
+		A-Z
+		0-9
+		_ 		//alulvonás
+		'.'		//period
+		Nemzetközi karakterek.
+		
+	Nem megengedett:
+		<xMl> különbözõ permutációi. Csak XML az elfogadott
+		aposztróf
+		
+	Alulvonás vagy betû állhat csak az elsõ helyen.
+		
+Content:
+	Ezeket le kell védeni (escape karakterek) ne kézzel, tool-ok, library-k egysoros fügvényeivel adjuk meg a rájuk való mindenkori hivatkozást.
+		<
+		&
+		>
+		"
+		'
+	CDATA: innetõl kezdve kód jön.
+		<! [CDATA[Lorem..]]>
+Comment: 
+	<!--
+	-->
+		Ez meg van tiltva a kommentek belsejében:	--
+		Ez pedig a végén: --->
+			
+Processing Instructions: (Ha egy programozási nyelv van beégetve a html-be.) (Fordítás függõ viselkedést határoz meg)
+	<? itt bármi lehet amit az értelmezõ végre tud hajtani ?>
+	
+XML deklaráció: opcionális. Ha van ezzel kell kezdeni.
+		Három dolgot lehet beleírni: Version, Encoding, Standalone -Van-e hozzá DTD (Document Type Definition).
+		<?xml version='1.0' encoding='UTF-8' standalone='yes' ?>
+		
+Egy elemnek nem lehet két ugyanolyan nevû attribútuma.
+
+Well formed xml: 
+	a nyitó tagokat le kell zárni.
+	Az elemeket lehet egymásba ágyazni.
+	Egy darab root elem lehet.
+	Az attribútum értékekket "quote"-olni kell.
+	Két ugyanolyan attribútum nem lehet.
+	Komment és tag nem keresztezhetik egymást.
+
+
+Névterek.
+	Ha különbözõ xml-eleket akarunk egyszerre használni akkor azok atrribútum nevei megyegyszhetnek,
+	ezért azok filejaiban egyedi névtér nevekkel kell ellátni az attribútumokat.
+	
+	A JSF egy specifikáció, aminek nagyon sok megvalósítása van.
+		Használata: 
+			xmlns:névtérneve uri:schecma location
+			
+	Névtereket ki kell írni mindenhova.
+			
+Sémák: .xsd-re végzõdik a file: xml schecma definition .xsd a kiterjesztése. Az xml validációjára szolgál. A DTD újragondolt változata.
+	Definiálja h azokban milyen tag-ek lehetnek, milyen sorrendben, milyen elõfordulással, milyen attribútumokkal, mi az opcionális, mi a fix érték, mi a default.
+
+Attribútumok:	
+	name
+	type
+	ref
+	fixed: opcionális elemet jelöl. Ha van akkor egy és csak egy értéke lehet.
+	default: pl.: language = en
+	
+Típusok:
+	Attribútumok:
+		prohibited: tiltott, h ne legyek deprecated cuccok.
+	Attribútum csoportok:
+		kéz a kézben já attribútumok esetén.
+	restriction:
+		regexp pattern megadásával lehet validálni, pl.: e-mail cim.
+
+Komplex típusok:
+	sequence: sorozat. Az el elemek kötött sorrenben tûnhetnek csak fel 0..*.
+	choice: enum szerû.
+	group: mindegyik elem feltûnhet 0..1.
+	
+
+XSI: xml schecma instance. 
+
+amikor sémát kötünk xml-hez:
+	xmlns: xsi="location"
+	
+Ha nem kell bele gyerek elem akkor simple, ha kell akkor complexContent kell h legyen.
+
+Miért parse-olunk?
+	Validálás (jó-e a kapott adat)
+	Jól-formált-e? (autómatikusan feldolgozható-e?) (ha usereket akarok feldozni, akkor nincs e benne egy tehén)
+	
+JAXP: Java API for XML Processing (xml tool set)
+	DOM parsing: betöltjük a memóriába, és magas szinten ott operálunk vele. Egyszerre van a memóriában. (-xmx el lehet memóriát adni az eclipse-nek)
+		nem read-only
+		random acces
+	
+	Push parsing:
+		SAX (Simple API for XML)
+		nagyméretû xml-bõl egy adott puffernyit betölt és végigmegy rajta. 
+		Én kapok értesítést a parsertõl h történt valami. Nincs rá befolyásom h vezéreljem a parsert. Eseményeket kapok, amiket kezelni kell.
+		read-only
+		nem random acces
+		
+	Pull parsing:
+		StAX: java 6tól  része a JDK-nak. Eventek vannak. Cursor, iterátor, ez is read only
+		Én tudom kikényszeríteni a parsertõl h információkat adjon nekem (Én tudom vezérelni a readert). Elemekt tudok átugrani vele.
+		Csak akkor csinálok valamit, ha számomra érdekes.
+		read-only
+		nem random acces
+
+Parsing:
+	XPath: a DOM sturktúrális bejárása föl és alá. XML-ben tárolt információ lekérdezésére alkalmas.
+		Node-okat, értékekekt lehet belõle kivenni.
+		1-tõl indexelünk.
+		/	:a root
+		//	:root-ból elérhetõ összes valami, akármilyen mélységben.
+		.	:aktuális node
+		..  :adott node szülõje
+		@	adott attribútum
+	
+XSLT (eXtensible Stylsheet Language family):
+	Transzformációs nyelv.
+	Adatnak van egy független reprezentációja (az xml) és abból akarok kinyerni valami. Pl.:html-t akarok kinyerni.
+	Xpath kifejezésre kell matchelõ node-okkal akarunk csinálni valamit, ezt egy template-ben adom meg az XSLT-ben.
+	
+JAXB (Java API for XML Binding):
+	Java fgv-ekkel le lehet kérdezni a tulajdonságokat. xml-bõl xml-be. Erre ad egy common api-t.
+	2 módszer: 
+		marshalling: Java objektumokat xml-re konvertálni,
+		unmarshalling: xml-t java objektekre konvertálni. Kell hozzá egy séma is.
+			Ha unmarshalling sebességre van szükség akkor JAXB, ha memória a kritikus akkor STAX.
+			xjc tool-lal lehet a sémából generátatni forráskódot
+				-d: destination ahova generátatni akarunk. (destination)
+	Az egész xml a memóriában van, ott lehet objektumokként dolgozni velük.
+	
+JSON (JavaScript Object Notation):
+	Egyszerûbb mint az xml. 
+	Könnyebben írható-olvasható a felhasználó számára.
+	Kapcsok között lehet definiálni struktúrákat. -Nincsek nyitó és záró tag-ek.
+	Kulcs-érték párok sorozata.
+	Nem kell annyi boilerplate-et írni mint xml-ben.
+	Tud kezelni tömböket.
+	
+SAX: (Simple API for XML): kurzor/iterátor alapú. Data binding.	
+	
+STAX: (Streaming API for XML) factory, inputstream, egyesével kell végigszaladni a tokeneken.
+
+SVG: rajzolni lehet vele xml-bõl.
+
+XML Processorok 3 fõ típusa:
+	Tree-based:
+		XPath: elõre, hátra könnyedén. Hátránya h sok memóriát igényel.
+	Streaming:
+		Egyszerre egy node-ot dolgoz fel. Pull(read only StAX) és push(Sax) a két vállfaja. Gyors, kevesebb memórai mert nincs egyszerre bent, keresés nem támogatott.
+	Binging Processors: 
+		A háttérben hasonlóan mûködik mintha DOM-stíulusú lenne, de POJO-kkal és annotációkkal operál.
+		Serializáls és deserializál. Könnyû karbantartani. Hátránya h a JAXB nem mûködik androidon.
+		Ami viszont igen az a Simple.
+

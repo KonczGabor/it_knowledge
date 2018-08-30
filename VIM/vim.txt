@@ -1,0 +1,41 @@
+On Linux:
+	sudo apt-get update
+	sudo apt-get install git
+
+	
+A beállításokat a ~/.vimrc tartalmazza. Ha nincs ott létre kell hozni.	
+	
+verison:
+	vim:
+
+Quit editing mode:
+	esc button
+
+open file:
+	vim fileName
+
+close file
+	:q!
+
+close and save
+	:wq
+	
+undo:
+	Esc, és u
+
+redo
+	Esc és CTRL+R
+	
+show line numbers
+	:set number
+	or
+		:set nu
+
+delete line:
+	dd (command módban kétszer egymás után a d)
+	Shift+d (D)
+	
+Select whole Line (command line):
+	V
+	D
+	P

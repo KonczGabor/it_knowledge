@@ -1,0 +1,11 @@
+Accepts one argument and produces a result
+
+Function<T, R> {
+	R apply(T t);
+}
+
+T - bekért típus, R - visszatérsi típus
+
+
+ Function<Integer,String> converter = (num)-> Integer.toString(num);
+        System.out.println("length of 26: " + converter.apply(26).length());  //2

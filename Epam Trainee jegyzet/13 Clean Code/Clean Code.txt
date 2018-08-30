@@ -1,0 +1,23 @@
+Az osztálynevek fõnevek legyenek! Kerüljük: Manager, Processor, Data, Info
+
+Metódusnevek: Igék.
+
+A kódbázis kollektívan a csapaté.
+
+A metódus egy dolgot csináljon, de azt jól.
+
+Ametódusban lévõ mûveletek azonos abasztrakciós szintûek legyenek.
+
+Az inputokat mindig validáljuk le.
+
+Nem számít a névhosszúság.
+
+if/else/while statementek egy sorosak legyenek (szervezzük ki inkább metódusba)
+
+A magas kódlefedettség nem feltétlenül jelenet jó kód minõséget.
+
+Ne teszteljünk gettereket és settereket.
+
+CRAP = Change risk analysis and prediction: Adott cyxlomatic complexity mellett mekkora az elvárt lefedettség.
+
+Egy kisebb nyom/jel ami arra utaé hogy a probléma mélyebb mint amilyennek látszik. 

@@ -1,0 +1,15 @@
+true-t ad vissza ha (jobb oldalt csak osztály állhat): 
+-objektum példánya-e saját osztályának.
+-alosztály közvetve vagy közvetlenûl
+-adott osztály implementálja közvetve, vagy kötvetlenûl
+
+Ami nincs egy azon öröklési ágon az le sem fordúl! (interfész esetén csak futás idõben derül ki, ha mégsem valósítja meg és akkor az false, nem pedig compilation error.)
+Ha már a referenciából kiderül hogy nem lehetséges akkor fordítási hiba lesz.
+
+Ha a bal oldalt null, akkor false-t ad vissza.
+Hippo nullHippo = null;
+boolean b5 = nullHippo instanceof Object; // false
+
+null is not an instanceof anytype.
+
+interface instanceof nem dob fordítási hibát, mert azt még valaki futás idõben implementálhatja.

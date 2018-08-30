@@ -1,0 +1,3 @@
+Ellentétben a Maven-nel itt nincs "super parent".
+
+A második buildelés már gyorsabb, mert ami nem változothatott, azokat nem frissíti be.

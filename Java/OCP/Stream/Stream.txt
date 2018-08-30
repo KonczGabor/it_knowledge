@@ -1,0 +1,144 @@
+java.util.stream
+
+Funkcionális programozás. Csak elmdonom h mit szeretnék, ahelyett hogy procedúrálisan lépésenként kiadnám az utasításokat.
+
+Adatok sorozata. 
+Streams allow you to turn Java collections into a sequence that can be operated on with functional operators (map, reduce etc).
+
+Stream pipeline: a mûveletek(stream operations) amik lefutnak a stream-en azért hogy elõálljon egy result.
+If no terminal operation is in the pipeline, a Stream is returned but not executed.
+
+1,Source
+2,Intermediate operations
+3,Terminal operations
+
+----------------------
+List<String> list = Arrays.asList("a", "b", "c");
+Stream<String> fromList = list.stream();
+Stream<String> fromListParallel = list.parallelStream();
+----------------------
+
+reduced:
+ha ez eredetit számosságát csökkenti. H csak visszakpunk egy értéket (findAny) az még nem minõsûl reduce()-nak.
+----------------------
+
+Optional<T> min(<? super T> comparator)
+Optional<T> max(<? super T> comparator)
+
+This example finds the animal with the fewest letters in its name:
+
+Stream<String> s = Stream.of("monkey", "ape", "bonobo");
+Optional<String> min = s.min((s1, s2) -> s1.length()—s2.length());
+min.ifPresent(System.out::println); // ape
+----------------------
+
+
+Optional<T> findAny()
+Optional<T> findFirst()
+
+This example finds an animal:
+
+Stream<String> s = Stream.of("monkey", "gorilla", "bonobo");
+Stream<String> infinite = Stream.generate(() -> "chimp");
+s.findAny().ifPresent(System.out::println); // monkey
+infinite.findAny().ifPresent(System.out::println); // chimp
+----------------------
+
+
+Stream<String> stream = Stream.of("w", "o", "l", "f");
+String word = stream.reduce("", String::concat);
+System.out.println(word); // wolf
+----------------------
+
+
+
+Stream<String> stream = Stream.of("w", "o", "l", "f");
+TreeSet<String> set = stream.collect(Collectors.toCollection(TreeSet::new));
+System.out.println(set); // [f, l, o, w]
+
+
+Stream<String> stream = Stream.of("w", "o", "l", "f");
+Set<String> set = stream.collect(Collectors.toSet());
+System.out.println(set); // [f, w, l, o]
+-----------------------
+
+
+
+The map() method on streams is for transforming data. Don’t confuse it
+with the Map interface, which maps keys to values.
+map method is used to convert elements of a stream from one type to another.
+
+Az eredetit i
+------------------------
+
+
+s.sorted(Comparator::reverseOrder); // DOES NOT COMPILE Nem jó fgv-re hivatkozunk. 199.old.
+------------------------
+
+
+
+Stream<Integer> infinite = Stream.iterate(1, x -> x + 1);
+infinite.limit(5)
+.peek(System.out::print)
+.filter(x -> x % 2 == 1)
+.forEach(System.out::print);  //11233455
+-------------------------
+
+
+Stream<Integer> stream = Stream.of(1, 2, 3);
+System.out.println(stream.reduce(0, (s, n) -> s + n));
+--------------------------
+
+
+IntStream: Used for the primitive types int, short, byte, and char
+LongStream: Used for the primitive type long
+DoubleStream: Used for the primitive types double and float
+---------------------------
+
+
+private static int range(IntStream ints) {
+	IntSummaryStatistics stats = ints.summaryStatistics();
+	if (stats.getCount() == 0) throw new RuntimeException();
+	return stats.getMax()—stats.getMin();
+}
+-----------------------------
+
+
+streams are lazily evaluated. This means that the stream isn’t actually created until the point when they needed.
+
+Reduction esetén végig kell nézni az egész stream-et. Csak terminal operation lehet reduction.
+
+-----------------------------
+
+
+.findany() csak így paraméter nélkül visszadja az elsõ elemet. Kivéve h parallelStream()-en hívjuk meg, mert akkor bármivel visszatérhet.
+A skip(),limit(),findfirst() utasítások lassítják a párhuzamos feldolgozást, viszont újra szinkronba hozzák õket, így az eredmény rendezett lista esetén olyan, mintha nem is lenne parallel.
+
+Arrays.asList(1,2,3,4,5,6).stream().unordered().parallel(); -unordered: megnöveli a teljesítményt.
+-----------------------------
+
+Reduce:
+
+A stream-bõl egy objektumot hoz létre.
+Három paramétere:
+	1, identity
+	2, accumulator
+	3, combiner
+
+Parallel stream-ek esetén a három argumentumu reduce()-t kell használni.
+
+-----------------------------
+
+Fork-Join során nem grantált hogy minden résztvevõ egyforma méretü feladatot kap, a lényeg csak az hogy a nagy feladat fel legyen osztva.
+---------------------------
+
+
+A forEach expects a Consumer object as argument.
+
+There is no Collectors.joining method that takes any functional interface as argument. 
+
+filter is an intermediate operation, which means it will not execute until a terminal operation is invoked on the stream.
+
+Stream.sorted is an intermediate operation. It will not be executed until a terminal operation is invoked on the stream.
+
+anyMatch requires a Predicate object as an argument, not an int.

@@ -1,0 +1,63 @@
+Stream<String> objStream = Stream.of("penguin", "fish");
+IntStream intStream = objStream.mapToInt(s -> s.length())
+
+List<String> myList =
+    Arrays.asList("a1", "a2", "b1", "c2", "c1");
+
+myList
+    .stream()
+    .filter(s -> s.startsWith("c"))
+    .map(String::toUpperCase)
+    .sorted()
+    .forEach(System.out::println);
+
+Stream.of("a1", "a2", "a3")
+    .findFirst()
+    .ifPresent(System.out::println);  // a1
+
+
+List<Person> filtered =
+    persons
+        .stream()
+        .filter(p -> p.name.startsWith("P"))
+        .collect(Collectors.toList());
+
+System.out.println(filtered);    // [Peter, Pamela]
+
+-------------------------------
+
+
+Tömbbõl elõször listát kell készíteni, majd arra ráhívni a stream-et
+Arrays.asList(weights).stream().forEach(
+d -> System.out.print(d.intValue()+" "));
+-----------------------------
+
+ParallelStream létrehozása:
+
+adottStream.parallel();
+adottCollection.parallelStream();
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

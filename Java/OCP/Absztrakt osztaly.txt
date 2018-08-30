@@ -1,0 +1,13 @@
+Egy metódus nem lesz autómatikusan absztrakt csak azért mert abasztrakt osztályban van.
+
+Nem tartalmazhat default típusú metódust. Staticot igen. Statikus változót is tartalmazhat.
+default metódusok csak interfészekben engedélyezettek.
+
+Egy metódusnak bármilyen láthatósága lehet.
+
+Az osztály nem lehet egyszerre absztrakt és final is.
+
+Ha egy osztályban van absztrakt metódus, akkor az egy abasztrakt osztály.
+
+
+

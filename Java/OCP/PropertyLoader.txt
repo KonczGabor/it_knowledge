@@ -1,0 +1,4 @@
+Csinákunk egy porty file-t
+A property file-nak szüksége van egy input stream-re ami beolvassa az adatokat.
+Itt jön egy csel, ugyanis az adott osztály Class-ától kell resource-ként elkérni az adott file-t, ugyanis h sima file ként akarjuk elérni, akkor lehet hogy aprojekten belül mûködik a történet, de abban a pillanataban amikor a projektet exportáljuk egy jar file-nak egy library ként hogy más is tudja használni, ezért szoktunk Class-resource ként exportálni dolgokat, mert az mûködik így is, mûködik úgy is. 
+Onnantól az adott property változón meghívott .getProprty("kulcs") fogja kikeresni a property változóban lévõ kulcs = érték -t. (Az értéknek nem kell ""-ben lennie)

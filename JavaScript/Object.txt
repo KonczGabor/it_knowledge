@@ -1,0 +1,6 @@
+•except for numbers, strings, boolean, null, and undefined everything else is object
+•simple types are also object like (they have methods), but immutable
+•an object is a container of name-value properties
+•objects can contain other object -graph, tree
+•object are class-free, useful for organizing, collecting data
+•prototype linkage allows an object inherit properties of another

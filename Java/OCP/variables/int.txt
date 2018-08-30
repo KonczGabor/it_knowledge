@@ -1,0 +1,11 @@
+Pélány Wrapper classok null-re inicializálódnak.
+Példány primitívek alap értékeikre.
+
+
+Lokális változók at muszály inicializálni, különben nem fordul le.
+
+Three ways to convert an int to a String:
+
+String s = String.valueOf(n);
+String s = Integer.toString(n);
+String s = "" + n;

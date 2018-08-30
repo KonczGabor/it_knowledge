@@ -1,0 +1,77 @@
+Ez egy Boolean kifejezés amit a kód egy olyan helyére kell tenni, ahol azt várjuk h valami "true" legyen.
+Ha false ra értékelõdik ki, akkor kapjuk az errort, vagy kiírjuk a hibaüzenetet.
+
+Ha az assertion engedélyezett és false-ra értékelõdik ki, akkor java.lang.AssertionError lesz dobva. 
+
+Maga a boolean kifejezés megengedett hogy zárójelben álljon, amit kettõspont "String", szám, vagy épp semmi sem követ.
+
+java –ea Assertions: //-ea enabe to use asertions, or -enableassertions
+
+public class Assertions {
+	public static void main(String[] args) {
+		int numGuests = -5;
+		assert numGuests > 0;
+		System.out.println(numGuests);
+	}
+}
+
+assert boolean_expression: error_message;
+
+Az általános irányelvtõl, miszerint nem szabad errort dobni, ilyen esetben eltekinthetünk.
+
+For example, the following command enables assertions only
+for classes in the com.wiley.demos package and any subpackages:
+java -ea:com.wiley.demos... my.programs.Main
+
+The three dots means any class in the specified package or subpackages. You can also
+enable assertions for a specific class:
+java -ea:com.wiley.demos.TestColors my.programs.Main
+----------------------------------
+
+
+java -ea:... -da:good... -da:bad... Main
+
+Mindenre -ea, 
+-da a good package és azok gyerekire,
+-da a bad package és azok gyerekire,
+Indítsd a Main-t!
+
+----------------------------------
+
+You can disable assertions using the -disableassertions (or -da ) fl ag for a specifi c
+class or package that was previously enabled. For example, the following command enables
+assertions for the com.wiley.demos package but disables assertions for the TestColors
+class:
+java -ea:com.wiley.demos... -da:com.wiley.demos.TestColors my.programs.Main
+
+
+//ilyet is célszerû lehet betenni egy vezérlési ágba, pl defualt egy switch case-ben :
+assert false: "Invalid season";
+
+
+Assertions should not contain any business logic that affects the outcome of code!
+int x = 10;
+assert ++x > 10; // Not a good design!
+
+
+Assertions are used for debugging purposes, allowing you to verify that something that
+you think is true during the coding phase is actually true at runtime.
+
+Ha nincs bekapcsolva az assertion az olyan, mintha konkrétan ki lenne az assertion ütve a forráskódból.
+
+
+public metódusok paramétereinek ellenõrzésére nem szabad használni, helyette:
+if( args.length  != 2 ) throw new RuntimeException("Must give two arguments");
+helyette: EX -t kell dobni.
+----------------------------------
+
+
+
+
+
+
+
+
+
+
+

@@ -1,0 +1,19 @@
+A rendszer statikus struktúrájából készül. A rendszer elemire fókuszál az idõbeliség helyett.
+
+A rendszer elemeinek kapcsolata és azok belsõ összeföggéseinek feltérképezése.
+ 
+A fejlesztõk az osztály, a business analystok(ba) a az ostály és objektum, az architektek a deployment és komponensdiagrammot használják legtöbbször.
+
+Olyan magában mint struktúra diagramm nem létezik, amire az emberek legtöbbször gondolnak az az osztály diagramm.
+
+Az osztály diagramm elemei:
+
+-Osztály
+-Interfész
+-Adat típus
+-Komponens
+
+
+-------------------------
+Szekvencia diagram:
+Az objektumok közti interakciók sorrendje.

@@ -1,0 +1,9 @@
+groovy -v
+
+Hozzá kell adnia környezeti változókhoz:
+	GROOVY_HOME
+	C:\develop\groovy\groovy-3.0.0-alpha-1
+	
+	Path:
+	%GROOVY_HOME%\bin
+	

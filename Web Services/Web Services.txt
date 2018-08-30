@@ -1,0 +1,6 @@
+Web Service: technológiák és szabályok halmaza, amelyek lehetõvé teszik hogy kettõ vagy több komponens egymással kommunikálhasson a weben.
+
+A szabályok, amik meghatározzák:
+	Hogy kommunikélnak a komponensek?
+	Milyen típusú üzeneteket küldenek egymásnak?
+	Hogyan kezelik a request-et, hogyan kezelik a response-t?

@@ -1,0 +1,12 @@
+Az acces modifiernek ugyanolyannak, vagy megengedõbbnek kell lennie.
+Nem muszáj exceptiont dobnia, még checked-et sem.
+Ha dob, nem lehet szélesebb a checked exception, mint amit felül szeretne írni.
+Runtime exceptiont bármikor dobhat.
+A visszatérési értéknek kovariánsnak kell lennie, azaz specifikusabb, vagy unagyolyan lehet mint amit felülír.
+A paraméterek típusának, számának és sorrendjének meg kell egyeznie.
+
+A statikus elõtag nem számít felülírásnak, csak kitakarásnak. Le se fordul, hacsak maga a feülírandó metódus is static eleve.
+
+
+
+

@@ -1,0 +1,69 @@
+Defenzív programozás:
+	Hibás interakció esetén egy jól definiált válasz érkezése.
+	
+	
+Javul a szoftver minősége, kevesebb bug.
+	
+Könnybben olvashatóvá váli.
+	Csökkentsük a kód komplexitását.
+	
+	Code review
+	
+Szoftver tesztelés
+
+Intelligens forráskód újrahasznosítás.
+
+Megjósolható válaszok	
+
+A sok if lekezelése helyett AOP-vel oldjuk meg h könnyebben olvasható maradjon a kód.
+
+Design by Contract:
+	Agreement a szolgáltatást nyújtó és a szolgáltatást használó(a kliens) között
+	Mikor tervezem az alaklmazásom akkor mindent figyelembe veszek.
+	
+	Precondition: Definiálok egy feltételt mielőtt a metódus meghívódik.
+		A kliens komponensnél van a hiba.
+		
+	Postcondition: Egy adott feltételnel teljesülnie kell miután lefutott a metódus. 
+		Pl.: Egy metódus soha ne adjon vissza null-t.
+			A szolgáltatást nyújtónál van a hiba.
+			
+	Invariant: pl.: Amikor egy objektummal dolgozok akkor az legyen beállítva,
+	mert az se konstruktor, se setterek által nem a kívánatosra lett defeiniálíva.
+	Ezek után meg lehet hívni rajta az adott metódust.
+	
+Bean viládáció: JSR 303/349 
+
+	Bean validation Framework <-> Design by Contract.
+	
+		Bean validation Framework: Üzletileg ellenőrizzük az adatok helyességét
+		
+		Design by Contract: Validáljuk hogy a kliens és a szerver között a kontraktot. Annotációkkal végezzük.
+
+OVal: Object Validation Framework:
+	Mind Bean validation Framework-re, mind Design by Contract-ra lehet használni.
+	
+	Megszorításokat lehet tenni:
+		mezőkre
+		metódus visszatérési értékekre
+		konsturktor és metódus paraméterekre
+		Vissaztérési érté
+		
+	Konstruktorra tudunk megfoglamazni
+	
+Az aspketketeket a library készítői írják, ami felhaszálja az annotációt.
+		
+@Guarded lehet ellátni az osztályokat és ha azokból csináljuk a bean-eket akkor megnézi h milyen ellenőrzések vannak rá beállítva.
+
+ Vannak alap megszorító annotációk: @NotNull, @NotEmpty, @Lenght(max=10), de mi magunk is készíthetünk.
+	Egy megszorítás-csokorra hivatkozhatunk egy másik helyről, mondvn h mi is olyat szeretnénk mint ő ott:
+		public void set AlternativeName(@AssertFielConstraints("name") String altName){}
+		Különböző nyelveken megadott ellenőrzéseket(feltételeket) is meg lehet adni.
+		
+@Guarded(inspectInterfaces = true) az interfészben definiált ellenőrzések is le fognak futni.
+
+AOP: növelem a modularitást cross-cutting megoldásokkal.
+
+Hogyan tesztelem?
+	A Spring AOP proxyzással működik  
+		

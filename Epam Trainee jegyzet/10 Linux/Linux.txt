@@ -1,0 +1,437 @@
+Kernel: Ezen keresztül lehet csak hozzáférni a hardware-hez. Az oprendszer szíve.
+A driverek a kernelben hiererachikusan szervezõdnek, mivel az oprendszerbõl jövõ folyamatok típusai adottak,
+így lehet rájuk elõállni általános megoldással.
+
+Az elsõ process ami elindul minden UNIX rendszeren az init. Felcsatolja a filerendszereket és elindítja a démonokat.
+Linuxon 10 runlevel-t különböztetönk meg (0-9). Részletek itt: /etc/inittab
+	0: System halt
+	1: Single user mode
+	3: Multi user
+	5: Multi user + GUI
+	6: System reboot
+	
+A usereket a getty nevezetû program logoltatja be a login programon keresztül.
+
+A rendszer nem megfelõ mûködését a Syslog naplózza.
+
+Az ismétlõdõ feladatok elvégzéstét a cron látja el. Az at-tel szemben az a különbség h míg az csak egyszer fut le, 
+a cron-t a démonok peridósikusan hajtják végre.
+
+Az X csak egy vizuális felület interfész, amit implementál pl.: a KDE vagy a Gnome.
+
+Hálózatos (TCP/IP) loginre a telnet-et, vagy az ssh-t (secure shell) használjuk.
+
+NFS: Network File System, alapból támogatja a kernel, CIFS: Common Internet File System, ezt nem támogatja a kernel, helyette a Samba.
+
+Printing: A jobok a printer queue-ba kerülnek, a fileok megmaradnak az adott gépen.
+
+-----------------------------------
+
+FHS: Filesystem Hierarchy Standard.
+
+bin: bináris állományok.
+	Bár ez nem törvényszerû, de általában a bin könyvtárakban a minden felhasználó által elérhetõ
+	állományok kerülnek az sbin könyvtárakba pedig olyan rendszereszközök, melyeket például csak
+	rendszergazdák használnak.
+	
+	A /bin és /sbin az alaprendszerhez szükséges programokat tartalmazza, a felhasználó által telepített
+	rogramok a /usr/bin /usr/sbin alá kerülnek
+
+	
+boot: könyvtárban találhatók a bootnál fontos fájlok:
+	általában a rendszermag (kernel), illetve Grub/Lilo
+	rendszerbetöltõ esetén annak konfigurációs állománya is.
+
+	
+media: alá kerül bejegyzésre az összes cserélhetõ média. pl. CD, DVD, floppy, pendrive, stb.
+
+
+dev: eszközfileok az összes eszköz számára.
+	/hda a master IDE drive a primary IDE kontrolleren. hdb a slave a pimary kontrolleren.
+	hdc és hdd a master és a slave a secondary IDE kontrolleren.
+	Minden lemez partíciókra van osztva. 1-4ig vannak az elõsdleges, a fölött a logikai partíciók.
+	/md0: Az elsõ metadisk group: RAID (Redundant Array of Independent Disks)
+	/null: a feketelyuk, amit ide küldünk örökre eltûnik.
+	/sda: Az el SCSI buson lévõ elsõ SCSI drive, a következõ az sdb.
+
+	
+etc: könyvtár a gyûjtõhelye a különbözõ programok globális konfigurációs fájljainak. 
+	Ellentétben a Windowsos registry megoldással Linux alatt minden konfigurációs állomány egyszerû szövegfájlba van
+	mentve, aminek nagy elõnye, hogy az állományok akkor is egyszerûen elérhetõk, ha a rendszer egyébként
+	használhatatlan. Természetesen emellett az egyes programok felhasználó specifikus beállításokkal is rendelkeznek,
+	ezeket a home könyvtárakban tárolja a rendszer, rejtett	mappákban.
+
+	/passwd: userek, valódi nevük, home könyvtáraik.
+	/shadow: a userek titkosított jeszavai
+	/fstab: az autómatikusan felcsatlakozó fileredszerek listája.
+	/group: a passwd-hez hasonló csak grup-okra vonatkozik.
+	/inittab: az init konfigurációs file-ja.
+	/issue: itt lehet megadni h mit írjon ki mielõtt meghívódik a getty: tipikusan üdvözlõ szövegek kerülnek ide.
+	/magic: a file konfigurációs file-ja, file formátumok leírása.
+	/motd: message of the day, ez az üzenet várja a usereket bejelentkezés után.
+	/mtab: A felcsatolt filerendszerek listája
+	/profile, /bash.rc /csh.cshrc: Ezen file-ok végrehajtódnak indítás, vagy bejelentkezés után autómatikusan.
+		Bemásolhatjuk õket a saját home könyvtárunkba is.
+	/securetty: biztonságos terminálokat nyújt
+	/shells: kilistázza a trusted shell-eket.
+	
+home: felhasználói könyvtárak, az adott könyvtár alatt a felhasználónak teljes jogköre van 
+	(írás, olvasás, végrehajtás), ezen az egy könyvtáron kívül azonban leginkább csak olvasási joga van alapból.
+
+	
+lib: a rendszer részei lapulnak: library fájlok, kernel modulok, stb. Moduláris felépítésû kernelek esetében az egyes
+	modulok innen töltõdnek be.
+	
+	
+lost+found: Ha a filesystem megsérül, és a helyreállító program olyan file-okat talál rajta, amelyeknek
+	könyvtárstruktúrába helyezéséhez nincs elég információja, ide teszi oket.	
+	
+	
+mnt: Ez alá a könyvtár alá kerülnek (általában) befûzésre a fix partíciók.	
+
+
+proc: Itt találhatóak az éppen futó mûveletek -fájlként leképezve, sorszámozva, 
+	illetve információk a rendszerrõl: processzorról, memóriáról, stb.
+	Ez csak egy látszólagos filerendszer, magán a merevlemezen nem létezik, a kernel hozza létre a memóriában.
+	/1(adott szám) Az 1-es számú process információi.
+	/cpuinfo
+	/devices: a kernel drivereinek listája
+	/filesystems
+	/interrupts
+	/ioports: mely I/O portok vannak jelenleg haszálatban.
+	/kmsg: kernel messages, syslog szerû.
+	/meminfo
+	/modules: mely kernel modulok vannak jelenleg betöltve.
+	/net: Statikus információk a hálózati folymatokról.
+	/stat
+	/uptime
+	/versiom: kernel verzió
+
+tmp: Az egyes programoknak szükségük van/lehet átmeneti fájlokra. Ezek kerülnek ide. Ez a másik olyan könyvtár,
+	amely alapértelmezettben írható minden felhasználó számára.	
+	
+
+usr: Ez alatt a könyvtár alatt található minden.
+	telepített programok nagy része,
+	hagyományból ide szoktunk forrásokat pakolni (/usr/src), és azt leforgatni.
+	Itt találhatók a dokumentációk,
+	itt találhatók az ikonok nagy része
+	/X11R6: X Window System
+	/bin: user commandok
+	/sbin: rendszer adminisztrációs parancsok amik nem szükségesek a root filerendszer számára, legtöbbjük server program.
+	/share/man,info,doc Manual pages, GNU dokumentumok.
+	/include: Header filok C nyelvhez.
+	/lib: Programok és alrendszerek nem változó adatfilejai.
+	/local: lokálisan installált programok.
+
+	
+var: Szintén számos szolgáltatás gyûjtõkönyvtára.
+	Itt találhatók a naplófájlok ( /var/log/maillog )
+	egyes programok hosszabb ideig tárolt, mégis átmeneti fájljai, ( /var/cache/apt/archives )
+	alapértelmezettben a felhasználói levélboxok ( /var/mail/balmag )
+	Az itt tárolt adatok változnak a rendszer futása során, tehát egyediek és senkinek sem érdekek megosztani õket egymás közt.
+	/cache/man: egyedileg formatált man page-ek.
+	/lib: olan fileok melyek folyamatosan változnak a rendszer futása során.
+	/lock: ide írják be a programok h épp mit használnak h a többi is értesüljön róla és ne legyen ütközés.
+	/log: különbözõ fileok loginjei kerülnek ide, a login-ek is és a syslogok. Néha ez a mappa meg tud hízni, érdemes törölni.
+	/run: a rendszer jelenlegi futásáról tárol informáciükat, /utmp: a jelenlegi becsekkelt userek ide kerülnek.
+	/tmp: olyan ideigleles file-ok amik több ideig kívánnak létezni mint ahogy azt a gyökér/tmp-ben elõírt.
+	
+-----------------------------------
+
+Fájlrendszer: Az oprendszer által használt metódusok és adat-struktúrák gyûjteménye, arra a célre hogy a fileokat
+menedzselni tudja az adott lemezen/partíción.	
+	
+A file nevét a directory tartalmazza annak inode számával együtt. Az inode tartalmaz minden mást a fileról.
+
+ext3: filerendszer az ext2-vel ellentétben már journaling(naplózó), 
+	ami azt jelentni hogy hogy növeli a teljesítményt és rendszer összeomlás után fel tud állni belõle. Ez a javallot.
+
+resierfs: ez is naplóz, robosztus.
+
+jfs: ez is naplóz az IBM fejlesztette ki nagy performanciát igénylõ környezetek számára.
+
+vfat: a FAT kiterjesztése, FAT32-ként ismert. MS Windows rendszerek használják.
+
+iso9660: standard CD-ROM ok esetén támogatja a hosszú file neveket.
+
+nfs: networked file system könnyen kezelhetõvé teszi a fileokat a hálózaton.
+
+smbfs: hálózati filerendszer ami kompatibilis Windows sharing protokollokkal.
+
+NTFS: a legfejlettebb Microsoft filerendszer, gyorsabb file elérést és rendszerstatibilitást biztosít elõdjeinél.
+
+parancsok:
+
+	mkfs: make file system
+		-t típusa
+		-c: hibás blokkokat keres
+
+-----------------------------------
+
+Mountolás
+
+Ahhoz h egy filerendszert használni tudjunk ahhoz csatlakoztatni kell egy fa struktúrába. 
+	$ mount /dev/hda2 /home
+	$ mount /dev/hda3 /usr
+		Egyiket a home, másikat a usr alá csatoltuk azoknat györekeriknél megfogva.
+A csatolási pontnak nem kell üresnek lenni, de léteznie kell. Fontos azonban hogy az abban már meglévõ elemek ilyenkor
+a neveiken keresztül elérhetetlenek lesznek.
+	-r: kapcsoló, read-onyl mount.
+	
+	A rout filerendszer elsõnek read only-ként csatolódik fel, majd késõbb az fsck lefutása után (ha azt megfelelõlnek találta) lesz csak írható.
+	
+Lecsatolásnál vagy az eszköz nevét, vagy a csatolási pontot kell megadni:
+		
+	$ umount /dev/hda2
+	$ umount /usr
+		
+fsck-t csak unmountolt filerendszeren futtassunk, vagy read-onlyn
+
+badblocks: hibás szektorok után kutat.
+
+df: megmutatja a szabad helyet.
+du: mennyit foglal egy mappa és annak tartalma.
+sync: sorosítunk a cache-bõl. Magától egy daemon szál is csinál ilyet "update"-tel.
+debugfs: ahova az fsck kevés ott manuálisan lehet debuggolni. Törölt fileok visszaálltására is jó.
+
+-----------------------------------
+
+System monitroring
+
+Az erõforrások menedzselésére szolgál.
+
+	top: folyamatosan frissülõ erõforrás használat jelentés.
+		-i: ki/be kapcsolja az idle(üres) processeket.
+		-p: rendezi CPU használat szerint.
+		-u: adott user szerint
+		-k: kill a process
+		-r: renice(protioritás állítás?)
+	Több részlet elérése itt: /proc Itt óvatosan kell eljárni h ne módosítsunk véltelenül dolgokat!
+	
+	iostat: CPU és fõleg I/O mûveletek diagnosztikája.
+	
+	ps: a jelenleg futó folyamatok listája
+		-ef:? összes mutatása?
+		
+		PPID: ParentProcessID
+		
+		aux | grep java   :az összes java process muatatása
+	
+	vmstat: statisztikai jelentés(report) a rendszer állapotáról az utolsó kért idõponttól, vagy ha az nem volt, akkor bootolás óta.
+	
+	Lsof: az összes éppen használt file-t megmutatja. Mivel a Linuxban minden file, ezért a lista hosszú szokott lenni, de grep-pel kihámozva meg lehet tudni
+		hogy ki használaja a lecsatolandó filerendszert.
+		-p processid: Az adott process álttal használt összes file.
+		
+-----------------------------------
+
+Filesystem usage
+
+	df: lemez kihasználtság az összes felcsatolt filerendszerre lebontva.
+		-h: human readable format
+		
+	du: adott file méretét mutatja meg, mappa esetén rekurzívan:
+		-h: human readable format
+		-s: summary(összesítés)
+
+-----------------------------------
+		
+Monitoring Users
+
+	Hogy tudjuk ki és milyen erõforrásokat vesz igénybe.
+	
+	who/w: ki és milyen terminálokon jelentkezett be, illetve hogy ki és mit használ.
+	
+	ps -u adottUser: megmutatja az adott user által használt folyamatokat.
+	
+-----------------------------------
+
+File permissions
+
+		Jogosultsági csoportok: 
+			owner
+			group
+			all
+		
+		Jogosultsági típusok:
+			read 	= 4
+			write	= 2
+			execute = 1
+			
+	lsl -l: gyors megjelenítés ami 3as blokkokba szervezõdik: _ooogggaaa (pl.:_rwxrwxrwx 1 owner:group)
+		az "_" egy speciális jogosultsági flag:
+			"_": semmi különös
+			d: directory
+			l: a file/directory egy symbolic link
+			s: speciális jogosultsági beállítások
+			t: sticky bit
+		
+		ooo: owner
+			rwx
+		ggg: grup
+			rwx
+		aaa: all
+			rwx
+			
+		integer: (itt az 1) az erre mutató hardlinkek száma
+		
+		A file tulajdonosa
+		
+	Jogosultásgok módosítása
+	
+		chmod 740 file1 : _rwxr_____ = az ownernek mindent szabad, a csoportnak csak olvasni mindenki másnak semmit.
+		
+		chown: a tulajdonos/group módosítására: 
+			chown owner:group filename
+			chown user1:family file1 = az owner a family, a a group a family lesz a file1-en.
+			
+-----------------------------------
+
+Managing user accounts:
+
+	Az account nem más mint a fileok, erõforrások, információk összessége mely az adott userhez tartozik.
+	
+	Ilyen menedzselõ programok az adduser és a useradd, vagy akár vmi GUI.
+	
+	Az accountok információs adatbázisa az etc/passwd, ami sorokba, s oszlopokba(7) van szervezve.
+	Minden sor egy adott user és az oszlopok az attribútumok.
+	
+		Username
+		Régen itt volt a jelszó is
+		Numeric user ide
+		Numeric grupId
+		Teljes név és egyéb leírások
+		Home directory
+		Login shell
+	
+	Jelszók már átkerültek ide: etc/shadow, amit csak a root olvashat.
+	
+Ha NetworkFileSytem (NFS) -et használunk fontos hogy a különbözõ rendszerekben ugyanaz legyen az az uid-nk és a gid-nk.
+Fontos hogy ezeket szinkronban kell tartani hogy az új userek ne kaphássák meg a régiek azonosító számait, mert akkor hozzáférhetnek azok filejaihoz.
+
+Kezdeti környezeti sablont lehet definiálni a felhasználók home könyvtárainak az etc/skel.profile-ban. 
+Mégis kifinomultabb megoldás ha ezt az /etc/profile-ban eszközöljük hogy már meglévõ beállítások ne akadjanak össze.
+
+-----------------------------------
+
+User létrehozása kézzel
+
+módosítsuk az etc/passwd tartalmát, a vipw segítségével, ami kizárólagos hozzáférést biztosít a filehoz, megakadályozván
+új userek létrehozását, vagy módosítását míg mi dolgozunk.
+
+A vigr-t használjuk az etc/group módosítására.
+
+Hozzunk létre a usernek home könyvtárat az mkdir paracs segítségével, majd másoljuk bele az etc/skel tartalmát.
+
+Állítsuk be a jogosultásgait a chown és a chmod segítségével, lehetõleg rekurzívan (-R).
+
+Konfiguráljuk a passwd filet. Ez legyen az utolsó lépés.
+
+-----------------------------------
+
+User tulajdonságainak módosítása:
+
+	chfn: Teljes név módosítás.
+	
+	chsh: login shell módosítás.
+	
+	passwd: jelszó módosítás.
+	
+-----------------------------------
+
+Removing a user
+
+		Elõször függesszük fel a user-t (disable)
+		
+		Töröljük a filejait (mailbox, aliases, cron, at és más referenciák)
+		Nem csak a home könyvtárban lehetnek file-jai ezeket a "find / -user username" -mel keressük meg.
+
+		Törüljük az etc/passwd és etc/group-ból a rá vonatkozó sorokat.
+
+	Egyes Linux disztribúciók generalizált megoldásokat biztosítanak erre: deluser, userdel
+	
+-----------------------------------
+
+User ideiglenes felfüggesztése
+
+	Valakit lehet h meghekkeltek, vagy a user nem fizeti a havidíjat..
+	
+	Ilyenkor megoldás lehet h lecseréljük a shellt-t egy üzenetre, hogy jelenleg a user fel lett függesztve, érdeklõdjön az adott címen..
+	
+	-----------------------------------
+	
+Linux commands
+
+	sudo su 
+		Change to root user
+
+	legfontosabb a man
+		man ls: az ls commandról add ismertetést. A PgUp és PgDn-nal lehet görgetni, kilépni a "q"-val lehet.
+	
+	ls: kilistázza az adott directory tartalmát
+		-l: részletek, tulajdonos, hozzáférési beállítások.
+		-a: láthatatlanokat is mutassa
+		
+	cp [módosítók] forrásfile cél: másolás
+		-i: megerõsítésre vár ha felül akarunk írni vmit a célkönyvtárban.
+		-r: rekurzív, az almappákat is másolja
+		
+	mv [módosítók] forrásfile cél: mozgatás
+		-b: mielõtt átmozgatná csinál egy bacupot
+		-i: megerõsítést vár overwrite esetén
+		
+	rm [módosítók] file(ok): törli a fileokat
+		-r: rekurzív, az almappákat is törli
+		-i: megerõsítést vár overwrite esetén
+	
+	cd: mappaváltás
+		paraméter nélkül visszatesz a home könyvtárba
+		".." : szülõkönyvtár
+		
+	mkdir: új mappa létrehozása
+	
+	rmdir: üres mappa törlése
+	
+	chown: megváltoztatja a file birtokos/csoport bejegyzését
+		-R: rekurzívan
+	
+----------------------------------------
+
+Vim
+
+	sudo apt-get install vimr
+	
+	$ vimtutor
+	https://vim-adventures.com/
+	
+	3 különbözó mód:
+
+		Normal:
+	
+		Insert:
+
+		Visual:
+			slecting text
+	
+
+	Commands:
+	
+		C: Change
+		I: Inside
+		P: Parens
+		D: delete
+		
+	Konfigurációs file: ~/.vimrc
+	
+----------------------------------------
+
+Tunneling:
+
+A hálózati tunnel egy olyan számítógépes hálózatok által használt technika, mely egy vagy több hálózati átvitel megvalósítására másik hálózati kapcsolatot vesz igénybe. 
+Lehetõvé teszi az egymással egyébként nem kompatibilis hálózatok közötti adatátvitelt, biztonságos kommunikációt biztosít egy nembiztonságos hálózaton keresztül. 
+Továbbá megkerülhetõ a használatával egyes hálózatok rendszergazdai korlátozásai.
+A VPN pont ezen felhasználást teszi lehetõvé, hogy tunelek segítségével bebiztosított hálózatot teremtsen a számítógépek vagy számítógépes hálózatok között.
+Tunnel (alagút) - végülis nevezhetnénk egymásbaágyázásnak is, hiszen ezt használja ki: egyes protokollokat a másik hálózat csomagjaiba csomagolja be. 
+Például itt van a Microsoft PPTP technológiája, mely megengedi az Internet használatát az adatátvitelhez egy VPN hálózatban. Lényegében az Internet által nyújtott TCP/IP csomagokba ágyazza be a saját hálózati protokolját.
+	

@@ -1,0 +1,325 @@
+https://learngitbranching.js.org/
+	-undo or reset to fix mistakes, nem kell újrahívni az oldalt.
+
+$ git config --global user.name "John Doe"
+$ git config --global user.email "johndoe@example.com"
+
+Checking Your Settings:
+$ git config --list
+git config -l
+
+ssh-agent sh -c 'ssh-add ~/AsusWin7_private; 
+git fetch git@bitbucket.org:KonczGabor221/pxtrlandingpage.git'
+
+help:
+$ git help config
+
+
+Initializing a Repository in an Existing Directory:
+$ git init
+
+git init [folder]
+Creates a new directory and Git repository.
+
+Cloning an Existing Repository:
+$ git clone https://github.com/libgit2/libgit2
+
+Checking the Status of Your Files:
+$ git status
+
+$ git status -s:
+New files that aren’t tracked have a ?? next to them, new files that have been added to the staging area have an A, modified files have an M and so on. There are two columns to the output - the left hand column indicates that the file is staged and the right hand column indicates that it’s modified.
+
+
+git add [file]
+Add a specific file to the Git staging area of your repository.
+git add file1 file2
+git add *.html
+
+git add .
+
+git add -u : a merge conflict során újra hozzá kell adni az érintett fileokat, így az összeset egy mozdulattal meg lehet tenni.
+Add all new/modified files inside the current directory to the staging area of your repository.
+
+git commit -a
+Commit everything has been changed
+
+git reset [file]
+Removes a single file from the Git staging area but keeps any changes to that file.
+
+git reset 
+Removes all files from the Git staging area but keeps all changes
+to the files.
+
+git clean -df
+	remove untracked files
+
+
+git checkout [file]
+Gets rid of your local changes to a file and instead checks out
+(or uses) the contents of the file from the last commit.
+
+
+git revert [commit] 
+Provides a way to safely remove a previous commit. Git will
+automatically remove the changes, and then create a new
+commit. This way you still have a history of the change being
+removed.
+
+git log = megmutatja a commitokat
+
+
+git help log 
+
+git log 
+command to get an idea of what our commit history has been.
+You can exit from the log view with the q button.
+
+
+git log --author="Kevin"
+
+
+git log --grep="init"
+
+
+//New branch creates from the particular branch where from it has been created. 
+
+git branch [branch_name] 
+Create a new branch (copy of the code) to use to
+develop a new feature or fix a bug.
+
+
+git branch 
+Lists all of the available branches
+The * character indicates the branch we currently have checked out.
+ branch -a: show all branches
+
+
+git checkout [branch_name] 
+Checks out an existing Git branch. This simply
+switches your code to a different Git branch.
+
+
+git checkout -b [branch_name] 
+Creates a new Git branch and checks it out. This is
+a shortcut so you do not have to create the branch
+and check it out using two steps.
+
+
+
+git merge [branch_name] 
+Merge [branch_name] into your currently checked out Git branch.
+The first step is to checkout your master branch using git checkout master, after that you can merge in your my_new_feature branch into your master branch by running git merge my_new_feature.
+Ahol állok abba merge-öli be azt amit megadok neki.
+
+git merge feature master
+A feature-t bemásolja a master-be.
+
+git branch --merged
+
+git branch --no-merge
+
+git branch -d branchName
+	Delete branch
+	
+git branch -D branchName
+	Forced Delete branch
+
+git mergetool 
+Opens up an external Diff viewer or merge tool for
+merging conflicts.
+
+git 
+
+ add [remote-name] [remote-url]
+Adds a remote repository called [remote-name] located at [remote-url]. We can now push and pull from this repository (assuming we have permission).
+
+
+git push -u origin master 
+Push our master Git branch to the remote called origin.
+$ git commit --allow-empty -m "Trigger notification"
+
+git remote
+Lists the available remotes for your current Git
+project.
+
+git remote set-url origin git@github.com:<Username>/<Project>.git
+
+
+git remote -v 
+Provides more information about your Git remotes,
+such as the location and what operations can be
+performed.
+
+git remote set-url origin https://github.com/USERNAME/OTHERREPOSITORY.git
+
+
+git remote rm [remote-name]
+Remove a Git remote from your current Git project.
+
+
+git clone [git-url] [folder-name] 
+Clone a Git repository at [git-url] and place it in a
+new directory called [folder-name]
+
+
+Git branch commands’ various options. -a shows all local and remote branches, while -r shows only remote branches.
+
+
+git remote and git ls-remote
+
+$ git remote show origin
+
+'git branch -r' only shows unupdate version of remote, git ls-remote will query the remote, thus will list the current version.
+If you git fetch, then 'git branch -r' will get the updated list at remote.
+
+git diff
+shows the changes of the stage
+
+git diff --staged
+The last changes on the stage
+
+
+koco@koco-UX31E:~/Munka/mediplanet/drupal_upgrade_prep$ git clone --branch drupal_upgrade_prep git@bitbucket.org:pronovix/mediplanet_site.git
+
+
+Branch
+	Mirroring a repository to another
+	
+Clone
+	Make a copy from a repository
+
+Push
+	push a files to a remote repository
+
+Merge
+	Merge to branch to one
+	git merge master	//ahol állunk oda mergeli be azt amit megadunk.
+
+Pull
+	Is a fetch and a merge
+	 --rebase
+
+Fetch
+	is a Pull without a Merge
+	Handy if you want to compare your code with others
+
+Checkout
+	Navigate between created branches
+	checkout -b newBranch and cheheck it out
+
+	
+	Create the text file gitignore.txt on Windows
+Open it in a text editor and add your rules, then save and close
+Hold SHIFT, right click the folder you're in, then select Open command window here
+Then rename the file in the command line, with ren gitignore.txt .gitignore
+
+Ha nem akarjuk leszedni a projekt mappját akkor álljunk bele ahová le sszeretnénk klónozni és a végére tegyünk egy szóközt és egy pontot:
+	git clone git@gitbud.epam.com:Gabor_Koncz/mep-linux.git .
+
+git commit -am"ha nem akarunk előtte külön git add .-tal hozzáadni mindent, hanem mehet egybe";
+
+gir commit -a --amend	:	az előző kommitot tudjuk módosítani h ne legyen messy a line. Megnyílik a message editor arra az esetre ha az üzenetet szeretnénk módosítani.
+
+A brench nen más, mint egy pointer ami egy adott kommitra mutat.
+
+Merging in Git creates a special commit that has two unique parents. A commit with two parents essentially means 
+"I want to include all the work from this parent over here and this one over here, and the set of all their parents."
+
+
+Reabase
+	Rebasing essentially takes a set of commits, "copies" them, and plops them down somewhere else.
+	While this sounds confusing, the advantage of rebasing is that it can be used to make a nice linear sequence of commits. 
+	The commit log / history of the repository will be a lot cleaner if only rebasing is allowed.
+	
+	git reabase master
+		ahol állunk azt beteszi a master után és megszűnik ahol álltunk. vessző lesz'
+
+		
+HEAD: Az a commit amire aktuálisan ki vagy checkoutolva.
+
+Amikor detach-cseljük a head-et akkor valójában csak annyi történk hogy egy commitra mutatunk, nem pedig egy branch-re.
+
+Commitra annak hash-ével tudunk rámutatni. Nem kell közvetlenül az adott brenchen állni hogy az adott commitra rááljjak, 
+egy másik branchről is közvetlenül át lehet ugrani.
+Nem kell megadni a teljes hash hosszát, magától tud következtetni.
+
+Relatíve is be lehet járni a hash-fát:
+	Fölfelé lépni egyet: ^	//Kettőt: 
+	Fölfelé lépni 4-gyel számút: git checkout HEAD~4
+	Akutális jelölő: HEAD. Feljebb léni egyet: git checkout HEAD^
+	
+git branch -f master HEAD~3
+	move by force.
+	
+A brancheket a branch utasítással lehet mozgatni, a HEAD-et a commit-tal.
+
+git reset HEAD~1
+git reset reverts changes by moving a branch reference backwards in time to an older commit. 
+In this sense you can think of it as "rewriting history;" 
+git reset will move a branch backwards as if the commit had never been made in the first place.
+Valóban kinyírja az aktuális kommitot és visszaáll az egyel előrébb lévőre.
+
+
+git revert HEAD
+While reseting works great for local branches on your own machine, 
+its method of "rewriting history" doesn't work for remote branches that others are using.
+In order to reverse changes and share those reversed changes with others, we need to use git revert.
+Előre megy és csinál egy C2' -t
+Ne adjunk ^-t meg ha csak egyet akarunk mozogni, mert akkor kettőt megy "előre", nem az előtte lévőrőre áll vissza, hanem az azt megelőzőre.
+
+
+Ha a head ugyanitt áll mint a branch akkor lehet felváltva használni? Nem tudom van amikor megy.
+
+cherry pick
+	Ahol állunk oda beteszi amit kiválasztunk és ráállunk a legutolsóra.
+	git cherry-pick C2 C4
+	ahol álltunk->C2'->C4'(ezen állunk mostmár)
+
+interactive rebase
+	Akkor ha nem pontosan tudjuk mely commitokat akarjuk.
+
+	All interactive rebase means is using the rebase command with the -i option.
+	If you include this option, git will open up a UI to show you which commits are about to be copied below the target of the rebase. 
+	It also shows their commit hashes and messages, which is great for getting a bearing on what's what.
+	For "real" git, the UI window means opening up a file in a text editor like vim.
+
+	When the interactive rebase dialog opens, you have the ability to do 3 things:
+
+	You can reorder commits simply by changing their order in the UI (in our window this means dragging and dropping with the mouse).
+	You can choose to completely omit some commits. This is designated by pick -- toggling pick off means you want to drop the commit.
+	Lastly, you can squash commits, it allows you to combine commits.
+	
+	git rebase -i HEAD~4
+	A 4-gyel előttünk állóig meggyílik egy párbeszéd, amiben újrarendezhetjük, elvethetjük a rang-en belül történit commitokat,
+	ameddig tartott az ablak(~4) onnantól új szál jön létre a kívánt sorrendbe rakott/megtartott commit' -kkel, a régiek megmaradnak.
+	Rmáutathatunk közvetlenül(direkt) az adott végpontra a commit hash-ével is, nem kell realtívka lennie.
+		git rebase -i C1
+
+Amíg valamit be nem kommentelek az az összes branchez tartozik, nem csak azon amin állok.
+
+Aliasok:
+	git config --global alias.st status 
+	git config --global alias.co checkout 
+	
+Csatlakozás már kész repóbol egy már meglévő távoliba:
+	git remote add origin ssh://...
+	
+Hogy lássuk mi is a remote-unk:
+	git remote -v
+	git config --get remote.origin.url
+	vagy:
+	git remote show origin
+	
+Delete/Remove commits:
+	git reset --hard HEAD~1
+	vagy
+	git reset --hard <sha1-commit-id>  //Ami még jó volt
+	
+	Utána:
+	git push origin HEAD --force
+	
+	
+Stash:
+	A stash egy verem amibe be lehet pakolni azokat a változtatásokat amiket nem szeretnénk az aktuélisan branchünkön látni/át akarjuk lapátolni máshova/később vissza akarjuk hozni.
+	A stash levesz mindent amit nem commiteltünk és ehy stash@{id} val beteszi egy verembe, amibe gyűjthetjük a többi stash-el együtt.

@@ -1,0 +1,4 @@
+Egy osztálya példányosítása során meghívja az õsosztály konstruktorát egy láncban egészen föl az Objectig.
+Ha azonban egy adott osztály konstruktora privát akkor azt kivülrõl el nem érheti, tehát az adott osztályt így közvetve bár (implicitly) final-lá tettük.
+
+final osztályból másik osztály nem származhat (extends)

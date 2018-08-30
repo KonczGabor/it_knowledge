@@ -1,0 +1,5 @@
+Takes one argument
+test();
+returns true or false (returns a boolean)
+returns a boolean primitive and not a Boolean object
+

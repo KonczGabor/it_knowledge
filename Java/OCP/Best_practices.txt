@@ -1,0 +1,13 @@
+0. Mindig ellenőrizd h mit kérdeznek! 
+	Melyik a helyes?
+	Melyik a nem helyes?
+	
+1. Zárójelek száma. Mindig legyenek párban.
+
+2. El nem érhető kódot is olvasd el mert lehet benne fordítási hiba.
+
+3. If szerkezetek tagolása direkt félreveztő szokott lenni.
+
+4. Switchben a bemenő típus, a break-ek. 
+
+5. &&-t nem érdekli h ha ő false, mi jön utána.

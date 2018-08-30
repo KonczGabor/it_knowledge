@@ -1,0 +1,4 @@
+Láthatósága bármilyen lehet.
+Egy osztályon belül jön létre, érvényesek rá az interfészek szabályai.
+Egy adott belsõ osztály valósítja meg. A megvalósított metódusoknak továbbra is public-nak kell lennük.
+

@@ -1,0 +1,6 @@
+Encapsulation:
+	A meezõk és a velük mûveleteket végzõ metódusok kapcsolatrendszere az enkapszuláció. Minél szorosabb, annál jobb.
+
+	Egyik megvalósítása:
+		Mezõk és metódusok olyan kombinálása hogy a mezók ne legyenek elérhetõek kívülrõl közvetlenûl, 
+		csak a rajtuk mûveleteket végzõ metódusaik segítségével.

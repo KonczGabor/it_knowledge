@@ -1,0 +1,6 @@
+Minden osztálynak van cstr-a. 
+Ha mi magunk explicit nem definiálunk semmilyen cstr-t, akkor a fordító lérehoz magától egy paraméter nélkülit.
+
+Haz az ős osztály ban csak paraméteres cstr van, akkor nekünkis létre kell hozni olyan cstr-t ami azt meg tudja hívni.
+
+Ha egyik cstr-ből meg akarunk hívni egy másikat, akkor a hívónak az első sorában kell szerepelni a hívásnak (this(a, b)), vagy ha őst akar hívni, akkor a super()-nek.

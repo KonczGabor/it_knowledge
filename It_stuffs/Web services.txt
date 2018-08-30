@@ -1,0 +1,160 @@
+Ajax
+	Asynchronous Javascript and xml
+
+Webservices
+	is a framwork for conversation between two computers
+	shared  vocabulary
+
+API
+	Application Programming Interface
+
+JSON
+	JavaScript Object Notation
+	Huma readable
+	Much smaller than xml
+
+URI
+	Unifrom Resource Identifier
+
+Servers/Webservices
+	PHP
+	ASP.NET
+	Java EE
+	Node.js
+	ColdFusion
+
+CORBA
+	Common Object Request Broker Architecture
+		Powerful, but complex
+
+RMI
+	Java's Remote Method Invocation
+
+XML
+	Extensible Markup Language
+		Readable by humans and machines too.
+		Plain text
+
+POX
+	Plain Old XML
+		
+SOAP	
+	Simple Object Access Protocol
+		XML-based, but more powerful, more complex but robust
+		Communication in <envelope> 
+		Clien(client library)<--XML-->(server library)Provider
+		Goals
+			Extensibility
+			Neutrality
+			Independence
+
+	
+	
+W3C
+	Word Wide Web Consortium
+
+Non HTTP Protocoll
+
+	FTP
+		For lond documents
+		Client<-->FTP Server<-->Provider
+
+	SMTP
+		Simple Mail Transfer Protocol
+		How to Send a message
+		Client<-->SMTP Server<-->Provider
+		
+
+	POP
+		Post Office Protocol
+		How to retrieve a message
+
+HTTP
+	Web Browsers and Client Apps communaticating in real time
+	Text-based vocabulary
+	Client-->request and wait/immediate response<--Provider
+
+	Get
+		get data
+
+		URI
+			Uniform Resource Identifier
+			Protocol/Host/Resource route/?querry parameter&querry parameter2    //Not always
+	POST
+		add data		
+			
+	PUT
+		update
+	DELETE
+		delete data
+	PATCH
+
+	MERGE
+
+SSL
+	Secure Socket Language
+
+AMF
+	Action Message Format
+		Binary, smaller than most text-based format
+		Cold Fusion, Flex
+		Created for FlsahPlayer6
+		Supported by Adobe
+		Non human readable
+		
+REST
+	Representational State Transfer
+		Based on HTTP request/response
+		Lighter-weight than SOAP, JSON
+		each request has a verb: GET, POST, PUT, DELETE
+		Many message formats
+		Flavors of XML: ATOM, RSS, POX
+		Statelessness: each request is independent
+		Cacheable
+
+ODATA
+	Based od REST
+	Based message syntay
+	Chose between XML and JSON
+	
+
+UDDI
+	Universal Description Discovery and Integration
+	~Public webservice registry 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+	
+

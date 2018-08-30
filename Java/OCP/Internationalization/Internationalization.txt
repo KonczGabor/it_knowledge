@@ -1,0 +1,71 @@
+Internationalization:
+is the process of designing your program so it can be adapted. This
+involves placing strings in a property file and using classes like DateFormat so that the right
+format is used based on user preferences.
+----------------------------
+
+
+Localization:
+means actually supporting multiple locales. Oracle defines a locale as “a
+specific geographical, political, or cultural region.” You can think of a locale as being like
+a language and country pairing. Localization includes translating strings to different languages.
+It also includes outputting dates and numbers in the correct format for that locale.
+----------------------------
+
+
+Cél:
+
+Dátumok nyelv és ország specifikus formázása.
+Pénznemek országspecifikus formázása.
+----------------------------
+
+
+Locale locale = Locale.getDefault();
+System.out.println(locale);
+
+First comes the lowercase language code. Then comes an underscore followed by the uppercase country code. //hu_HU
+
+US 	// can have a language without a country, but not the reverse
+enUS 	// missing underscore
+US_en 	// the country and language are reversed
+EN 	// language must be lowercase
+----------------------------
+
+
+Property file:
+	only String values are allowed
+
+Resource Bundle:
+	Java class resource bundles allow any Java type as the value. Keys are strings regardless.
+
+	extends ListResourceBundle
+
+Hierarchia (Elõször az osztály, utána a properties):
+
+	1, A bekért nyelv és ország
+
+	2, A bekért nyelv
+
+	3, A default nyelv és ország
+
+	4, A default nyelv
+
+	5, .java
+
+	6, .properties
+
+	7, MissingResourceException
+----------------------------
+
+
+RE-t dob ha olyan locale-t csinálunk ami nem létezik (nincs ilyen típusú állományunk).
+----------------------------
+
+
+
+Hogyan nyerjünk ki adatot a ResourceBoundle -bõl?
+
+A, Object obj = rb.getObject("key1");
+
+B, String[] vals =  rb.getStringArray("key2");
+	

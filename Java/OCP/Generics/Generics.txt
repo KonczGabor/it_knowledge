@@ -1,0 +1,20 @@
+Elsõdleges célja hogy megakadályozza a futás idejû hibákat úgy hogy CTE -t csinál belõlük
+
+1.5 óta
+
+Elõtte Objektummá generalizáltunk, majd abból vissza specializáltunk.
+
+Primitives are not allowed as generics
+
+Elephant elephant = new Elephant();
+Integer numPounds = 15_000;
+SizeLimitedCrate<Elephant, Integer> c1 = new SizeLimitedCrate<>(elephant, numPounds);
+
+A háttérben valójában minden típus object-re cserélõdik a fordított kódban, ezt hívjuk type erasure-nek
+
+Nem lehetnek a Genercis-ek primitív típusuak, ezért futás idõben object-té kasztolódnak, ami teljesítmény csökkenést jelent.
+
+super: data in
+
+extends: data out
+

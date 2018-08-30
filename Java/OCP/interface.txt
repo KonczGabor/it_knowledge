@@ -1,0 +1,48 @@
+Az interfész egy szerzõdés.
+
+interface-ek csak egymásból származtathatóak (még absztrakt osztályból sem), extendes kulcsszóval és egyszerre "többtõl is örökölhet".
+Azonos defaultokat ilyenkor egyértelmûsíteni kell, a gyerekben új default metódust kell írni.
+
+Az osztályok számára lehetõvé teszi a multiple inheritance-et. (Vagy elgalábbis olyasmit)
+
+Interfész maga csak public vagy package private lehet.
+
+Interfész nem implementálhat más osztályt vagy metódust.
+
+Minden metódusa autómatikusan absztrakt és public. Nem adható meg más típusú láthatóság.
+
+Minden változó public, static, final. Konstans. Tehát nem adhatunk neki uj erteket.
+	El lehet érni az interfész konstansát anélkül hogy implementálnánk azt. Elég csupán beimportolni az interfészt.
+
+default metódusnak rendelkezni kell törzzsel.
+
+defult metódus nem lehet static!	
+	
+Egy absztakt metódust a származtatott interfészben default-tá lehet tenni, vagy fordítva, defaultból absztrakttá.
+
+Subinterfész örökölt defaultból nem csinálhat static metódust, viszont fordaítva igaz: static metódust feülírhat defaulttal. (S->D igen, D->S nem) 
+
+Ha egy interfész örököl különbözõ helyekrõl, de ugyanolyan szignatúrájú metódusokat, akkor abban egyértelmûsíteni kell, nem adja tovább az elsõ konkrét osztálynak. (CTE)
+Ellentétben a változókkal, amit két(vagy több) helyrõl örököl. Magában nem kell egyértelmûsíteni, de az interfészt implementáló osztályban egyértelmûen kasztolni kell az adott változót, hogy melyik helyrõl szeretnénk elérni.
+
+A metódusok felhasználása lehet: 2 csoport megállapodik egy közös interfészben, 
+az egyik implementálja azt, a másik elkezdi fejleszteni a saját alkalmazását ami fehasználja az interfészt (mockolhatja). 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

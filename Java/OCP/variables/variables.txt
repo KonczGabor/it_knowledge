@@ -1,0 +1,35 @@
+Méret szerint:
+
+								alapértelmezetten:	Méret:						Értékkészlet
+byte 		előjeles egész 		0 					8 bit (1 bájt) 				-128 - 127
+short 		előjeles egész 		0 					16 bit (2 bájt) 			-32768 - 32767
+int 		előjeles egész 		0 					32 bit (4 bájt) 			-2147483648 - 2147483647
+long 		előjeles egész 		0 					64 bit (8 bájt) 			-9223372036854775808 - 9223372036854775807
+float 		lebegő pontos 		0.0 				32 bit (4 bájt) 			+/-1.4E-45 - +/-3.4028235E+38, +/-infinity, +/-0, NAN
+double 		lebegő pontos 		0.0 				64 bit (8 bájt)				...passz
+char 		Unicode karakter 	\u0000 				16 bit (2 bájt) 			\u0000 - \uFFFF
+boolean 	logikai érték 		false 				1 bitet használ 			true, false 
+													egy 32 bites 
+													egészből 
+
+
+Változók lehetnek:
+	Objektumhoz kötöttek: Kint élnek a class-ban és nincs előttük static kulcsszó.
+	
+	Osztályhoz kötöttek. A class az ő gyökerük és static kulcszóval vannak ellátva.
+		Nem szükséges hozzájuk a példány létezése, az osztály nevén keresztül érjük el őket.
+			Class.klassVáltozó, DE
+			Példány változón keresztül is el lehet, csak nem szép:
+				osztálypéldány.classVáltozó
+			Ha egy változó láthatósága protected, akkor csomagon kívülről csak a származtatott osztály változóján keresztül lesz az elérhető,
+			az eredeti osztályreferencián keresztül, csomagon kívülről nem lehetséges.
+	
+	Lokális változó: a függvényen belül él, kötelező h értéket kapjon. Aminek az értéke nem változik bizonyosan a kvázi .. 
+	
+	
+Egy deklarálásban egy típust csak egyszer használhatunk:
+	String cat, String dog = "animal";
+	
+_int______first = Integer.parseInt("5");
+_Integer______second = Integer.valueOf("5");
+

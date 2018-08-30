@@ -1,0 +1,19 @@
+Java 5
+java.util.concurrent
+
+Különböző szálak szinkronizálására szolgál.
+Amíg nem értünk oda annyian (annyi thread nem várakozik ott: await() és nem wait()!), addig a kód további része nem lesz végrehajtva.
+
+El kell kapni egy InterruptedException-nel és egy BrokenBarrierException-nel.
+
+CayclicBarrier obj = newCayclicBarrier(key: ahány thread-et bevárunk kell)
+
+Hétköznapi példa: Egy taxi, aki addig nem indul el, amíg legalább három utas be nem szállt.
+
+Egy main szál ami legyárt három thread-et, ami ugyanarra a barrierre szinknizál. 
+Egy adott szál egy olyan objektummal jön létre amely megvalósítja a Runnable interfészt és ezen objektum továbbá
+konstruktorában kapja a Barriert.
+
+Az objektumok @Override-run() metódusaikban a cyclicBarrier.await()-jét hívják.
+
+A main thread késlelteve indítja a háro különböző szálat, akik ugyan azon kapu előtt fognak várakozni.

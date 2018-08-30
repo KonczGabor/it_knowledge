@@ -1,0 +1,170 @@
+Docker: Open-Source platform (Cél: megkönnyíteni a DevOps-ot, az IT Operation munkáját.)
+	Segít abban h deployoljuk a kódot és futtasuk az alaklamazást olyan körülmények közt mintha az prod lenne.
+	A különböző aőőlikációk konténereikben izoláltan futhatnak.
+	
+2 változatban létezik: Community(Stable and edgedfg[new features]) és Enterprise edition (provides business critical operations)	
+	
+Előnyei:
+		Simplicity: Fejlesztőknek nem kell foglalkozniuk a deployment-tel, csak a package-ekkel/dependenciákkal
+		
+		Speed: A konténerek osztoznak a host OS kernelén, mégis függetlenek megymástól
+		
+		Interoperability: DevTeamek több konténert/service-t össze tudnak hogy kialakítsanak többrétegű architektúrákat.
+		
+		Portability: A docker közös/standard metódust bizotsít a konténerek deployolási processzusára, legyen az dev workstation, privát vagy publikus felhő, ...
+		
+		Density: A konténerek lightweight runtime envirinmenteket biztosítanak az app-jaik számára, ami íg növeli a "host per app sűrűséget".
+		
+		
+		
+A Dokcker a Host operációs rendszer felett ül.
+
+A docker egine segít hogy különböző konténereket gyárthassunk.
+
+A kontlner nem egy konkrét operációs rendszer.
+A kontlnerek csak a szökséges binary-ket és libraryket tartalmazzák, melyek az alkalmazást támogatják.
+
+A kontérnerek közös(Host) oprendszeren osztoznak.
+
+A konténer maga egy light-weight OS. 
+A konténerben saját kis OS-én ül a RUNTIME.
+RUNTIME: démonok - docker engine
+A Runtime-on ül az APP (Lehet egy DB, vagy egy WebServer, MiddleWare)
+
+	Virtualization VS Docker:
+
+Virtualization során adott 3 layer:
+		Hypervisor: ez teszi lehetővé h a virtuális gépek (Guest OS) meg tudják osztani egymás közt a fizikai erőforrásokat. (Memory/CPU/SDD/IO)
+		Oprendszer
+		Infrastructure (Vas, Felhő, ...)
+	Minden virtuális gép saját OS-sel bír	
+
+A Docker fileból fog megszületni a docker image.
+A Docker image tartalmazza a projekt kódot, github repót(?), midnen eszközt és technológiát ami szükséges az app futtatásához
+
+A Docker Engine tartja életben a konténereket.
+
+Image: Egy read-only template instrukciókkal a konténer létrehozásra. Gyakran egy image egy másik image-re épül
+
+Rest API: Client userek ezen keresztül tudják elérni a docker daemont.
+
+Docker Daemon(dockerd) feladata managelni a konténereket és az imageket, hálózatot.
+
+Build File~Docker file: arra szolgál h létrehozzon egy a konténert kód alapján. pl
+
+Registry:
+
+Docker Architecture
+	
+	Client-Server(Host)-Registry
+	
+	Client a CLI segítségével kommunikál a Docker Daemonnnal
+		Ezek a parancsok: 
+			Pull: a parancs kiadásakor a docker demon lehúzhatja a Registryből azt at image-et amit mi szeretnénk.
+			Push: Ide tölti fel az imaget.
+			Run:
+			
+	Registry: pl.:Docker Hub. Ezt lehet konfigurálni h hova mutasson.
+	
+
+	
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

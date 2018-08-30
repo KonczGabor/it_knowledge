@@ -1,0 +1,2 @@
+Jó helyre tegyük a metódusokat. Mondjuk meg az objektumoknak hogy mit csináljanak, ne az adatokat kérjük ki belõlük.
+Lehetõleg kerülni kell a gettereket.

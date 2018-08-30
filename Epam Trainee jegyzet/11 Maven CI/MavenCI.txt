@@ -1,0 +1,353 @@
+Software Developing Lifecycle
+
+Continous Integration Pipeline
+
+Specifikáció->kódolás->tesztelés(különbözõ környezetekben)->
+
+Cél: a környezetek minél jobban hasonlítsanak a production környezetre.
+//UAT enverinment: User Acceptance Testing
+
+Minél rövidebb ideig tartsuk a gépünkön a fejlõdõ kódbázist, integráljuk minél gyakrabban a rész egységeket az egészbe.
+Így hamarabb, egyértelmûbben kiderül h milyen hatással lesz a mi feature-ünk az egészre. 
+
+Early feedback (jó irányba megy-e a hajó):
+	Mi is lássuk
+	Az ügyfél is lássa
+
+Legalább egyszer(nap végén push-oljunk)
+
+A feature branch-ek minél rövidebb idejüek legyenek. Kapcsolókkal ki/be lehessen állítani a feature-eket.
+
+History: rendszeresen alábecsülték az integrációra szánt idõt.
+
+Continous Integration: Az alapelvek és technikák összessége.
+
+Continous Delivery: Folymatosan olyan állpotban tartjuk a kódot hogy tudjuk deployolni különbözõ környezetekre.
+
+Continous Deployment: 
+
+Continous Integration egy technika különbözõ tooloknak és szokásoknak az összessége, az ahogyan fejlesztünk, 
+ahogy egymással kollaborálunk és betartjuk ezek szabályait.
+Nem az agilis framework a lényeg(SCRUM, Kanban), hanem a gondolkodásmód, hogy a változásokhoz való adaptálódás.
+
+A toolokat csoportosíthatjuk funkciókörük alapján:
+	-Verziókezelõ rendszerek (GIT)
+	-Repository manager toolok: GITLAB, GITHUB (Adnak egy plusz layert a git használat fölé)
+	-Build toolok: forráskódokból, részegységekbõl tudunk komplexebb egységet gyártani. (ANT->Maven->Graddle)
+	-CI servers: processeket autómatizálnak
+	-Repository Manager-ek (Nexus, Artifactory)
+	-Code Review, Issue Tracking, Documentation toolok (Egymást támogatják)
+	
+Forráskód->tesztelés(Build és Unit Test)->Pusholjuk a kódot egy repository managerbe->kitesszük egy teszkörnyezetbe(integrációs tesztek)->deploy PROD-ra
+
+Maven: Olyan project management tool, ami project object modellel dolgozik, illetve olyan foglamakat hoz be mint a 
+	project életciklus
+	függés kezelés (dependency maganegement)
+	
+	A lifecycle-höz különbözõ fázisok vannak, amikhez különbözõ pluginek tartoznak, amiknek különbözõ goaljaik vannak.
+	
+	Amikor mavent.használunk akkor ezen keresztül a pom-on keresztül tudjuk kifejezni a projekt sajátosságait-
+	
+	Cross-cutting logic: a projekt buildelésére vonatkozó instrukciók. Projektet behálózó konfigurációk.
+		Konvenciók elfogadása default eljárásokat eredményez.
+	
+	A mavent az ilyen cross-cutting logikákat közös egységbe szervezi.
+
+A maven a tevékenységeit plugin-ek segítségével hajtja végre
+
+A pom.xml-nek van egy leírója, a leírónak van egy nyelvezete amiben csak azt kell konfigurálni amiben mi el akarunk térni a konvencióktól.
+
+Jar verziók és repsoitory dependenciák kezelése.
+
+A maven a deklaratív nyelvezetet preferálja: kezdeti állapotunk adott és el szeretnénk jutni valalhová és azt kell konfigurálni hogy hogy szeretnénk elérni.
+//Ezzel szemben egy imperatív nyelvben lépésenként meg kell mondani h mi történjen.
+
+A lifecycle kitüntetett fázisai:
+	Validate: helyes-e a pom.xmel-ünk, a projektstruktúra megfelel-e a kívánalmaknak
+	Compile: forrásfile-ok lefordítása a compiler segítségével
+	Test: elõállítjuk a testfileokat, a teszt erõforrásokat megfelelõvé tesszük, lefuttatjuk a unit teszteket.
+	Package: rész eredmények összecsomagolása egy egészbe
+	integration-test :installálni tudjuk egy repository-ba és tudjuk deployolni
+	
+Az archetype plugin arra jó hogy maven-es projektetket hozzon létre. A template-ek alapján létrehoz egy alap struktúrát
+
+
+$mvn archetype:generate -DgroupId=com.epam.training -DartifactId=first-project -DarchetypeArtifactId=maven-archetype-quickstart
+ennek a parancsnak a kiadása után mindent letölt és közben elõször visszakérdez h mi legyen a verzió, 
+majd hogy mi legyen a java filet tartalmazó package neve
+Minde a két esetben lehet entert ütni.
+
+3 nagyon fontos leíró (Egyedi azonosítója a projektnek):
+	groupID
+		artifactID
+			version (ez alatt található maga a file)
+	
+	
+Az összes maven utasítást onnan a mappából adjuk ki ahol a pm.xml található, ez a biztos.	
+a <packaging>jar</packaging> azt mondja meg h ebbõl egy jar fog születni.
+<name> projekt szimbolikus neve 
+
+Compiler plugin letöltése:
+$mvn help:describe -Dplugin=compiler
+
+---------------------
+$mvn clean package //két fázis konkatenálva. A clean kitörli a target foldert. Nem csak a tartalmát, magát a foldert is
+
+
+	Létrejön egy target folder
+		Gyakoraltilag a maven workspace. Törölhetõ, létrejön újra, dinamikus (on-the-fly). Sosincs verziókezelés alatt.
+		
+	És egy jar file
+
+	
+compile esetén létre jön a class file, de nem csomagolja be egy jar.-rá, ahhoz kell a package	
+---------------------
+
+Nem csak fázisokra, hanem magára a pluginok goal-jaira is hivatkozhatunk, 
+ilyenkor kiragadjuk a lifecycle-bõl azt az egy konkrét részfeladatot és a többit elfelejtjük.
+Meg kell nevezni a plugint és annak a goalját pl.:
+	mvn clean:clean
+	mvn coplier:compile
+
+---------------------
+
+A help plugin nincs lifecycle-höz kötve.
+
+ha java -jar ezt dobje: no main manifest atribute az azt jelenit h nincs  aprogramnak belépési pontja 
+és ha nincs manifest fileunk akkor a package fázisban be kell konfigurálni a pom.xml be felveszünk egy utasítássorozatot.
+
+<build>
+  <plugins>
+    <plugin>
+      <groupId>org.apache.maven.plugins</groupId>
+      <artifactId>maven-jar-plugin</artifactId>
+      <version>2.4</version>
+      <configuration>
+        <archive>
+          <manifest>
+            <mainClass>...</mainClass>
+          </manifest>
+        </archive>
+      </configuration>
+    </plugin>
+  </plugins>
+</build>
+
+a "..." részbe meg kell adni a teljes elérését a class-nak: com.epam.training.App
+mvn clean package
+Mostmár a létrejövõ jar-ba belelépve meg fogjuk találni a manifest file-t
+
+------------------------
+
+a pom.xml "mögött" van az effective-pom ami valójában tartalmazza az összes lépést, ez a konvenió over configuration elv.
+A pom.xml-ben az ettõl való eltéréseket adjuk meg.
+Így tudjuk elérni: mvn help:effective-pom
+
+------------------------
+
+Honnan állnak elõ a repositoryk?
+
+	Local: a user nevünk alatt egy .m2 folderben
+	
+	Remote (Internal for organization): Vállalati szintü dolgok, amiket nem akarjuk elérhetõvé tenni.
+	
+	Remote (Internal for public https://search.maven.org/) (innen akár kézzel is le tudjuk szedni)
+	
+Ezeket a repóket be tudjuk konfigurálni a pom.xml-ben.
+
+Feloldási irány:
+	Elõször a Local repóból indulunk ki (olyan mint egy cache) 
+	utána a vállalati, 
+	majd a central repóból tölti le. 	
+	
+Installal bekerül a mi lokális repónkba a jar file: user/.m2/repository
+
+maven deploy olyan mint a git push 
+
+maven install olyan mint a git commit
+
+------------------------
+
+Deploy beállítása
+
+<project>
+  <distributionManagement>
+    <repository>
+		<id>juniorprogram_ci</id>
+		<url>http://evhubudsd1a14:8081/nexus/content/repositories/juniorprogram_ci_releases</url>
+	</repository>
+	<snapshotRepository>
+		<id>juniorprogram_ci</id>
+		<url>http://evhubudsd1a14:8081/nexus/content/repositories/juniorprogram_ci_snapshots</url>
+	</snapshotRepository>
+  </distributionManagement>
+</project>
+
+Igen ám, de itt még nicns beállítva h credentials, azt a settings.xml-ben thetjük meg
+apache-maven/conf/settings.xml
+mvn -v megmondja hova lett telepítve a maven, pl.:
+/use/share/maven/conf/settings.xml
+
+------------------------
+
+Versioning:
+
+	Major.Minor.Incremental-SNAPSHOT
+	1.0.0.
+	
+	Incremental: a feketedobozon belül történnek változások.
+	Minor: funkcionális változások a visszafele kompatibilitás még biztosított.
+	Major: Generációváltás, alapvetõen átalakult a projekt.
+	
+	SNAPSHOT: ez még fejlesztés alatt áll. Nem stabil verzió, még változhat.
+	Ha nincs SNAPSHOT az már nem fog változni.
+
+	Version plugin.en keresztül könnyebbé válik a verzió átállítása, nem kell kézzel átállítani a pom.xml-t
+		mvn versions:set  //interaktívan megáll és bekéri.
+		mvn versions:set -DnewVersion=3.0-SNAPSHOT
+		
+	Ez még nem lesz lebuildelve, ahhoz le kell clean installálni.
+		
+------------------------
+
+Profiles:
+
+	Különbözõ viselkedést tud megadni a buildhez.
+		-p profilNeve:
+		vagy:
+			adott környezeti változó jelen van, vagy nem így el tudja dönteni h UAT, DEV en, vagy PRODUCTON-on van-e
+			a <profile><id> -jával kell lebuildelni
+			
+------------------------
+
+Dependenciák:
+
+	Ant-ban nincs autómatikus dependency kezelés.
+		
+	Scope: 
+		
+		Compile
+	
+		Provided pl.: Bár kell a fordításhoz, de nem kell becsomagolni a war file-ba. Nem fogjuk shippelni
+			vs
+		Runtime p.: dll-el amik nem kellenek a fordításhoz, de mikor az app elendül akkor ott kell h legyen.
+		
+		Test: junit csak unit teszteléshez kell
+		
+		System: pontosan meg kell mondani h hol van.
+		
+		Import: csak pom-típusuaknál értelmezett
+	
+	Tranzitív dependenciák: egy mátrix adja meg h mi milyen scope-ban kerüljön be.
+		tudunk dependenciákat exclude-olni: megmondom h ez ne hozza magával azt.
+		
+	Dependency mediation: egy adott groupID-ból és artifactID ból egy adott verzió lehet csak a classpath-on.
+		erre vannak különbözõ feloldási szabályok:
+			pl.: Ami legközelebb van a hívóhoz. Melyik van elõbb deklarálva. Nem a legmagasabb verzió nyer feltétlenül.
+	
+	Ritka hogy a nulláról építsünk fel dependencia gráfot a fejlesztõknek.
+	
+	Hasznos plugin: mvn dependency:tree goal-lal meghívva kilistázz a projekt függõségeit. 
+		Azt is megmondja h ami többször van jelen azok közül melyikkel oldotta fel.
+
+------------------------
+
+Multi-modulos projekt:
+
+	A projektstruktúra több almodulból ál fa szerûen, amiben minden projekthez külön pom.xml tartozik. 
+	
+	Ha nincs a modulok között dependency akkor deklarálási sorrendben buildeli le.
+	Ha van köztük függõség akkor azokat veszi elõre amire mindenki más hivatkozi. Ha körkörös függõség van az baj.
+	
+	konfiguráció öröklés történik úgy hogy meghivatkozom h ki a parentem. 
+	Mielõtt elkezdi a modul önmaga fordítását elmegy az õ szülõjléhez hogy magába építhesse annak tulajdonságait.
+		
+
+		Integrációs teszt: Végigkattingatós (pl.:Seleinium )
+		
+------------------------
+
+Eclipse-ben kell egy plugin ami kapcsolatot teremt a Maven és az IDE között ez az m2e plugin
+	Fontos hogy ugyanazt a settings-et lássuk a Window->Preferences->Maven->User Setting->Global/User(mindegy) keressük ki az
+	apache-mave-[version]/conf/settings.xml
+	
+Jobbklikk->Import->Maven->Existing Maven Projects	
+
+------------------------
+
+Repository manager olyan szerveroldali alkalmazás ami bináris állományok menedzselését támogatja.
+	Pl.:Artifactory, Nexus.
+	Miben segíthet egy vállalati környezet?
+	Csökkenteni tudják a vállalati környezet és a külvilág közötti forgalmat.
+	Saját kézben van az uptime.
+	
+	
+	
+	GAV=Group Artifact Version (com.epam.training first-project 1.0)
+	LDAP=Lightweight Directory Access Protocol, directory szolgáltatások elérését szabályozza.
+	
+Repository-k típusai:
+	Hosted: pl filerendszerben tárolja a deployolt artifactokat fizikailag a diszken
+	Proxy: Átjáró egy másik távoli repó és a vállalti repó között (nekünk nem kell bekonfigurálni a távoli rendszert mert úgy látjuk mintha az local lenne)
+	Virtual: Repository adapter inkompatibilitási problémák kiküszöbölésére.
+	
+Repository Group:
+	Repository-k tetszõleges számú csoportja. 
+	Amilyen sorrendben vannak olyan sorrendben fogja a rendszer visszadni az artifactot.
+	
+------------------------
+
+Coninous integration
+
+	Git repóból kiszedi saját workspaceben lebuildeli onnan átkerül a local repójába és ha minden jó akkor kiteszi valamilyen artifact tárolóba (Nexus, Artifactory) 
+
+	Növeli a produktivitást könnyebbé válik a :
+		Fejlesztés,
+		Változások beépítése a projektbe, 
+		Buildelés, 
+		Tesztelés,
+		Depolyolás,
+		Történetiség kezelés
+		
+	A különálló csomópontokat összeköti
+	
+	Jenkins (java nyelven íródott, eredetileg Hudson néven futott):
+		Ingyenes, a pluginek is néha
+		Core disztribúció-alapképességeket hoz magával
+		Bõvíthetõ saját pluginekkel
+		
+		De van hozzá Maven, Graddle Script futtató plugin.
+		
+	Build job konfiguráció:
+		Build Triggers: Jenkisn elmegy adott idõközönként (cron) a git repóba és megnézi h
+			volt -e változás?
+			melyik branch-en volt?
+		De lehet úgy is konfigurálni h a gitrepó szóljon a Jenkinsnek
+	
+------------------------
+
+Deployment:
+	Bináris állományok eljuttatása A-ból B-be. Ellõtte lehet le kell állítani a futtatást. Megnézi h tényleg elindult-e.
+	
+	Jenkins tudja kontrollálni ezt a folymatot. Nexusból kitelepítheti a Maven seígtségével egy távoli környezetbe.
+
+	Version pluginnel ki lehet deríteni h mi volt az utolsó verzió, ilyenkor a pom.xml-be ír vissza.
+	
+	A dependency plugin copy goal-ja tudja másolgatni remote-ok között az artifact-ot.
+	
+
+Nem szabad megengedni hogy külsõ snapshot-os projektet release-eljünk, mert az késõbb megváltozhat.
+
+A belsõ snapshotos dependency-ket felhúzzuk oda ahol éppen tartunk az összes többi modul verzióval.
+
+Ezekre ad megoldást a release plugin.
+	2 fõ fázisa:
+		Preparation:
+			Felhúzzuk a verziót, beállítjuk a git-taget, viszont nem deployolunk a Nexusba
+		Perform:
+			A git-taget kicheckeli és ezen mond egy clean deploy-t aminek eredményeként bekereül a verzió a Nexusba.
+			
+		
+	
+//drymode =newm teszi fel csak legyártja
+//match-mode=olyan mintha interaktívan ütnénk egy enter-t

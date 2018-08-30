@@ -1,0 +1,19 @@
+•syntax is C-like syntax, which has blocks
+•usually a block creates a scope
+•but not in JavaScript, where we have function scope (later)
+•in other languages it's usually beneficial to define a variable at the latest moment it's possible, for JavaScript they should be at the top of each function
+•in JS all parameters and variables defined in a function is not visible from outside
+•and also means if a variable defined in a function, it's visible everywhere in the function
+
+varfoo = function ( ) {
+	vara = 3, b = 5;
+	varbar = function ( ) {
+		varb = 7, c = 11;
+		// At this point, a is 3, b is 7, and c is 11
+		a += b + c;
+		// At this point, a is 21, b is 7, and c is 11
+	};
+	// At this point, a is 3, b is 5, and c is not defined
+	bar( );
+	// At this point, a is 21, b is 5
+};

@@ -1,0 +1,23 @@
+A Collection maga egy interface.
+A Collections pedig egy staticusokat szolgáltató osztály.
+
+ Interface  Collection
+ Extends Interface List
+ Implements Class ArrayList 
+ 
+ Interfacek: List, Set, Map000
+ 
+ Implementációk:
+	List: Vector
+		Dinamikus Array.
+		Default capacity 10
+		ThreadSafe
+		Slow
+		
+		
+	ArrayList:
+		Alapból a size() -a 0.
+		Nincs capacity-je.	//Csak a szükséges memória méretet foglalja le.
+		NotThreadSafe
+		Fast
+		

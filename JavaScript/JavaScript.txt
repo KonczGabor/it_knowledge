@@ -1,0 +1,484 @@
+Mire használjuk? 	//Rég túlhaladtuk azt h animálgassuk a weboldalakat.
+	Böngészõk/Mobilok
+	Szerver oldalra átkerült a Node-dal.
+	Böngészõ kiegészítõk (Ad-blocker)
+	MongoDB(noSQL) lekérdezések
+	Irodai és dizájn alkalmazások
+	Operációs rendszer scriptelés
+	
+Dinamikus nyelv:
+	Futás közben dõl el h milyen típust használunk.
+	
+Aszinkron: Egy hívásnak nem várjuk meg a visszatérõ értékét, hanem továbbmegyünk a kód futtatásában,
+	és lehet h mire vissza kapjuk az adatot, addigra befejeztük a 4., 5. sort is.
+	
+A változók adattaípusai.
+	Primitívek:
+		undefinied
+		nullboolean
+		number
+		stríng		//!
+		symbol(ES6)
+	
+	Objektumok:	
+		Object
+		Function
+		Array
+		Date
+		Error
+		RegExp
+		Boolean
+		Number
+		String
+		... etc.
+		
+	NaN: Õ nem egy szám, még saját magával sem egyenlõ NaN !== NaN
+		
+	typeof 2 => "number" 	//Egy string reprezentációt ad vissza
+	true instanceof Booean => false, mert ez a kicsi true, nagy True esetén => true lenne.	//true/false -t ad vissza. Note: Prototype szûkítés, meddig követi vissza?
+
+	
+NULL 								VS 					UNDEFINIED
+Nem létezõ referencia esetén							A változóhoz még nem rendeltünk értéket
+Ezzel dobjuk el a referenciát							Sose állítsunk egy változót undefinied-ra
+A JS osem állít semmit NULL-ra							Inital nélküli változók undefiinied-ek lesznek.
+
+	null => ha egy változó nincs feltöltve,
+	undefinied => ha még soha nem is kapott értéket. //Vissza lehet állítani egy változót undefinied-ra
+	
+	Truthy és Falsy:
+		Ha valami alapjáraton nem true/false, de arra evaluál, ha betesszük egy if-be.
+	
+Két egyenlõ ( == )
+		Nem nézi meg h ugyanolyan típus-e a kettõ, amenynire tudja, megpróbálja ugyanolyan típusra lakítani a kettõt,
+		és lehet h ez passzolni is fog.
+		
+Három egyenlõ ( === )
+	Megnézi h ugyanolyen-e a két típus, s utána h az értékük is megegyezik-e
+	
+Wrapper:
+	primitív tipus felokosítása (becsomagolása) h velük mûveleteket tudjunk végezni.
+		
+
+Syntax Parser: A program that reads your code and determines what it does and if its grammar is valid.
+
+Lexical Environment: Where something sits physically in the code you write.
+	
+
+Execution Context: A wrapper to help manage the code that is running.
+	Megcsinálja a global objectet, amire a this-szel tudunk hivatkozni, ez minden böngészõ ablakban egy új window.
+		Global is not inside a Function.
+
+Object: Collection of name and value pairs in js.
+
+Hoisting: a JS-ben nem muszáj a változóknak létezniük mielõtt meghívjuk õket, ilyenkor undefiinied-ek lesznek.
+	Mintha autómatikusan "felemelné" a változókata file tetjére.
+	Nem fizikailag emeli fel, hanem csak a memóriát foglalja le a változók és a metódusok számára, de értéket még nem kapnak, csak placeholderként undefiinied-ek lesznek.
+	Function expressions are not hoisting. // Az értékadások nem értékelõdnek ki elõre.
+	A függvény deklarálások is felviszi, de a var x = function y(){} - ból csak a var x megy fel, a function hozzárendelését még nem látja ha elõrébbrõl hívjuk. x is not a function. //még. Csak változónak látja.
+	Csak a statement bal oldalával foglalkozunk, az egyenlõség jobb oldalával nem törõdik a hoisting.
+		
+
+JavavScript is single threaded synchronous executioner.
+	Every function creates a new execution context
+		Every execution context has it's own variable environment
+			Every execution context has a reference to it's own outter environment
+			
+FUNCTION SCOPE: KURVA FONTOS! Hoisting //angolúl: mikor valamit kiveszek valahonnan
+	Függvényeken belül, egymás ágyazott blokkok esetén ugyanolyan névvel történõ újradefiniálás nem felülírja
+	a szûkebb blokkban, hanem az egész függvényen belül, mivel JS-ben a változók függvény szinten léteznek.
+	A két változó ugyan az lesz:
+	
+		function(){
+			var x = 1;				//<= x : 2
+				if(...){
+					var x = 2;
+				}
+		}
+	
+	ÚJABB CSAVAR: Csak a deklarálást viszi magával, az értékadást nem:
+	function(){
+		console.log(x); // => undefinied
+		var x = 2;
+		console.log(x);	// => 2
+	}
+	
+	Hoisting esetén végigmegy, megfogja az összes változót (var) és felrángatja a függvény elejére.
+	Ez igaz különbözõ nevû változók esetén is, a belsõ blokk-ban lévõk láthak a külsõ blokkban is.
+	
+	==> EZÉRT TEHÁT JS-BEN A VÁLTOZÓKAT A FÜGGVÉNY LEGELEJÉN DEKLARÁLJUK --CONVENTION
+	
+	Globális változók használata kerülendõ.
+	
+	Ha függvényen kívül deklarálok egy változót var -ral az így is-úgy is globális lesz.
+	
+Varable envirionment: where the variables live.
+
+Ha nem teszünk ki var-t egy változó deklarálásakor akkor globális lesz.
+	
+Scope Chain: a scopeok nem egymáshoz kötöttek meghívási láncban, hanem ahhoz, amiben meg lettek írva.
+Ez a fizikailag megírt lánc a ScopeChain.  A lexikai lánc. Ha nincs benn a tratalmazóban amit keresek, akkor eggyel
+kijjebb lépek, amíg meg nem találom a ScopeChain-ben. 
+
+function b(){
+    console.log(myVar);
+ }
+
+function a(){
+    var myVar=2;
+    b();
+ }
+
+var myVar=1;
+a();
+
+//Result: 1, és nem kettõ, mert ahol a function van megírva, abban a kontextben keres, nem abban amiben meg lett hívva.
+Function b() a globalhoz kötõdik és abban myVar = 1
+
+Ergó execution environment != lexical environment. És a váltpzók lexical envirionemnthez kötöttek.
+
+Scope: where the variable is available in the code.
+
+	let: block scopeing. Csak abban érhetõ el. A for loopban is új születik.
+
+Single Threaded:	
+	Egy böngész egy tabja egy thread -et kap.
+		Ha van több utasítás, nem lehet megoldani h egyszerre fussanak le.
+		
+
+	
+Event Queue: Csak akkor dolgozódnak fel, ha már minden más folyamat megtörtént. Asynchronous úgy van megoldva, 
+hogy szinkron történnek, ha a "normál" folyamatok már befejezõdtek. WTF?!
+
+Dynamic Typing: You don't tell the engine what type of data a variable holds, 
+it it figures it out while your code is running. <=vs=> StaticTyping. 
+	primitive type = not an object. Just a single value. //Object is a collection of name-value pairs.
+	undefinied: represents lack of existence. You shouldn't set a variable to this.
+	null: represents lack of existence. Egy változó is beállítható null-ra.
+	boolean: true, false.
+	number: floating point number (there's always some decimals).
+	string: single and double quotes can be used.
+	symbol:
+
+Az operátorok function-ök, amik felüldefiniálhatóak.
+
+A pontos vesszõt nem muszáj kitenni, autómatikusan kitevõdnek az enterek helyére. Vigyázzunk vele!
+
+A == és a === (Strict equality)között az a különbség, hogy a === szigorúbb mert ott nem végez beépített átalakításokat a nyelv, lásd:
+false == 0 : true
+true == 1 : true
+"3"==3 : true
+null == 0 : false
+null < 1 : true
+"" == 0 :true	//empty string megegyezik nullával, jah!
+"" == false : true
+"hi" || "hello" : returns "hi" because it is returns the first one.
+undefinied || "Hello" : "hello" 
+0 || 1 : 1 
+
+A window objectben a behúzalozott források közös context-be kerülnek így a késõbb jövõ felüldefiniálja a hamarabb hivatkozott
+ugyanolyan változó értékét. 
+ Felülírás megakadályozása az új libraryben:
+	window.libraryName = window.libraryName || "lob2"; Ha eddig nem volt, akkor window.libraryName => undefinied
+	és undefinied || string = string, viszon ha már volt valami akkor az elõs érényesül, tehát nem írja felül az újjal.
+
+"." is an operator, a function.
+We can declare objects with dot chaining: person.address.street = "111 Main St."	
+conosle.log(person.address.street)		//It's the same conosle.log(person["address"]["street"]);
+
+
+Creating objects on-the-fly:
+	functionName({
+		firstname: 'Mary', 
+		lastname: 'Doe'
+	});
+
+Object literal syntax vs JSON
+	on Json poperties have to definied in "quotes"
+		{
+			"firstname": "Mary",
+			"isAProgrammer": true
+		}
+		
+		vs JS:
+		
+		var objectLiteral{
+			firstname: "Mary",
+			isAProgrammer: true
+		}
+		
+takes a String and converts it into a JS object:
+	var jsonValue = JSON.parse('{"firstname": "Mary", "isAProgrammer": "true"}');
+	
+takes a JS object ang logs out in json:
+	var objectLiteral{
+			firstname: 'Mary',
+			isAProgrammer: true
+		}
+	
+	console.lo(JSON.stringify(objectLiteral));
+	
+Functions are objects!!!
+	Everything you can do with other types, you can do with functions:
+		Aggign them to variables, pass them around, create them on the fly.
+			Although: functions have a special(sometimes hidden) properties:
+				Name: can be optional - anonymus.
+				Code: Actual line of codes. Ez invocable.: ()
+
+"=" operator returns a value.
+	a = 3; returns 3
+	
+	a = { greetin: 'hi'}; returns Object {greeting: "hi"}
+		
+
+This is a function statement:
+	function greet(){
+		console.log('hi');
+	}
+	
+	This doesnt' returns a value.
+	
+
+
+Anonymus function:
+	var anonymusGreet = function greet(){
+		console.log('hi');
+	}
+	
+	Itt maga egy objektum, az anonymusGreet jön létre ami rámutat egy másik névtelen objektumra.
+		Így tudjuk meghívni: anonymusGreet();
+	
+-------------
+	anonymusGreet();			// => Error, mert az értékadás az anonymusGreet objektumnak nem történe meg. (undefinied(primitive) is not a function)
+	
+	var anonymusGreet = function greet(){
+		console.log('hi');
+	}
+-------------	
+	greet();					// => No proble, hoisting során már létrejött hamarabb az objektum.
+	
+	function greet(){
+		console.log('hi');
+	}
+	
+
+	
+	
+
+A metódusokat hamarabb meg lehet hívni mint ahogy deklaráltuk õket talán azért mert maguk is objektumok és a hoisting miatt hamar létrejönnek(?)
+
+Passing a function:
+
+	function log(a){		// returns: hi
+		a();
+	}
+
+	log(function(){			//on-the-fly hozunk létre egy functiont, ami ugye egy object, amit paraméterként átadunk, amit invoke-olunk.
+		conosle.log('hi')
+		});
+
+primitívek esetén érték szerinti átadás történik (létre jön egy másolat ús memória címen)
+Míg objektumok estén referencia szerint átadás, ugyanarra a memória címre fognak mutatni.
+
+
+Tömbök:
+	var arr = [1,2,3];		//Zero based
+	arr[0]
+	Bármit bele lehet tenni, miexlni is akár. Collection of anything.
+		var arr = [
+			1,
+			false,
+			{
+				name: 'Tony',
+				addess: 'dasdas'
+			},
+			function(name){
+				var greeting = 'Hello';
+				console.log(greeting + name);
+			}
+		];
+
+	Hogya futtatom a negyediket a harmadik értékkel (ami egy objektum) elsõ propertyjével?
+		arr[3](arr[2].name);
+
+
+Strict: Nem töri el a visszafelel kompatibilitást.
+	Azt a célt szolgálja h könnyebben tudjunk "biztonságos" kódot írni. A bad syntax-ból error-t csinál.  
+	A programozó választja ki. A kód elejére kell kitenni hogy egyértelmû legyen a blokk, amire utal.
+	De lehet olyat is hogy csak a függvény belseje legyen.
+
+Adattípusok
+	JavaScriptben nincs char. string van helyette, ami egy kicsit array is (lebutított), mert lehet az i-edik elemére hivatkozni: stringValtozo[0]; Csak olvasni tudjuk.
+	Stringet manipulálni a saját függvényeivel tegyük.
+	"a" ugyanúgy használható, mint a 'a'. Lehet cserélgetni.
+
+
+Data Persistency
+	Minden hasznos és szükséges user adat megtartására szolgál a látogatások között.
+	
+Süti (Ha azt akarjuk h a backend is lássa)
+	Lehet kliens oldali kulcs-érték pár ami a Domainhez kötõdik, így nem keveredhetnek össze.
+	Minden egyes alkalommal amikor küldök egy requestet a szervernek, utazik vele a cookie is, meg vissza is.
+	
+	Amikor belépek szerverre akkor a szerver az adatbázisában maintainel h én melyik kulccsal vagyok belépve.
+	Hogyha egy adatot a kliensnél szeretnénk tárolni, de backenden szeretnénk dolgozni, akkor az általában süti lesz.
+	
+	A Storage nem ugyanaz mint a cookie.
+		Frontenendhez köthetõ, csak a kliens oldal kell h lássa.
+		Session Storage: Minden egyes alkalommal ha lezárod a böngészõt az kitörlõdik.
+		Local Storage: Megmarad akármeddig.
+		
+FÜGGVÉNYEK:
+	Minden függvény Object saját poperty-jeivel és saját metódusaival.
+	A függvények úgy viselkednek mint a változók.
+	A funkciók és a változók hoisetd-elõdnek.
+	Különbözõ képpen lehet õket definiálni.
+	Annak ellenére h a JS single-thread-ed, lehetnek aszinkronok. setTimeout(), setInterval().
+	Azinkron metódusok visszatérési értékét callback technikával kezeljük.
+
+	First class:
+		In execution, amikor fut a program, akkor is tudunk új függvényt készíteni.
+	
+	El tudjuk õket adatstuktúrákban tárolni.
+		Egy objektum property-jébe egy függvényt mentek el:
+			var y = {} // ez idáig egy objektum.
+			y.a = function(){console.log(123)};
+			y.a		// => function(){console.log(123)}
+			y.a{};	// 123
+			
+	Egy függvény visszatérési értéke lehet egy másik függvény.
+		Egy függvény ugyanúgy mûködik mint egy változó. Amit egy változóval meg lehet csinálni azt meg lehet csinûlni egy függvénnyel is.
+
+	A függvényt meg lehet hívni hamarabb mint ahogy deklaráljuk:
+		f();						// => fff
+		function f(){
+			conosle.log('fff');
+		}
+		
+	3 féle képpen lehet függvényt definiálni:
+		Deklarálás:
+			function myFunction(param){}
+			
+		Nevesítés:
+			var x = function myFunction(param){};
+	
+		Anonymus function:	
+			var x = function(param){};
+	
+
+	function as callback: A callback egy olyan függvény, amit akkor fog valami meghívni, hogyha õ végzett a saját dolgával. setTimeOut gyönyörû példa.
+		
+	CALL VS. APPLY
+		Call: amikor bind-ot használnánk, de egybõl meg akarjuk hívni.
+		Az apply()-t olyan fgv-en használjuk ami nem fogad Array()-t paramétereként és mi ezt rá akarjuk erõszakolni.
+		//Bind-ot meg akkor ha késleltetni akarjuk a meghívást.
+		
+SCOPE VS. CONTEXT	
+
+		Context: az a környezet amiben valamit értünk. Egy fgv esetében az a környezet amiben õ éppen lefut.
+		Minden amit a böngészõben csinálunk az a window objektumra kerül rá.
+			var.x -et elérem úgy is h window.x
+			A window az a tároló ami megadja azt a környezetet h JS kódot tudjunk írni.
+			this a Global object-re mutat. visszadja a Window-t
+			Létezik function context is:
+		A this az a kontextus. Az mondja meg h az a this milyen contextus-ban lett meghívva. Melyik objektumon.
+		A this az az objektum, amin rajta van az adott függvény.
+		
+		Bind: vissza ad egy új function-t egy egyedi context-tel.
+			Az az értelme h az objet akkori állapotával hívódik meg a bind-olt függvény.
+			
+		Scope: arra vonatkozik h ki mit lát? A változók függvény szinten vannak, nem blokk scope, function scope.
+			Ha több változó is van ugyanazzal a névvel egymásba ágyazott fgv-ek esetén, mindig az kap elõnyt, aki a 
+			legközelebbi scope-on volt deklarálva.
+			
+Construktor:
+
+	var x:
+	x instanceof Asd 	// => Asd is not definied
+	---
+	function Asd(){};
+	x instanceof Asd 	// => false
+				 
+		
+CLOUSURE:
+		Outer Function + Inner Function = Closure
+		Definiálunk egy fgv-en belül egy másik fgv, amit egybõl meg is hívunk.
+		A Clousere el tudja érni a külsõ fgv változóit, még az után is ha a külsõ fgv return-ölt.
+		Self-executing function, még neve sincs.
+		Az a haszna h létrehoz egy function scope-ot, nem történik ki hoistolás a külsõ függvénybe
+		
+			var add = (function(){
+				var counter = 0;
+				return function(){	//Closure
+					counter+=1;
+				}
+			})();
+			
+			add();	//	1
+			add();	//	2
+			add();	//	3
+			
+		Veszélyes a memórai leak-ek miatt.
+		
+MODULE:
+	Amit nyújt: Ne akkadjanak össze a változók
+		function(global){
+			var _foo = "foo";
+			
+			global.MyModule = {
+				printFoo: function(){
+					console.log(_foo);
+				}
+			}
+		}
+		
+Cascading/Chaining:
+	Bármit csinál egy fgv, visszadja saját magát.
+	
+	var userController={
+		read: function(username){
+			//read user from DB
+			return this;
+		}
+		update: function(json){
+			//update properties
+			return this;
+		}
+		save: function(){
+			//save user to DB
+			return this;
+		}
+	}
+	
+	userController.read("testuser").update({name: "New Test"}).save();
+		
+CURRY:
+	Hiba esetén képes részeredményt szolgáltatni:
+		function curry(a,b){
+			if(!b){
+				return function(b2){
+					return a+b2;
+				}
+			}
+			return a+b;
+		}
+		
+		console.log(curry(1,2)); 	// 3
+		console.log(curry(1,2)); 	// 3
+		var x = curry(5);
+		console.log(curry(5)); 		// 10
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		

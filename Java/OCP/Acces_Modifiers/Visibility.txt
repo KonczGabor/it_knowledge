@@ -1,0 +1,42 @@
+Megengedősség foka szerint csökkenve:
+
+Public:
+	Mindenhonnan elérhető a változó/metódus osztály
+	
+Protected:
+	Csak metódus és field lehet. 
+	Az adott package-en belül bárki elérheti, illetve a packagen kívűl azok akik leszármaznak belőle.
+	Ilyenkor a leszármaztatott osztály példányváltozóján keresztül el lehet érni az adott protected 
+	láthatóságú metódust/fieldet, de ha az ős osztály tpusú változón keresztül akarom meghívni, akkor már nem, mivel
+	így megkerüljük az öröklődést. 
+	When you think protected, think package + kids.
+	Protected does not mean the subclass can treat the protected superclass member as though it were public.
+	Az öröklődés segítségével nem kell a származtatott osztály referenciáján direktbe rámutatni, a származtatott
+	osztályban olyan a származtatott protected member mintha a sajátja lenne. Tehát this.protectedMember, vagy
+	egyszerűen csak protectedMember.
+	Packeg-en belül el lehet érni az ős osztály példányán keresztül, de package en kívül csak öröklődéssel látható a
+		
+Package Private (~default, de nem ugyan az mint a default metódus az interfészeken): 
+	Az adott package-en belül bárki elérheti. 
+	
+Private:
+	Csak az adott osztályban. When you think of default access, think package restriction. No exceptions.
+	
+
+/alap osztály láthatósága csak private v default lehet. Attól mert egy osztályt még behivatkoztunk egy másikba még publicnak is kell lennie.
+
+Attól mert egy member (változó/method) még public még nem biztos h elérhető lesz kívülről is. Magának az osztályank 
+is public láthatóságúnak kell lennie.
+
+
+
+
+
+
+
+
+
+
+
+
+

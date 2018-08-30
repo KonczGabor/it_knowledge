@@ -1,0 +1,4 @@
+J2EE is a platform for distributed applications
+which provides a set of services arround transaction management, security checks, state
+
+The EJBs are the part of J2EE which are transaction orientated. They make a J2EE application scalable.

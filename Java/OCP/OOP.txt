@@ -1,0 +1,2 @@
+Öröklődés előnye:
+	Újrafelhasználhatóvá tesz kódrészleteket, a közös ős segítségével.

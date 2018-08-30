@@ -1,0 +1,2 @@
+Példány initalizer:
+	{System.out.println("I am an instance initializer. The cstr is not.")}

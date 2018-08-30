@@ -1,0 +1,324 @@
+Miért használunk több szálat?
+-Órajelek már nem nõnek tovább nagyságrendileg, helyette a processzorok és a magok száma nõ.
+
+-Egy magot is jobban ki tudunk használni, ha más szálak dolgoznak amíg õ vár.
+
+-Amíg hálózatkezelünk és tekerjük a vinyót, addig dolgozhatunk máson.
+
+-Idõnként háttérben, bacthben összefogott mûveleteket el kell indítani. Óra járhat hátul a weblapon, esténként
+
+Alapvetõen kétféle párhuzamosságról lehet beszélni.
+	
+	-Multiprocessing: Több feladat fut, több exe-filet indítunk el, ezek külön processekben futnak, ezek között 
+	az oprendszer ütemezõje váltogat. Ezek a processek egymástól az oprendszer által elkülönítve futnak, akár különbözõ számítógépeken is.
+	IPC: Inter Process Communication: Lehet hálózatos, közösen használt memóriaterületeken keresztül, Socketeken keresztül, Unixon pipe-okon keresztül.
+	Ahhoz hogy egymással beszélni tudjanak létre kell hozni valamilyen eszközt.
+	
+	-Több szálúság: Egy processnek több szála van. Ezek sokkal kevésbé különülnek el egymástól.
+	Shared heap: A program fõ memóriaterületén nagyrészt osztozank a szálak. Globális, mindki eléri egy programon belül. Ez az adatosztkozkodás okozza a problémák nagy részét.
+	A Stack privát, az minden szál sajátja: Ide kerülnek a hívási láncok és a hívási paraméterek, lokális változók.
+	
+A programon belül szinkronizálni kell a memóriához való hozzáférést.
+Mert a compiler is megcserélheti a sorrendet. Out-of-order execution.
+
+Leggyorsabb a regiszter, majd a cash, majd a központi memória. 
+Egy adatnak több helye van, és ha nem jól csináljuk a szinkronizációt, akkor nincs konzisztens képe.
+
+A memória nem azonnal és nem abban a sorrendben szolgálja ki az kéréseket. A cash-ek egymás közt beszélgetnek.
+Ilyen kommuikációs potokoll a MESI (az állapotát jelentik egy-egy adatnak ami a cash-ben lehet): 
+--------------------
+
+java memória modell: A memóriához való hozzáférést leíró szabályok összessége. CPU specifikus. Egyszer kell mgírni, fut mindenhol.
+
+Happens before: A programok különbözõ szálakban mûveletek hajtódnak végre és azok között sorrendiséget kell kapjunk.
+
+Synchronized: egy kölcsönös kizárás a monitor objekten keresztül, amire közvetlenül nem tudunk hivatkozni.
+	metóduson vagy blokkban tudom használni.  
+--------------------
+
+Modified: Módosítottam és ez az érték még nem terjedt szét a rendszerben.
+
+Exclusive: Valaki lockolta és írni szeretném kizárólagos hozzáféréssel.
+
+Shared: Az adat benne van a cash memóriában és mindenki ugyanazt gondolja róla. Konzisztens mindenhol. Legjobb eset.
+
+Invalid: Nincs benne a cash-ben majd be kell olvasni
+
+--------------------
+
+Minden probléma ebbõl ered: Megosztott, módosítható adat.
+Ilyenkor szinkronozálni kell. Ilyenkor két dolgot kell biztosítani:
+
+-Rendezés: Milyen sorrendben látszódnak végrehajtódni a mûveletek
+
+-Láthatóság: Egyik mûvelet eredménye látható lesz-e egy másik szálban valaha is.
+
+Hatások: A helyi változtatásokat ki kell nyomni a közösbe.
+
+Happens-before: részleges rendezés: olvasások-írások közötti sorrend felállítása.
+
+Program order: Szemantikai változás nem lesz, úgy hajtódnak végre ahogy leírtam.
+
+synchronized: Hozzárendeli a monitort egy erõforráshoz. Kölcsönös kizárást tud biztosítani, egy lock.
+				Metódusban vagy blokkban.
+
+volatile: Megtiltja a compilernek az összes egymástól függetlennek tûnõ cserét, amihez az adott attribútunak köze van.
+			Egy volatile kulcszó elõtti írásokat nem lehet átmozgatni a volatile utánra, sem elé (láthatósági szabály).
+			Számábrázolás esetén a 64 bites mûveleteket a 32 bites JVM 2 lépésben teszi meg, ilyenkor ezeket is összehangolja hogy helyes eredményt kapjunk. pl.: Double.
+			Van egy olyan plusz tulajdonsága is hogy a mezõt csak akkor írja, ha a mögötte lévõ mezõ teljesen elkészült.
+---------------------
+
+
+Démon szál: amit nem a user indít el. Nem akadályozza meg a kilépést. Bármikor lelõhetõk.
+
+Yield: Õ már dolgozott eleget, ha gondolod ütemezz helyettem mást. Nem utasítás, csak jelzés.
+
+Preemptív multi task: Fix idõszeletenként átkerül máshoz a proceszor. Ez nem utasítás, csak jelzés.
+
+destroy(), stop(), suspend(), resume(); nem biztosnágosak, deprecatedek, inkonzisztenciát okoznak.
+
+Minden objektumnak van egy monitora(lock-ja) objektuma ami mutex, azaz kölcsönös kizárást valósít meg.
+
+wait: én várok az adott szálra, amin meghívtam.
+
+minden objektumhoz tartozik egy monitor és egy adott thread azt tudja lockolni, iletve unlockolni.
+a sleep nem dobja le magáról a lockot. A lock-ok reentrantként lettek megtervezve hogy kialakuljanak a deadlock-ok.
+
+
+-----------------------
+
+wait/notify/notifyAll() metódusokat csak szinkronizált blokkból lehet meghívni.
+A notify()-lyal csak simán felébredünk, az interreupt()-tal exception-nel ébredünk fel.
+A notify() csak egyvalakit ébreszt fel, vha nincs beállítva senki akkor randomra, a notifyAll() pedig minden kit felébreszt.
+ 
+és arrra az objektumra kell szinkronizálni amin magát a metódust is hívjuk.
+
+A this-re azért veszélyes szinkronizációt írni, mert azt más is megteheti és akkor esetleg minket notify-ol.
+Helyette guard object-eket hozzunk létre. Ez legyen privát és final.
+-----------------------
+
+Final attribútum rögzül legkésõbb a konstruktor lefutásakor.
+
+Új objektum vs. szinkronizált mûvelet.
+
+Deadlock: amikor egymással szemben állnak egy szûk folyosón
+
+Livelock: Folyosón mindig jobbra-balra állnak hogy kikerüljék egymást.
+
+Unsafe publication: Objektumok nem kellõen inicializálva (félig készen) állank rendelkezésre más szálak számára.
+
+Nem a referenciára történik a szinkronizálás, hanem az objektumra. Nem szabad hogy a referencia másra mutasson. A this ezért jó, vagy ami final.
+	
+----------------------
+
+A tesztelés azért nehéz mert a hibák nem jönnek elõ determinisztikus módon, idõzítés és architektúra függõ	
+
+volatile arra jó hogy kikényszerítse hogy elmenjen a memóriához.
+
+Ha egy lockért nagy a versengés akkor hatalmas az overhead-je, ezért lehet gyorsabb egy egyszálú program, mint a egy többszálú.
+
+Pugh-féle statikus belsõ osztályban van a Singleton példnya, ilyenkor nem kell szinkronizálni, 
+mert a pélány szálbiztosan létrejön statikus osztálybetöltõdésnél. Ez lazy és nem szükséges a double check-idioma.
+
+----------------------
+
+Teljesítmény:
+
+Szinkronizált blokkok feltartják a többit. Ezért szinkronizált blokkon belül ne menjünk aludni és ne csináljunk blokkoló mûveleteket lehetõleg.
+Logolást is csak szinronizált blokk után érdemes megtenni.
+
+----------------------
+
+Konstruktorból nem szabad kiadni a this referenciát.
+
+Azért rossz konstruktorból szálat indítani, mert ha az abból leszármazott is idítani akar, akkor az illeagal state thread lesz, mert egy szálat csak egyszer lehet elindítani,
+másrészt még lehetnek be nem állított értékek.
+
+jconsole ban is lehet meg lehet találni a deadlockot. a jconsole a jvm-mel jön.
+
+Körkörös várakozást asszimmetriával lehet megtörni. (Elég ha csak az egyik filozófus nem a jobb villáját veszi fel elõször, hanme a balt)
+
+Kiléps deadlock ból: -kill: szám
+
+control-break,
+
+A wait elengedi a lockot, a sleep nem.
+
+----------------------
+
+Kiszállni egy szálból:
+
+stop(), destroy(): depricated- inkonzisztens memóriatartalmat hagy maga után 
+
+Kilépési feltétel
+
+Flag: private volatile boolean myKeepRunning = true;
+
+interrupted(); -flag
+
+Poison pill
+
+Régi hálózati kommunikáció esetén: Bezárni alatta a sokcektet, újabb esetén interruptable channel
+
+----------------------
+
+Servlet: Egy példány van belõle, requestek mehetnek át rajta. Thread-Local használata, a thread a kulcs így lehet szálakat kötni az adott értékekhez, így csak az adott szál fér hozzá.
+
+----------------------
+
+Collections:
+
+	Adott szerkezet ne sérüljön meg ha egyszerre többen akarják módosítani. Vector, Hastbale eleve szinkronizált.
+	
+	Concurrent csak az adott részt lokkolja, nem az egészet. Hashmap példa.
+	
+	Deque: azt jelenti h ki tudom az elejérõl és a végérõl is venni az elemeket. Double ended queue
+	
+	Konkurens kollekciók iterátora Fail-safe: Ha közben módosítunk adatokat azok nem fognak látszani, csak a következõ kiíráskor.
+	Fontosabb h ki tudjak szolgálni sok felhasználót elégpontosa adattal, mint kevés felhasználót nagyon pontos adattal.
+	
+	CopyOnWriteArraylist: Akkor érdemes használni ha ritkán módosítom és gyakran megyek végig rajta. 
+	Amikor kérek rajta egy iterátort akkor a pillanatnyi állapoton megyek végig, ha közben módosítom akkor létrehoz egy új példányt egy ahhoz tartozó iterátorral.
+	
+	NavigaleArraySet: rendezett. NavigableMap: a kulcsok értéke szerint növekedõ értékben készül.
+	Skiplist: Heurisztikusan egy fa struktúrát épít fel, ami rendezett.
+	
+----------------------
+
+atomic operations: Check-then-modify.	
+
+----------------------
+
+daemon thread: kisebb jelentõségû fealdatok ellátására: idõ mutatása, kiovasgatni db-bõl. 
+Egy alkalmazás addig fud amíg vannak nem dameon thread-jei. Ha csak azok vannak, akkor kilép. Bármikor lelõhetõk. Háttérmunkára valók.
+
+Thread t = new Thread(r);
+t.setDaemon(true);
+
+----------------------
+
+void interrupt(): Interrupt the thread identified by the Thread object on which this method is called. 
+When a thread is blocked because of a call to one of Thread’s sleep() or join() methods (discussed later in this chapter),
+the thread’s interrupted status is cleared and InterruptedException is thrown. Otherwise, the interrupted status is set 
+and some other action is taken depending on what the thread is doing. (See the JDK documentation for the details.)
+
+
+static boolean interrupted(): Test whether the current thread has been interrupted, returning true in this case. 
+The interrupted status of the thread is cleared by this method.
+
+
+boolean isInterrupted(): Test whether this thread has been interrupted, returning true in this case. 
+The interrupted status of the thread is unaffected by this method.
+
+----------------------
+
+Semaphore: kölcsönös kizárást biztosító eszköz. Ha hozzá akarunk férni akkor a semaphoron keresztül csökkenteni kell annak permit értékét. Vissza is lehet tölteni neki.
+			Blokkol, mert ha nem áll rendelkezésre elegendõ permit akkor nem léphetek be, viszont a synchroniz-zal ellentétben interruptolható, szóval ha várakozás közben kapok egy interrupt-tot akkor elhagyhatom.
+			Deadlock elkerülése végett hasznos.	
+			release-zel vissza adhatom a permitjeimet. Akár többet is mint amit elvettem.			
+
+CountDownLatch: Egyszer használatos számláló. Ha kész vagyok ezzel a feladattal akkor csökkentem az értékét. Nem lehet az eredetire visszaállítani, csak újat készíteni.
+
+CyclicBarrier: Újraindítható, ha befejezõdött az összes mûvelet, akkor lehet azokat összegezni és csinálni belõle egy végeredményt.
+				Meg lehet számolni h hány résztvevõje van és h hányra várunk.
+				
+Phaser: Menet közben is ki-be lehet szállni, ha én mégse akarok benne résztvenni.
+
+Explicit locks: Szinkronizált blokkok helyet vannak, rugalmasabbak annál, de bonyolultabbak. Két szinkronizáló metódus amik csak olvasnak, azok ki tudják egymást zárni szinkronizált blokkokban, itt nem.
+				finally-ban el kell engedni. Try-lockban lehet várakozni (felveszem a villáimat, elmegyek aludni és késõbb újra próbálkozom.)
+
+Condition:
+
+ReentrantLock: újra be lehet lépni a blokkba ha már megfogtuk a monitorát. Csak egy számláló növekszik hogy hány mélységig vagyunk benne.
+
+StampedLock: Csak olvasási jogot kérek, de ha vamilyen feltétel teljesül akkor írásit is szeretnék és arra lockolni.
+
+ReentrantReadWrileLock: El lehet különíteni az író-olvasó lockokat.
+
+----------------------
+
+Executor framework: kézben lehet tartani h hány szál is fut. Valójában egy thread pool. Azért van h ne nekünk keljen kézzel szálakat indítani.
+ 
+A pool olyan erõforrások halmaza, amelyeket elõre létrehozunk és szükség szerint használjuk fel.
+
+Minden egyes szálnak saját stack-je van.
+Egy-egy feladat végrehajtására idõkorlátot lehet megadni.
+
+Callable objektumnak lehet visszatérést megadni, ezzel szemben a runnable() az void. A Callable<T> Future<T> ben fogja össze a visszakapott értékeket és azt kérdezgetem h kész van már, kész van már?
+
+Thread factory: ebben lehet a szálaknak prioritást, saját nevet adni, ezt hívogatja az ExecutorService. 
+ThreadPoolExecutor: Bele tudom tenni a feladatok és bekereülnek egy várakozási sorba ha épp nincs szabad szál.
+ScheduledExecutorService: A feladatokat bizonyos gyakorisággal hajtsa végre, pl.: 5 másodpercenként kérdezze le a részvényárfolyamokat.
+	shutDown(): Ne kezdj bele új feladatba
+	shutDownNow: Termination-t is küld.
+Rejection policy: Azt határozza mag ha már folyik a shutDown, vagy túl van terhelve, akkor mit csináljon az új feladatokkal.
+	caller runs: Azok a szálak akik enddig bombáztak a kérésekkel maguk is beállnak a feldolgozók közé, másrészt azért is jó mert addig sem tudnak új feladatokat adni a rendszenek.
+
+ForkJoin példa: Autómatikus feladatszétosztás/párhuzamosítást tesz lehetõvé. Pl.:range felezés rekurzívan.
+	Meg kell valósítani a compute() metódusát. Ennél fejlettebbek a streamek a Java 8-ban. Ez 7-es. 
+		
+
+CompletionService: Van benne egy queue, amibe a feladatok érkeznek, ebbõl veszik ki a workerek a végrehajtandó feladatokat, 
+	és van egy másik sor is, amibõl a fogyasztók veszik ki az elkészült feladatokat.
+		
+----------------------
+
+Java 8 stream-ek: parancsokat fûzök össze pipeként. Ami ennek a kimenete, annak a bemente. Iterátorok összetett if-es szerkezete helyett szûrõket használhatunk.
+
+STM: Software Transaction Memory: az objektumaim verziózva vannak és rollback ha a visszaíráskor az már nem aktuális, kicsit hasonló hozzáállás mint az adatbázis tranzakciók, vagy az atomic integer.
+
+----------------------
+
+Double ended queue
+
+A terhelés szétterül a rendszerben, mert alulról, felülrõl lehet belõle lopkodni, amit aztán tovább lehet adni.
+
+----------------------
+
+Szál indítása:
+
+Két lehetõség van (mindkét esetben felül kell írni a run() metódust:
+	1, Vagy létrehozunk egy osztályt, ami extendálja a Thread-et és az objektumon meghívjuk a start()-ot.
+	2, Vagy létrehozunk egy osztályt, ami implementálja a Runnable interfészt és ezt az objektumot átadjuk a Thread osztály túlterhelt konstruktorának, és az abból létrejövõ objektumon meghívjuk a start()-ot.
+	
+	További lehetõségek:
+		Runnable interfészt helyben implementálunk anyonymus inner class-szal.
+		Runnable interfészt helyben implementálunk lambda kifejezéssel.
+
+A fork szétválaszt egy szálat, a join újra összeszervez. Linuxban a fork új process-t indít.
+----------------------
+
+Race conditions: i++;
+
+Data Races: Adott pl.: egy get() ami visszad Valami-t ha az null. Másik szál is futtatja és még láthatja h az null-on vol, így õ is létrehoz egyet.
+
+Cached Variables: Ugyanannak az objektumnak más állapotát látják.
+
+----------------------
+
+join: magamat várakoztatom meg, egész addig nem futok amíg a másik be nem fejezõdött: pl.: masik.join(); //try-catch blockban.
+
+----------------------
+
+a synchronized példánymetódus az saját objektumához tartozik.
+
+a synchronized statikus metódus az adott osztályhoz köthetõ. 
+
+Statikus inincializáló blokk vagy statikus belsõ osztály esetén nem kerülnek rá pointerek, mert védi a VM, így pl.: egy konstruktor szálbiztosan végigfuthat, nem kell rá volatile.
+
+----------------------
+
+Sor (Queue): Átmeneti puffer ahol lehet tárolni a dolgokat. Termelõ->Fogyasztó.
+
+BlockingQue: Ha én vagyok a termelõ akkor megnézi h van e hely, ha én vagyok a fogyasztó megnézi h van-e elem, nem kell checkelgetni.
+
+
+
+
+
+
+
+
+
+
+

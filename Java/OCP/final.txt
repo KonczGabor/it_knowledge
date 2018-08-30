@@ -1,0 +1,11 @@
+Ostályon: Nem lehet az osztályt tovább származtatni.
+	Miért érdemes ostályon használni a finalt?
+		Ha erõsen függünk egy implementáción és garantálni akarjuk h senki ne írhassa felül az osztály metódusait.
+
+Osztály Változó: Nem módosulhat az értéke ->konstans. Legkésõbb a konstruktor lefutásakor értéket kell h kapjon.
+
+Lokális verzió: Metóduson belül.
+
+Metódus: Nem írható felül a származtatott osztályban, de kettõvel lejjebb már létre lehet hozni ugyanolyan néven, de nem lesz érvényes rá a dinamikus kötés. Az elsõt (final) hívja meg.
+
+Metódus paraméteren: Nem állíthatjuk át a referenciát. Maga az objetum állapota megváltozhat.

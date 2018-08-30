@@ -1,0 +1,72 @@
+1, Projekt jobbklikk 
+	New
+		Spring Bean configuration File
+
+2, File name: applicationContext.xml
+
+3, Location:
+	/src/
+	
+A Bean-esk gyakorlatilag osztályok (POJO)
+	getterek és setterek
+	
+A new kulcszót helyettesítjük.
+
+Konstruktor argumentumok
+
+Properties
+	Másik bean, amit meg kell találnunk.
+	
+Values
+	Primitív values-k aiket be akarunk állítani a POJO-n.
+	
+
+A nevet és az id-t használhatjuk szinonímakét.
+
+	Az id nem tartalmazhat specila karaktereket: "*","/","."
+
+	A name már igen
+	
+Az App.class-ba ezt bel kell tenni:
+	ApplicationContext appContext = new ClassPathXmlApplicationContext("appplicationContext.xml");
+	
+	
+Konstruktoron keresztül
+		<bean name="customerService" class="com.pluralsight.service.CustomerServiceImpl">
+			<constructor-arg index ="0" ref="customerRespository"></constructor-arg>
+		</bean>
+		
+Propertyn keresztül:
+	<bean name="customerService" class="com.pluralsight.service.CustomerServiceImpl">
+		<property name="customerRepository" ref="customerRespository"></property>
+	</bean>
+	
+Autowiring (4 Típus):
+
+	byType: Ha a konténerben csak egy bean létezik az adott típussal.
+		Ha nincs egy se, akkor nem történik semmi, a property nem állítódik be.
+		Ha több is létezik akkor exception.
+		Ha nincs default constructor, akkor el fog szállni.
+		Ha nincs setter akkor is el fog szállni.
+		<bean name="customerService" class="com.pluralsight.service.CustomerServiceImpl" autowire="byType">
+		</bean>
+			
+	
+	byName: property neve alapján. Egy névbõl csak egy lehet a kontéberben. 
+	
+		<bean name="customerService" class="com.pluralsight.service.CustomerServiceImpl" autowire="byName">
+		</bean>
+
+	constructor: Hasonló mint a  byType, de konstruktor argumentumokra érvényes, ha nincs olyan bean a konténerben vagy több ugyanolyan típusú, mint amit az argumentum igényel, akkor fatal error.
+			<bean name="customerService" class="com.pluralsight.service.CustomerServiceImpl" autowire="constructor">
+			</bean>
+
+	no: No autowiring.
+	
+	----			
+	public void [a byName ezt nézi]setCustomerRepository([a byTypeezt nézi]CustomerRepository customerRepository) {
+		this.customerRepository = customerRepository;
+	}
+	---
+	
+

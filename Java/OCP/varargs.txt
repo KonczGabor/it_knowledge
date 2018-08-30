@@ -1,0 +1,21 @@
+A különbéség varags paraméteres és String tömb paraméteres metódus hívásakor, hogy
+varagsosnak sima Strginget és String tömböt is átadhatunk, míg String tömösnek, csak String tömböt:
+
+	public void printStormName(String... names) {
+		System.out.println(Arrays.toString(names));
+	}
+	
+	public void printStormNames(String[] names) {
+		System.out.println(Arrays.toString(names));
+	}
+	
+	A. printStormName("Arlene");
+	B. printStormName(new String[] { "Bret" });
+	C. printStormNames("Cindy"); 
+	D. printStormNames(new String[] { "Don" });
+	
+	A "C" nem fog lefordulni.
+	
+varags-ot csak és kizárólag metódus parméterben lehet használni.
+
+varags csak utolsó paraméter lehet és csak egy szerepelhet belőle.

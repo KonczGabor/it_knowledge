@@ -1,0 +1,7 @@
+//Specific type of a function
+
+Takes a sungle argument, returns a single value
+
+UnaryOperator<String> str  = (msg)-> msg.toUpperCase();
+        System.out.println(str.apply("This is my message in upper case")); //THIS IS MY MESSAGE IN UPPER CASE
+

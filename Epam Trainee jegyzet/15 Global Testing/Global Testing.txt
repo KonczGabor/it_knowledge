@@ -1,0 +1,57 @@
+Mikor indul a tesztelés?
+	A tesztelés akkor kezdõdik amikor elkezdõdik a követelményrendszer(specifikáció) melyet már az elején is lehet reviewel-ni
+ 
+	Elõször megírjuk a unit test-case eket és utána a kódot
+	
+	Bárki aki tesztel: õk a minõségi szûrõk vagy kapuk.
+	
+	Mindenki tesztel a saját munkájában.
+	
+Mindig kockázatokkal dolgozunk, csak nem mindig vagyunk vele tisztában. 
+
+Iparági standardek-nek is meg kell felelni, nem csak a vevõ igényeinek.
+
+Projectmanagement háromszöge: Pénz, Funkció, Idõ (, Középen a minõség)
+
+Nem szabad azonnal nekiesni egy hiba kijavításának, priorizálni kell õket, figyelembe venni a vevõ igényeit.
+
+Mikor érdemes fejleszteni: Ha az adott dolog már nem fog változni. Mikor hagyjuk abba? Ha a limitált feltételeknek eleget tettünk.
+
+Boundary value analysis: a paraméterek hátérétékeit vizsgáljuk, azok az érdekesek.
+
+ROI: Return Of Investment: Risk, Time, Budget (Menedzsment terminológia)
+
+A buildelés sebessége is számít.
+
+Pareto diszciplia: A hibák 80%-a a kód 20%-ából jön.
+
+Szoftver életciklus model:
+V, Vízesés, Scrum, Kanban(maintenance -meglévõ dologban hibajavítunk, akkor ez a legjobb), ..
+
+Nem funkcionális követelmények:
+	Teljesítmény tesztet
+	Security
+	Minden ami UI (felhasználó barátság)
+	
+Statikus tesztelés:
+	review
+	
+Dinamikus tesztelés (azután lehet miután megvan h mit akarunk tesztelni):
+	
+Fejlesztõi környezet karbantartása.
+
+Tesztadatok minél helyesebbek, a valósághoz közeliek legyenek.
+
+Hatékonyság(effectiveness): 
+	Konstruktív technika
+	Fókuszáljunk azokra a területekre, ahonnan a hibák származnak.
+
+Hatásosság(Hatásosság):
+	Határozzuk meg a technikát
+	Csökkentsük a teszt eseteket
+	
+A hibajelentés egy adott hibára vonatkozzon, külön kell leriportolni.
+
+Unit tesztelés az white, míg a functional az black(nem látjuk a kódot)(lényeg h az eredményt tudjam).
+
+A kommunikáció lassúsága is RISK.

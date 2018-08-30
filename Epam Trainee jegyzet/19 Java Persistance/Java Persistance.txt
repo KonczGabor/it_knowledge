@@ -1,0 +1,408 @@
+Hibernate: Object Relational Mapping Framework(ORM) that implements the Java Persistence API (JPA) specification.
+
+Tárolt eljárásnak több különbözõ kimenete is lehet. A kódja vendorfüggõ.
+
+SQL
+	Having: aggregált funkciók feltétele (skalár szorzatoknál).
+
+Az adatbázistáblában a mezõnevek_aláhúzással írandók, Javában pedig camelCase szolgálja a szóHatárt.
+
+Trigger: 
+	Pl.: Auditba (egy arhcív táblába) elteszem azt amit változtatni szeretnék
+	Logoff-ra: Housekeeping: ügyfél ideiglenes cuccait kisöpörjük.
+	
+Tranzakciók: Lépssorozatok egyszerre történõ végrehajtása. Ez egy munkaegység. Növelni lehet a performanciát.
+	
+	2 Nagy fajtája lehet:
+		Konténer által (a kliens nincs benne a konténerben, csak a szervizek és a daok)
+		Bean által menedzselt.
+		
+	Tranzakciók propagálása:
+		
+
+	ACID:
+		Atomicity: Egybe valósul meg/vagy nem
+		Consistency: Az adatbázisban definiált szabályok, típusok mindig konzosztensek maradnak.
+		Isolation: Az egyes tranzakciók egymásra hogyan hatnak.
+			Szintek:
+				read_uncommitted: amit még a másik nem kommitált be, de én azt látom
+				read_committed: amíg amásik be nem kommitál, addig nem látom az õ változtatását
+				repeatble_read: a tranzakció közben nem hat rám a külvilág, ha egyszer lekértem, azzal dolgozok, hiába módosították már azt közben mások.
+				serailizable: Az egymásra ható tranzakciókat az adatbáziskezelõ sorrendbe rakja.
+		Durability: Ha kihúzom a 220-ból akkor ugyanúgy benne lesz az adat.
+		
+	Izolációs szintek anomáliái:
+		Dirty read: Egy olyan dolgot olvasok, ami még nem lett elkommitálva.
+		Non repetable read: Mások módosítják azokat a sorokat, amiket én már kiolvastam
+		Phantom read: Más beletett abba, amibõl én már kiolvastam
+		
+			Hol jeletkezhet:
+				Dirty read: Read uncommitted
+				Non-repeatable read: read_uncommitted, read_committed
+				Phantom read: read_uncommitted, read_committed, repeatble_read
+				Serializable: semmi
+		
+		
+	Tranzakciók kontollálása:
+		set transaction
+		commit
+		rollback
+		savepoint: Egy tranzakción belül megadott horgony, oda lehet vissza rollback-elni.
+		
+	A service-ekbõl indulnak a tranzakciók, azok egymást is hívogathatják.
+	A service-ek hívogathatják a DAO-kat, azok viszont egymással nem kommunikálnak.
+
+Elosztott tranzakció: Egy alkalmazás több adatbázishoz csatlakozik (lehetnek különbözõk (oracle-mysql))
+	A két/több adatbázis között egy lépésben hajtódjon végre a tranzakció. 
+
+Tranzakciók propagálása:
+	@Transactional
+		REQUIRED: mikor ide eljut: ha van futó tranzakció akkor becsatlakozik abba, ha nincs akkor nyit egy újat, s abba fog dolgozni.
+		SUPPORTS: megnézi h van e tranzakció, ha igen akkor csatlakozik hozzá, ha nincs akkor tranzakción kívül fog dolgozni,(nem lesz tranzakció)
+		MANDATORY: kötelezõ h legyen tranzakció, ha nincs akkor exceptiont dob.
+		REQUIRES_NEW: Mindegy hogy volt-e elõtte tranzakció, azt felfüggeszti és indít egy sajátot és abban fog dolgozni, majd visszatér az eredeti.
+		NOT_SUPPORTED: Ha volt tranzakció akkor azt felfüggesti, s azon kívül csinálja meg, ha nem volt akkor tranzakción kívül megcsinálja.
+		NEVER: Ha volt akkor hibát fog dobni, ha nem volt akkor pedig megcsinálja.
+		NESTED: nem minden esetben értelmezhetõ: csinál egy save pointot és arra rollbackel vissza.
+		
+		Gyakorlatban: Mandatory szokott elõfordulni.
+	
+SQL Injection: rossz indulatú sql utasítás adunk meg a programnak külsõ bemenetként.
+
+SQL kliensek:
+	JDBC kliensek:
+		Eclipse beépített
+		SQuirrel
+		Eclipse SQL Explorer
+		
+	Oracle:
+		SQL Developer
+		PL/SQL (nem ingyenes, tárolt eljárások)
+		
+	MySQL:
+		MySQL Workbench
+		
+	MS SQL:
+		Ms SQL Studio Express
+		
+JDBC:
+	Ez eg API(Interfészek halmaz), hogy egy adatforráshoz(egy adat bázishoz) tudjunk utasításokat küldeni/fogadni.
+	
+	Hierarchia:
+		Java Application
+		Az API egy szabvány, csak azt mondja meg h miket kell megvalósítani
+		JDBC Driver Manager (kitatlálja az URL-bõl hogy az adott jar-ból melyik drivert töltse be)
+		JDBC Driver
+		Data Source
+		
+	Komponensei:
+		Connection
+		Statement
+		ResultSet
+		SQLException (csak ezt dobja, meg valami hibakódot esetleg- checked exception)
+		
+	Ha el akarok indítani egy tranzakciót a JDBC-ben akkor az auotocommit-ot false-ra kell állítani.
+	
+	Hibakezelés: Vendorspecifikus.
+		
+A tárolt eljárások kódját nem lehet áttenni másik adatbáziskezelõkbe.
+
+A relációs adatbázisban lávõ típusok és a Java typusok között leképzéseket kell csinálni. Ez a Mapping.
+
+preparedStatement: SQL injection ellen véd, mert az adott kérdõjelek helyére lehet beszúrni a paramétereket, növeli a performanciát is mert újrahasznosítható.
+
+DAO: Data Access Object: Az adatbázissal kommunikáló osztály, általában több.
+
+	Spring Template: Konzisztens technológia a különbözõ alacsonyszintû adatbáziskezelõ technológiák fölött.
+		Csak runtime exceptiont tud dobni, a saját hierarchiájába belehelyezi az alulról jövõ kivételeket.
+		Gyakorlatilag van egy szótára majd minden adatbáziskezelõhöz, de ezt még mi is kiegészíthetjük.
+		
+		2 nagy része van:
+			Egyik a JDBC-hez: JdbcDaoSupport(JdbcTemplate)
+			Másik az ObjectRelationalMapping: Annotations(@Repository)
+		
+		Elõnyei:
+			Megnyitja a Connection-t
+			A resultot hatékonyabban járja be
+			Feldolgozza a kivételeket
+			Kezelei a tranzakciókat
+			Lezára a Connection-t
+			
+		Használat: xTípusúEredmény = prepare statement, visszatérési érték, paraméterek 
+		
+Connection: Költséges megnyitni, és ahelyett h lezárnánk õket(Close) csak visszatesszük õket egy pool-ba.
+	Típusok:
+		Standard
+		Poolozott
+		Elosztott(XA-s driver kell hozzá) Kétfázisú kommitprotokoll
+
+JPA (Csak egy szabvány, interfészek halmaza, amit különféle képpen lehet implementálni.)
+	Entity: olyan dolog aminek tulajdonságai és relációi vannak. 
+	Perzisztálhatónak kell lennie.
+	EJB 3-tõl hívják Entity-nek, elõtte EntityBean volt.
+	
+	Két legismertebb implementáció:
+		EclipseLink
+		Hibernate
+		
+	Elvárások:
+		Legyen perzisztálható
+		Lehessen azonosítani (~primaryKey)
+		Támogassa a tranzakciókat
+		Granularitás: ne legyen túl bonyolúlt (Java Bean-ekbõl fog készülni)
+		
+	Három részbõl áll:
+		API
+		Lekérdezések (az entitásokokn futnak a lekérdezések)
+		Object-Relation metadata: megmondja h az entitásaink hogyan fognak a táblákba belekerülni.
+		
+	Metaadataok:
+		2féleképpen:
+			@Annotációval
+				@Id
+					Primary Key (primitívek és wrapper osztályaik, String)
+					@GeneratedValue(strategy=GenerationType.AUTO)
+						Lehet sequencia is vagy identity is, esetleg table-bõl is kaphatjuk, tehetjük.
+				@Lob = Large Object , pl.: fotó
+				@Enumeration
+				@Basic(alapból minden az, itt lehet fetch=LAZY-t mgadni h csak akkor töltõdjön be, ha kérdezzük konkrétan. Alapból EAGER)
+				@Temporal
+					Dátum
+					TimeStap
+					Time
+				@Transient(Nem szeraializálódik) Nem perzisztálódik az adatbázisba
+					
+				
+			XML-lel
+		Alapból minden a saját neve mentén képezõdik le, s csak ha máshogy szeretnénk, azokat kell megadni.
+		Ezek a metaadatok az adatbázisban tárolódik, hanem Java oldalon vannak
+		
+	Roles:
+		Single-value
+		Collection-value
+		
+	Realtions:
+		Egy az egyhez		
+			@Id private long id;
+			private String name;
+			@OnetoOne
+			@JoinColumn(name="PARKING_SPACE_ID")
+			private ParkingSpace parkingspace;
+		
+				Kétirányú is lehet, mindkét tálblában tároljuk a másik referenciát.				
+					@OnetoOne(mappedBy="parkingSpace")
+					
+		
+		Egy a többhöz.
+			public class Department {
+				@Id private long id;
+				private String name;
+				@OneToMany(mappedBy="department")
+				private Collection<Employee> employees;
+			}
+					
+		Több az egyhez (Kétirányú)
+			@Id private long id;
+			@ManyToOne
+			@JoinColumn(name="DEPT_ID")
+			private Department department
+			
+			Több az egyhez (Egyirányú)
+				@Entity
+				public class Employee{
+					@Id private long id;
+					private String name;
+					@ManyToOne
+					private Collection<Phone> phones;
+				}
+		
+		Több a sokhoz
+			@Entity
+				public class Employee{
+					@Id private long id;
+					private String name;
+					@ManyToMany
+					@JoinTable(name="EMPLOYEE_PROJECT",
+						joinColumns=@JoinColumn(name="EMP_ID"),
+						inverseJoinColumns=@JoinColumns(name="PROJ_ID"))
+					private Collection<Project> projects;
+				}
+		A kapcsolótábla Entity-vé léphet elõ, ha a több-a-többhöz kapcsolat minõséggel (plusz attribútum) is bír.		
+			
+		@Embedded: nem kell külön tábla az Employee és a Company címének, minkettõbe beágyazhatunk egy ilyen típust. (
+		One-to-One), elõnye: nem kell másik táblához joinolni.	
+			
+		Az Entity Manager (Ez egy interfész) segítségével érjük el a Persistence Context-et.	
+				
+		Life-Cycel:
+			A persitance context: egy pool amiben az entity-k vannak, de azok csak a tranzakció végén, vagy a flush() során perisztálódnak az adatbázisba.
+			Perzisztance Contextbe-kerülnek ha szükség lesz rájuk (managaed), ha nem detached. 
+			Másik irány: adatbázisból a persitance context-be hozzuk a változásokat: refresh()
+			
+			Probléma a detached állapottal: a lazy vonatkozású attribútumait már nem tudjuk elérni.
+			
+			Merge-el lehet egy detach-cselt entity-t újra menedzseltté tenni és vissaz is ad egy olyat(, vagy azt),
+			míg a persisit az void, a nem persisit-et persisit-té teszi símán.
+			
+			
+			
+	JPQL: Java Persistence Query Language.
+		A bulk mûveletek(ezek nem sql-ek) nem tartják karban a persitance contexet.
+		Egytõl megy a paraméter számozás	
+		Visszatérési érték lehet alap, objet[], lista, vagy egy új objektum(konstruktorral)
+		Collection-ok esetén a join fetch-cse Lazy.
+		
+	Criteria API: A JQPL lekérdezést áttranszformálja egy programming interfészre.
+		Támogat bizonyos Java programming feature-öket.
+
+Secondary table: egy LOB oszlop (Kép, vagy nagyobb) file  külön kiszervezése egy másodlagos táblába.
+
+Öröklõdés
+	Többféle képpen lehet:
+		Sigle Table: Mindent beletesz egy táblába, és egy Discriminator column annotációval egy olyan oszlopot adhatunk meg ami eltárolja hogy milyen típusú az az adott entitás.
+		
+		Join strategy: Minden entitásnak külön tábla, és csak a plusz oszlopokat veszem fel.
+			Nem lesz lassabb, mert az idegen kulcs egy primary key, és azok indexelve vannak, tehát hamar megtalálódnak.
+			
+		Table-per-concrete-Class: Teljes értékû táblák készülnek, mindegyik entity tartalmazza a saját adatait.
+		
+		Mixed: Az elõzõ hármat keverjük
+
+Lockolás
+	Optimitsta: Ellenõrzi h változott-e az olvasás és a visszaríás között. A háttérben egy verziózós történik, aminek meg kell egyeznie.
+		@Version annotáció-val érhetõ el.
+	Pesszimista: Addig lockoljuk amíg mi használni akarjuk. Csökkenti a performanciát, akár deadlock is kialakulhat.
+	
+Spring ORM: különbözõ Object Releating Mapping technológiákat integrálja egybe.
+	Egységesített Exception hierarchia. Egyszerûbb IoC.
+	@Repository -al lehet elérni.
+		
+Spring Data:
+	Elõnye: Interfész alapú programozási modell: A Spring Data futásidõben megcsinálja az implementációját.
+		Repository-k alatt nagyon durván a dao-kat értjük.
+		pom.xml-be fel kell venni a spring-orm et, illetve a jpa-t.
+		A Configuration file-ra rá kell tenni egy @EnableJpaRepositories("adottPackageAholACrudRespoitorytExtendálóInterfészVan")-t
+		//SpringData és a SpringORM verziója lehet h meg kell egyezzen, ha esetleg összeakadnának
+			
+JDO: olyan mint a JPA: Sokmindenben többet tud:
+	Nem csak relációs adatbázisokhoz lehet használni
+	Hátránya: senki nem hallott róla.
+	
+iBatis: Semminye Standar nincs mögötte:
+	Akkor ha teljesen kontrollálni akarod az sql-eket. Legacy rbd-khez lehet domaint gyártani. 
+	Pont fordítva mûködik mint a JPA. Nem fentrõl lefelé, hanem lentrõl fölfelé építkezik.
+
+Tesztelés:
+	Hogyan teszteljük az osztályokat, amik a perzisztenciát megvalósítják.
+	POJOK.hoz nem írunk tesztet.
+	A DAO-t már teszteljük, mockoljuk a komponenseket.
+	Spring Data: sehogy nem tudjuk tesztelni, mert nincs implementáció.
+	Service: Unit teszt: kimockolom a DAO-kat, Entity managert, Statement interfészt,..
+	Integrációs teszt: több osztály együttmûküdése, az alkalmazás egy szekcióját (általában valamilyen funkcióját) pl.: Perzisztencia réteg.
+	JEE környezetben: EJB container.
+	In memory database pl.: H2
+	Tesztek elõtt hozzuk létre a tábla struktúrákat, populáljuk õket.
+	Tesztek után tegyünk rendet (töröljük a táblákat)
+	xml-ben is meg lehet adni h mi menjen be és mi jöjjön vissza az adatbázisba, így lehet assertálni a DbUnit-tal.
+	
+Mibõl áll egy alkalmazás?
+	1, Forráskód (Verziókezelõben)
+	2, Konfiguráció (Verziókezelõben, vagy IT operations)
+	3, Adatbázis (struktúra, inicializáló adatok pl.: devizanemek, városok listája, business data, tárolt eljárások)
+
+		Best Practices:
+			Autómatizálás
+			környezetfüggetlen scriptek (bash, groovy-script nyelvek) (ha egyszer már kiadtad akkor ne módosítsd)
+			Histroyban legyen letárolva h milyen patch-eket futtattunk az adatbázison.
+			Liquibase -source control for databse.
+			
+DAO pattern (Data Access Object):
+	Data Acces Layer-ben van
+	DAO-knak az a dolga h lekérdezzék az adatbázisból az adatokat és/vagy oda visszaírják.
+	A szolgáltatásokat (Services) összekötik az adatbázissal.
+	Az entitás a DAO réteghez tartozik.
+	A szervíz réteg és a DAO réteg között lehet egy transzformációs réteg, ami az entity-ket a szervíz számára egy DTO-ra(Data Transfer Object)
+	A szervízrétegben nem entity-t használunk, hanem valami saját struktúrát.
+
+Mi az enterprise alkalmazás?
+	
+	
+Absztrakt osztályokat jelöljük meg: 	
+	@MappedSuperclass
+public abstract class SportEvent {..} Belõlük nem lesz Entity
+
+A beágyazott osztályok @Embeddable annotációt kapnak. A tartalmazó osztályben pedig @Embedde-et.
+Ezeket különbözõ osztályokban is fel lehet használni, és még fel is lehet írni az adott osztályban a reprezentációját.
+	@Embedded
+	@AttributeOverride(name="addressLine" column=@Column(name="USER_ADDRESS_LINE"))
+	
+Ha egyszerû típusok listáját szeretnénk tárolni akkor @ElementCollection kell, mert hát egy rekord egy adott attribútuma csak egy elleemt tud tárolni,
+ezért külön táblába kell hogy kerüljenek.
+	@ElementCollection
+	@CollectionTable(name="kiszervezetttábla", joinColumns=@joinColumn(name="masiktáblaforegginkey"))
+	@Column(name="AkiszervezettTáblaOszlopánakNeveAhováKerüljenek")
+	privare Colletion<String> contacts = new ArrayList<>();
+	
+Ha map-et akarunk leképezni:
+	@ElementCollection
+	@CollectionTable(name="BANK_CONTACT", joinColumns=@joinColumn(name="BANK_ID"))
+	@MapKeyColumn(name="POSITION_TYPE")
+	@Column(name="NAME")
+	private Map<STring,String> contacts = new HashMap<>();
+	
+Ha összetett típusokat akarunk Collection-be tenni:
+	@ElementCollection
+	@CollectionTable(name="USER_ADDRESS", joinColumns=@joinColumn(name="USER_ID"))
+	@AttributeOverrides({@AttributeOverridename="addressLine" column=@Column(name="USER_ADDRESS_LINE")),
+	@AttributeOverridename="addressLine" column=@Column(name="USER_ADDRESS_LINE"))})
+	private List<Address> address = new ArrayLsit<Address>();
+	
+	
+A kapcsoaltok olvasása: Source->Target
+		Célben
+			OneToMany:
+				Egy hez csatlakozik több.
+		
+		Forrásban:		
+			ManyToOne
+				Több ilyen csatlakozik egy olyanhoz.
+				
+Egyirányú (csak a credentialsbõl érhetjük el a Usert.)
+
+	Egy az egyhez:
+		Forrsában:
+			@OneToOne(cascade=CascadeType.ALL)
+			@JoinColumn(name="USER_ID")
+			public User user;
+	
+	Egy a többhöz:
+		Forrásban:
+		
+		Célban:
+			@OneToMany(CascadeType.ALL)
+			@JoinColumn(name="ACCOUNT_ID", nullable=false) //ez a false kellhet, pontosan nemtudom h miért.
+			List<Transaction> transactions = new ArrayList<>();
+		
+	
+Kétirányú 
+	OneTOMOne
+		Forrásban(Credentials)
+			@OneToOne(cascade=CascadeType.ALL)
+			@JoinColumn(name="USER_ID")
+			public User user;
+		
+		Cél(USer):	
+			@OneToOne(mappedBy="user") //nem kell cascade-elni min a két oldalt, mert akkor loop-ba kerülünk, akárcsak join esetén, a source oldal attribútumára mutat.
+			privare Credential credential;
+		
+		A reláció mind a két oldalát le kell menteni mielõtt kommitálunk.
+	
+	OneToMany
+	
+		Forrás:	
+			@ManyToOne	//Many Transactions belongs to one Account	
+			JoinColumn(name="ACCOUNT_ID")
+			private Account account;
+	
+		Cél:
+			

@@ -1,0 +1,79 @@
+Nem lehet extend-elni ha már létrehoztunk egy Enum osztályt. (Implicityl final)
+
+foreach bejárás:
+for(Season season: Season.values()) {
+	System.out.println(season.name() + " " + season.ordinal());
+}
+
+Az Enum enum-jai dekaráslási sorrendben számozódnak, 0-tól:
+WINTER 0
+SPRING 1
+SUMMER 2
+FALL   3
+
+Ha felsoroláson kívül nincs más a fileban, akkor nem kötelezõ a statement végére kitenni a pontosvesszõt(;)
+
+Enum constructora csak private lehet vagy package priavte. 
+Mégegyszer megadni a private láthatóságot redundáns.
+Ha nem adunk meg konstruktort, akkor autómatkusan létrehoz egyet.
+
+Enum konstruktora csak egyszer fut le.
+
+Az egyes enumok megvalósíthatnak az Enumban deklaráct absztrakt metódust. Ha nem akarunk mindegyiknek egyet, akkor elég csak egy sima, amit a kívánt enum felülír. 
+Ez lesz a default. Nem összetévesztendo az interfészek default-jával itt csupán nem kell láthatóságot megadni(~package private).
+
+Final autómatikusan(implicitly). Nem lehet extendelni az Enum típusú osztályt. Még egy másik Enumnak sem.
+
+Õ sem extendelhet mást, mert autómatikusan a java.lang.Enum-ból származik, de megvalósíthat interfészeket.
+
+Enum konstanst nem lehet létrehozni a new kulcsszóval.
+
+Implementálja a java.lang.Comparable -t, szóval át lehet adni SortedSet, TreeSet, vagy TreeMap -nak.
+
+Metódusai:
+	-values(): konstansok tömmbjét adja vissza, az enumokat.
+	-valueOf(String): KonstansOsztaly.valueOf("van-eIlyenEnum,kéremSzépen!")
+	-name(): Visszadja az enum nevét.
+	-ordinal(): az enum indexét adja vissza (0-tól indul)
+----------------------------------
+
+Ha switch(beRakjuk),
+
+akkor a case(ben nem lehet megadni az Enumot, csak az enumot)
+
+pl.:
+---
+switch(s) { 
+	case Switch.OFF : System.out.println("It is off!"); 	//NEM jó!
+	break; 
+}
+--
+switch(s) { 
+	case OFF : System.out.println("It is off!"); 			//Ez már jó!
+	break; 
+}
+----------------------------------
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

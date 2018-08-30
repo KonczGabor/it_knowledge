@@ -1,0 +1,401 @@
+1.7-tõl
+
+Non-blocking IO.
+
+Elõre és hátrafele is tud olvasni anélkül hogy blokkolná az az erõforrást.
+
+A java.io.File class File objektumát a NIO.2 API Path-ja tudja helyettesíteni.
+//Abszolút, vagy relatív, filera, mappára.
+
+A Path tud használni symbolic linkeket is.
+
+A Path egy interfész, a Paths factory-val lehet példányosítani. Ezért konstruktora sincs.
+
+Fontos hogy ne közvetlenül hozzuk létre a Path objektumot, 
+mert akkor az csak az adott filerendszerre fog vonatkozni és elveszítjük a platformfüggetlenséget.
+Ezért kell használni a java.nio.files.Paths factory class-t: Path path3 = Paths.get("/home/zoodirector");
+
+Vagy külön FileSystem objektummal helyettesítve: 
+Path path3 = Paths.get("/home/zoodirector");
+
+atomic operation: egyszerû, tagolhatalan mûvelet, nem lehet részben teljesült.
+
+Helyes:
+	FileSystems.getDefault().getPath("puma.txt")
+	Paths.get(new URI("cheetah.txt"))
+	Paths.get("cats","lynx.txt")
+	new java.io.File("tiger.txt").toPath()
+	Paths.getPath("ocelot.txt")
+	Path path1 = Paths.get("/alligator/swim.txt");
+	
+Heytelen:
+	new Path("jaguar.txt")
+	new FileSystem().getPath("leopard")
+	Paths path1 = Paths.get("/alligator/swim.txt"); // DOES NOT COMPILE
+-----------------------------------------
+
+
+Subpath:
+Nem veszi figyelembe a gyökeret. 0 val indul és exclusive a range.
+
+Path path = Paths.get("/mammal/carnivore/raccoon.image");
+
+System.out.println("Subpath from 0 to 3 is: "+path.subpath(0,3));
+// Subpath from 0 to 3 is: mammal/carnivore/raccoon.image
+
+System.out.println("Subpath from 1 to 2 is: "+path.subpath(1,2));
+// Subpath from 1 to 2 is: carnivore
+
+System.out.println("Subpath from 1 to 1 is: "+path.subpath(1,1)); 
+// THROWS EXCEPTION AT RUNTIME
+-----------------------------------------
+
+
+relativize():
+
+megkeresei két állomány között a legrövidebb utat
+
+Path path3 = Paths.get("E:\\habitat");
+Path path4 = Paths.get("E:\\sanctuary\\raven");
+
+System.out.println(path3.relativize(path4));
+..\sanctuary\raven
+
+System.out.println(path4.relativize(path3));
+..\..\habitat
+
+Vagy mind a kettõnek realtívnak, vagy mind a kettõnek abszolútnak kell lennie.
+// THROWS EXCEPTION AT RUNTIME
+
+Ha a forrás és acél ugyanaz, akkor üreset dob vissza.
+
+Windowson ráadásul még ugyanazon a gyökéren is kell osztozniuk, különben:
+
+Path path1 = Paths.get("/primate/chimpanzee");
+Path path2 = Paths.get("bananas.txt");
+Path1.relativize(path3); // THROWS EXCEPTION AT RUNTIME //? path3
+
+Példa: 
+
+
+What will the following code fragment print?
+
+        Path p1 = Paths.get("c:\\personal\\.\\photos\\..\\readme.txt");
+        Path p2 = Paths.get("c:\\personal\\index.html");
+        Path p3 = p1.relativize(p2);
+        System.out.println(p3);
+
+Megoldás: ..\..\..\..\index.html
+
+Miként:
+
+Observe that if you append this path to p1, you will get p2. Therefore, this is the right answer.     
+p1 + ..\..\..\..\index.html =>c:\\personal\\.\\photos\\..\\readme.txt + ..\..\..\..\index.html 
+=>c:\\personal\\.\\photos\\.. + ..\..\..\index.html 
+=>c:\\personal\\.\\photos + ..\..\index.html 
+=>c:\\personal\\. + ..\index.html 
+=>c:\\personal + index.html 
+=>c:\\personal\index.html  
+
+A ".." implies parent folder, therefore imagine that you are taking off one ".." from the right side of the plus sign and removing the last name of the path on the left side of the plus sign.
+
+Magyarul: a (.)-t és a (..)-t is figyelembe kell venni, õgy kell kezelni mint egy valamit, 
+nem szabad normalizálni, és ráadsául még az utolsó elemet, mint 0. lépcsõt is számolni kell.
+
+-----------------------------------------
+
+
+resolve():
+
+Egy abszolúthoz hozzáragaszt egy relatív útvonalat, a köztes szimbólumokat (..) megtartva (nem normalizál semmit).
+final Path path1 = Paths.get("/cats/../panther");
+final Path path2 = Paths.get("food");
+System.out.println(path1.resolve(path2));
+/cats/../panther/food
+
+
+Két relatív összeolvasztása során a másodikat kapjuk vissza.
+final Path path1 = Paths.get("/turkey/food");
+final Path path2 = Paths.get("/tiger/cage");
+System.out.println(path1.resolve(path2));
+/tiger/cage
+-----------------------------------------
+
+
+normalize():
+
+Kiveszi az útvonalból a felesleges (..)-okat és egy abszolút útvonalat hoz létre.
+System.out.println(path3.resolve(relativePath).normalize());
+Nem módosítja a Path objektumot, helyette újat hoz létre.
+-----------------------------------------
+
+
+Itt már Files és nem File class-t kell használni.
+
+Mostmár van:
+createDirectory() a File mkdir() -jével szemben.
+
+Files.exists(Paths.get("/ostrich/feathers.png")); //nem dob E-t ha nincs ilyen.
+
+Files.isSameFile(Path,Path) // Ez már dob, ha valamelyik file nem létezik.
+	Nem a fieok tartalmát, hanem a helyét és az attribútumaikat hasonlítja össze.
+A két file-nak ugyanazon a helyen (v szimlinkkel elérve) ugyanazzal a névvel kel rendelkeznie.
+-----------------------------------------
+
+
+createDirectory() és createDirectories():
+
+Az IO mkdir() és mkdirs()-ja helyett. Az 's'-es verzió létrehozza a még nem létezõ elérési utat is.
+IOException e jöhet létre ha valami nem létezik vagy, vagy ha nem tudja létrehozni.
+-----------------------------------------
+
+
+getName():
+
+Visszadja a Path változót(annak valahanyadik tagját) Stringként.
+
+
+What will the following code print when run?
+
+import java.nio.file.Path;
+import java.nio.file.Paths;
+public class PathTest {
+    public static void main(String[] args) {
+        Path p1 = Paths.get("c:\\code\\java\\PathTest.java");
+        System.out.println(p1.getName(3).toString());
+    }
+}
+
+Válasz: It will throw IllegalArgumentException	// És nem ArrayIndexOutOfBoundsException
+
+1: 0-tól indul a számozás.
+2: a gyökér (c:\) nem számít bele.
+3: (\) nem része a névnek.
+4: Negatív vagy nagyobb elemszám esetén: java.lang.IllegalArgumentException és nem null!
+-----------------------------------------
+
+copy():
+
+Files.copy(Path,Path); IOException, Ha mappát másolunk akkor csak a mappa neve hozódik létre másutt, az eredeti mappa tratalma nem kerül át.
+A file attribútumok sem kerülnek másolásra(?).
+
+Ha a file, vagy szimlink már eleve létezik a cél helyen, akkor kivételt dob, kivéve ha a forrás és a cél ugyanaz, mert ilyenkor nem fut le a mûvelet maga.
+Ha engedélyezve van szimlink akkor nem a link, hanem a hivatkozott másolódik.
+-----------------------------------------
+
+
+Files.move()
+
+Files.move(Path,Path); IOException, atomic, optional values: NOFOLLOW_LINKS , REPLACE_EXISTING , ATOMIC_MOVE, COPY_ATTRIBUTES.
+Nem üres mappán végrehajtva különbözõ driveok között: NIO.2 DirectoryNotEmptyException 
+NOFOLLOW_LINKS: ha a forrás szimlink akkor magát a linket és nem a file-t másolja (, magyarán ezt kell bemásolni ha a linket akarjuk mozgatni). Mintha azt mondanénk: "Ne mûködj szimlink!"
+COPY_ATTRIBUTES: Ha nem adjuk meg akkor is viszi autómatikusan az attribútumokat.
+
+Ha nincs bekapcsolva a REPLACE_EXISTING, akkor nem írja felül és dob egy FileAlreadyExistsException-t.
+	Helyesen:
+		Files.move(p1, p2, StandardCopyOption.REPLACE_EXISTING);
+-----------------------------------------
+
+
+delete();  deleteIfExists()
+
+Csak magát a szimlinket törli ki, a hivatkozott file-t nem. 
+A két változat között aza különbség hogy a második nem dob E-t, csak Boolean-nal tér vissza.
+-----------------------------------------
+
+
+newBufferedReader(); newBufferedWriter()
+
+Files.newBufferedReader(Path,Charset); Tudni kell a Charset-et is!
+
+Path path = Paths.get("/animals/gopher.txt");
+
+try (BufferedReader reader = Files.newBufferedReader(path, Charset.forName("US-ASCII"))) {
+	// Read from the stream
+	String currentLine = null;
+	while((currentLine = reader.readLine()) != null)
+		System.out.println(currentLine);
+} catch (IOException e) {
+	// Handle file I/O exception...
+}
+-----------------------------------------
+
+
+readAllLines()
+
+Files.readAllLines(); returns the results as an ordered List of String values.
+
+Path path = Paths.get("/fish/sharks.log");
+
+try {
+	final List<String> lines = Files.readAllLines(path);
+	for(String line: lines) {
+		System.out.println(line);
+	}
+} catch (IOException e) {
+	// Handle file I/O exception...
+}
+
+Ha túl nagy és nem fér el a meóriában ideiglenesen, akkor: OutOfMemoryError
+-----------------------------------------
+
+
+isDirectory() isRegularFile() isSymbolicLink()
+
+Vissza tud dobni true-t ha a szimlink egy hagyományos file-ra mutat.
+//Egyes filrendszereken lehetnek a mappáknak is kiterjesztéseik, szóval nem biztos hogy
+Files.isDirectory(Paths.get("/canine/coyote/fur.jpg")); valójában egy .jpg
+
+nem dobnak E-, helyette Boolean.
+-----------------------------------------
+
+
+isHidden()
+
+try {
+	System.out.println(Files.isHidden(Paths.get("/walrus.txt")));
+} catch (IOException e) {
+	// Handle file I/O exception...
+}
+-----------------------------------------
+
+
+Nem dobnak E-t ha file nem létezik, helyette false:
+
+isDirectory(), 
+isRegularFile(), 
+isSymbolicLink(), 
+isReadable(),
+isExecutable() 
+-----------------------------------------
+
+size()
+
+Vissazdja byte-ban, IOException ha nem létezik.
+-----------------------------------------
+
+getLastModifiedTime(); setLastModifiedTime():
+
+FileTime object-et ad vissza, IOE ha nem létezik. 
+Nem kell ahhoz megváltoztatni a file tartalmát hogy módosíthassuk az utolsó módosítottság idejét.
+
+try {
+	final Path path = Paths.get("/rabbit/food.jpg");
+
+	System.out.println(Files.getLastModifiedTime(path).toMillis());
+
+	Files.setLastModifiedTime(path, FileTime.fromMillis(System.currentTimeMillis()));
+
+	System.out.println(Files.getLastModifiedTime(path).toMillis());
+
+} catch (IOException e) {
+	// Handle file I/O exception...
+}
+
+-----------------------------------------
+
+
+getOwner(); setOwner()
+
+Elõször el kell kérni egy azonosító objektumot:
+UserPrincipal owner = FileSystems.getDefault().getUserPrincipalLookupService()
+.lookupPrincipalByName("jane");
+
+majd azt átadni:
+Files.setOwner(path, owner);
+
+Ha nem férünk hozzá, vagy nem módosíthatjuk, akkor: IOException
+-----------------------------------------
+
+
+Files.readAttributes(): csak read-only
+
+Files.getFileAttributeView(): már módosítható is.
+
+trying to read Windows-based attributes within a Linux file system may throw an UnsupportedOperationException.
+-----------------------------------------
+
+walk()
+
+Adott pontból kiindúla bejárja a fát.
+
+Path path = Paths.get("/bigcats");
+
+try {
+	Files.walk(path)
+		.filter(p -> p.toString().endsWith(".java"))
+		.forEach(System.out::println);
+} catch (IOException e) {
+	// Handle file I/O exception...
+}
+
+
+/bigcats/version1/backup/Lion.java
+/bigcats/version1/Lion.java
+/bigcats/version1/Tiger.java
+/bigcats/Lion.java
+-----------------------------------------
+
+
+Files.list(); java.io.File.listFiles()
+
+Egy mélységig mennek csak le?
+-----------------------------------------
+
+
+Files.lines()
+
+Path path = Paths.get("/fish/sharks.log");
+
+try {
+	Files.lines(path).forEach(System.out::println);
+} catch (IOException e) {
+	// Handle file I/O exception...
+}
+
+Nem fog kifogyni a memóriából, mert processed lazily (Stream-mel tér vissza), 
+ellentétben a Files.readAllLines() -szal (list-tel tér vissza).
+-----------------------------------------
+
+
+Files.isSameFile(path1, path2)
+
+Még ha ugyanaz a két file és az attribútumok is át lettek másolva copy-kor, de különbözõ helyen vannak,
+akkor false-ot fog vissza jönni. 
+Maga a file tartalma nem számít, wtf!
+Nem is kell létezniük magéknak a fileoknak sem. elég ha a két path object ugyanoda mutat.
+-----------------------------------------
+
+
+Files.find()
+
+Ha 0 a második paraméter (a bejárás mélysége), akkor csak saját magát vizsgálja meg.
+-----------------------------------------
+
+
+NIO.2 views meatadata metódusok elõnyei a java.nio.Files metadata metódusokkal szemben:
+	Kevesebbszer kell a filerendszerhez forulni, egyszerre visszakapjuk az összeset (teljesítmény, átláthatóság).
+	Filerendszer függõ attribútumokat is megmutat.
+
+Alapból mindakettõ használható mappára, file-ra, szimlinkre.
+-----------------------------------------	
+
+
+path.equals() nem normalizál, szóval két ugyanaz a file speciális karakterekkel false lesz.
+-----------------------------------------	
+
+
+Amit a legacy java.io.File class tud:
+
+	Kilistáz minden filet egy mappában.
+	Ki tud törölni fileokat és nem üres mappákat.
+	Ki tudja olvasni az utolsó módosítás dátumát.
+
+Ezeken felül a NIO2:
+
+	Támogatja a filrendszer specifikus attribútumokat.
+	Közvetlenül be lehet járni egy mappa struktúrát.
+	Támogatja a szimlinkeket.
+
+
+

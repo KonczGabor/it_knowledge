@@ -1,0 +1,49 @@
+Csak azok a változók és metódusok hívhatók meg expilicit kasztolás nélkül az objekmtumon, 
+amilyennel az arra rámutató referencia rendelkezik.
+------------------------
+
+
+Attól mert még vissza kasztolunk egy objektumot az õsére, attól még csak a változók állítódnak vissza,
+a metódusok továbbra is polimorfikusan viselkednek.
+
+class Widget {      
+	String data = "data";     
+	public void doWidgetStuff() {       
+		System.out.println(data);     
+	}  
+}  
+
+class GoodWidget extends Widget{     
+	String data = "big data";      
+	public void doWidgetStuff() {}  		//ez lesz meghívva.
+}  
+
+ public class WidgetUser{     
+	public static void main(String[] args) {         
+		Widget w = new GoodWidget();         
+		((Widget)w).doWidgetStuff();    
+	}     
+}
+
+System.out.println(w.data); 				//prints data         
+System.out.println(((GoodWidget)w).data); 	//prints big data
+------------------------
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
