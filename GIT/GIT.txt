@@ -1,6 +1,10 @@
 https://learngitbranching.js.org/
 	-undo or reset to fix mistakes, nem kell újrahívni az oldalt.
 
+Create new SSH public_key:
+		$ ssh-keygen -t rsa
+	
+	
 $ git config --global user.name "John Doe"
 $ git config --global user.email "johndoe@example.com"
 
