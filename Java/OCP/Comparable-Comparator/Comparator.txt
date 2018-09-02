@@ -1,3 +1,6 @@
+Akkor kell ha az osztály melyet rendezni szeretnénk nem redelkezik saját compareTo metódussal,
+vagy egyedi logika szeretnénk sorrende rakni a példányokat
+
 public static void main(String[] args) {
 
 	Comparator<Duck> byWeight = new Comparator<Duck>() {
@@ -11,6 +14,6 @@ public static void main(String[] args) {
 	ducks.add(new Duck("Puddles", 10));
 	Collections.sort(ducks);
 	System.out.println(ducks); 	// [Puddles, Quack]
-	Collections.sort(ducks, byWeight);
+	Collections.sort(ducks, byWeight);  //Túlterhelt metódus. Comperator helyett a saját Comperable interfész implementácóját hívja meg
 	System.out.println(ducks); 	// [Quack, Puddles]
 }

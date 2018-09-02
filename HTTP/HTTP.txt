@@ -1,6 +1,7 @@
 Hypertext Transfer Protocol
 	
 	Formális szabályok összessége, mely megmondja hogyan cseréljünk adatot egy hálózaton.
+	Plain text protocol.
 
 Applikéciós réteg szintû protokoll melynek segítségével a web alapú alklamzások adatcserével kommunikálhatnak.
 A web postása.
