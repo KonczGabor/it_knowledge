@@ -22,25 +22,68 @@ Stateless:
 	//REST provides state.
 	
 	
-Három nagy részbõl (section) áll a HTTP message (Plain text based):
-	Request
-		Start Line (Method/URI/HTTP Version) GET | /products/myproduct.html  | HTTP/1.0
-		Headers: Name-Value pairs: Host: www.mywebsite.com; Accept:text/html; Accept-language:en-us
-		Body (Binárist is tartalmazhat)
 
-		//URI: set of readable characters, a way to locate the resource
+Request-nek ezekbõl kell állnia
+	Request-Line: carries actual data 
+		GET vagy POST	
+		RESOURCE: (URI (Unified Resource Identifier))
+		PROTOCOL: HTTP, SMTP, FTP
+		VERSION: pl.: HTTP/[1.1, 2]
+
+	Headers: Meata infos: Name-Value pairs: Host: www.mywebsite.com; Accept:text/html; Accept-language:en-us
+		Pl.:
+			Host
+			User-Agent: telnet
+			Accept-Language: en-US (Milyen választ szeretnénk)
+			..
+			
+	Blank Line
 	
-	Response:
-		http/version |	status code	
-									//200-OK
-									//404-File not found
-		Headers: Name-Value pairs
-		Body: pl.:Requested file - response message					
+	Request Body (Másnéven: Payload) (Binárist is tartalmazhat) (GET-tel nem küldõdik body(?))
+		Itt mehetnek át egy kitöltött form adatai
+
+	//URI: set of readable characters, a way to locate the resource
+		Az URL valójában egy URI
+	
+Response ezekbõl áll:
+	Status-Line:
+		Protocol: HTTP, SMTP, FTP [Version:]
+		Status code: 200
+		Status message: OK
+		
+	Headers: Name-Value pairs
+		Pl.:
+			Server: nginx
+			Data: When the repsonse was sent
+			Content-Type_ application/xml
+	
+	Blank Line
+	
+	Body: pl.:Requested file - response message					
 								
 
-GET: Hey Server! Give me data! No Seide-effects. 
+GET: Hey Server! Give me data! No Seide-effects. Nem akarok változtatást.
+	get?atttribute=value&attribute2=value2
 
-								
+POST: Making a change
+
+Mind a Get, mind a Post valójában egy QueryString-gé áll össze:
+	A QueryString az összeállított attribute-value párok 
+	//Note: A form TAG-ek tartalma "name" és nem "id" alapján kerülnek be a QueryString-be.
+	Get esetén az URI-hoz fûzõdik hozzá, POST esetén ez a Payloadba kerül be.
+
+Paramtere VS Header:
+	
+	Parameter:
+		Let's say you're requesting an image for a product. 
+		The product id may be one parameter. The image size (thumbnail vs full size) might be another parameter. 
+		The product id and requested image size are examples of "some detail" (or parameter) being supplied as part of the content of a request.
+
+	Header:
+		But things like the request is JSON or x-www-form-urlencoded are not the content of the request, 
+		but rather information about the request (esp since that's necessary for web service 
+		to know how to parse the body of the request). 
+		
 Methods
 
 Create	->	POST	(Beküldök egy FORM-ot)		Ha PPOST-tal küldök paramétereket azok nem a HEADER-be, hanem a BODY-ba kerülnek.
