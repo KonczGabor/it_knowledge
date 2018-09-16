@@ -4,3 +4,81 @@ A szabályok, amik meghatározzák:
 	Hogy kommunikélnak a komponensek?
 	Milyen típusú üzeneteket küldenek egymásnak?
 	Hogyan kezelik a request-et, hogyan kezelik a response-t?
+	
+A JS álltalában kliens oldalon dolgozza fel a kapott válaszokat, de hát ott van ugye a NodeJs ami szerver oldali JS.
+
+Main concept: Valójában a client és a server nem tudják egymásról h  mit csinálnak, de közös nyelven beszélnek.
+
+TransformProtocols:
+	File Transfor Protocol:
+		Hosszúdokumentumok számára.
+			Tud Async is lenni, a Client elindítja a feltöltést egy FTP szerverre, 
+			ha a feltöltés elkészült, az FTP szerver jelet ad a harmadik félnek h szedje át, 
+			majd a harmadik fél(Provider) a választ vissza küldi az FTP szervernek (Pl.: lekicsinyített file),
+			és ha az átment az FTP szerverre, akkor az értesíti a Clientet h elkezdheti leszedni tõlen.
+		
+		SMTP: Simple Mail Transfer Protocol: Annyit tud h hogyan kell küldeni üzeneteket
+		
+		POP: Post Office Protocol: Tudja hogyan kell fogadni üzeneteket.
+		
+		HTTP: Szinkron kérés-válasz alapú, megvárja a választ mielõtt bámi mást tenne.
+			Most popular verbs:
+				GET - get data
+					Anatomy of a GET Request:
+						http://services.explorecalifornia.org/pox/tours.php?packageid=5
+							http://								:protocol
+							services.explorecalifornia.org/		:host
+							pox/tours.php						:resource root
+							?									
+							packageid=5							:paramteres
+				
+				POST - add data
+					Anatomy of a POST Request:
+						POST /pox/tours.php HTTP/1.1					
+						Host: services.explorecalifornia.org
+						Content-Type: application/x.www.form-urlencoded
+						Content-Length: 11
+						
+							POST								:verbs
+							/pox/tours.php						:resource root
+							HTTP/1.1							:protocol
+							services.explorecalifornia.org		:host
+							Content-Type: application/x.www.form-urlencoded :honnan jön a request (pl egy form)
+
+						PUT - update data
+				Delete - delete data
+				
+		
+				
+MessageFormats:
+	SOAP:
+		XML based format
+	
+	XML
+	
+	JSON
+		JavaScript Object Notation
+		
+
+RequesSyntax:
+	Named Methods
+	Uniform Rsource Identifier (URI)
+	Paramter Names and Types
+	
+Authentication:
+	Username and password
+	Authentication tokens
+	
+WebService Managers:
+	PHP
+	ASP.NET
+	Java EE
+	Node.js
+	ColdFusion
+	
+Possible ClientSide Languages:
+	Java
+	C++
+	JavaScript
+	Visual Basic
+	

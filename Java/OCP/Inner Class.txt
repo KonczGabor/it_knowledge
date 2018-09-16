@@ -85,9 +85,12 @@ STATIC NESTED CLASS:
 - Lehet belsõ statikus osztálya.
 - Lehet belsõ nem statikus osztálya.
 - A külsõ osztály hivatkozhat a static nested class tagjaira.
-- Lehet importálni statikusana statikus belsõ osztályt:
+- Lehet importálni statikusan statikus belsõ osztályt:
 	import csomag.Osztaly.StatikusOsztaly;
 	import static csomag.Osztaly.StatikusOsztaly;
+-lehet abstract
+	A példányosításnál implementálni kell az abstract metódusokat.
+	Nem lesznek a törzs nélküli metódusok autómatikusan abstractok, ellentétben az interface-szel.
 
 
 public class Enclosing {
