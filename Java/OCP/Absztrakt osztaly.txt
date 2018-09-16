@@ -9,5 +9,5 @@ Az osztály nem lehet egyszerre absztrakt és final is.
 
 Ha egy osztályban van absztrakt metódus, akkor az egy abasztrakt osztály.
 
-
+Statikus bels¿ osztály lehet absztrakt. A példányosítása során deklarálni kell abstract metódusait.
 
