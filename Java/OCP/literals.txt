@@ -1,0 +1,117 @@
+1, A suffixelt literalok tipusa minden kontextusban a suffix által jelölt tipus. Compile error, ha a literal kimutat a suffix range-éből.
+ 
+
+	7l – long
+
+	7f – float
+
+ 
+
+2, Az egyszerű lebegőpontos literalok típusa minden kontextusban double.
+ 
+
+	7.0 – double
+
+ 
+
+3, Az egész literalok típusa deklaráció és értékadás jobb oldalán fogadó változó típusa, de maximum int. Compile time error, ha a literal érték kimutat a fogadó változó, vagy az int range-éből.
+ 
+
+	The following lines all compile
+
+		byte   b = 7;
+
+		short  s = 7;
+
+		int    i = 7;
+
+		long   l = 7;
+
+		float  f = 7;
+
+		double d = 7;
+ 
+
+	But these will not
+
+		byte x = 128;        // Compile error (out of byte range)
+
+		long y = 2147483648; // Compile error (out of int range)
+
+ 
+
+4, Az egész literalok típusa kifejezésben és függvényhívás paramétereként minden esetben int
+ 
+
+	Will not compile without casting
+
+		Byte.valueOf((byte)7);
+
+		Short.valueOf((short)7);
+
+ 
+
+5, Operátorok eredménye sosem kisebb, mint int
+ 
+
+	byte b = 1;
+
+	byte rb = (byte)(b + b); // Cast is required
+
+	short s = 1;
+
+	short sr = (short)(s + s) ; // Cast is required
+
+ 
+6, A literalok közötti konstans műveleteket a compiler ki fogja számolni és az értéknek megfelelő literalként fogja értelmezni. 
+Ha a kiszámolt érték kimutat a byte és short cél típusból, akkor compile error, int és long esetében ugyanez int, vagy long overflow, vagy underflowt eredményez.
+ 
+
+	byte b1 = 126 + 1;            // OK – Effectively 127
+
+	byte b2 = 127 + 1;            // Compile error (128 out of byte range)
+
+	 
+
+	short s1 = 32766 + 1;         // OK – Effectively 32767
+
+	short s2 = 32767 + 1;         // Compile error (32768 out of short range)
+
+	 
+
+	int  i1 = 2147483646 + 1;     // Effectively 2147483647
+
+	int  i2 = 2147483647 + 1;     // OK - Effectively -2147483648 (overflow!)
+
+	 
+
+	long l1 = 2147483647 + 1;           // OK – Effectively 2147483648L
+
+	long l2 = 9223372036854775806L + 1; // OK – Effectively 9223372036854775807L
+
+	long l3 = 9223372036854775807L + 1; // OK – Effectively -9223372036854775808L (overflow!)
+
+ 
+
+7, Minden final változót, amely semmilyen módon nem vezethető vissza más nem final változóra, a compiler effektív literaloknak tekint, amelyek, mint más literalok alkothatnak compile time kiszámolásra kerülő constant expresssionöket. Ld. 6
+ 
+
+	final short a = 1;
+
+	final short b = a + 1; // Effectively 1 + 1 = 2
+
+	short c = a + b + 1;   // Effectively  1 + 1 + 1 + 1 = 4
+
+ 
+8, Short array literal csak egy soros deklaráció job oldalán állhat. pl `{ 1, 2, 3 }` a `new int[] {1, 2, 3}` helyett.
+ 
+
+	int[] foo = { 1, 2, 3 }; // OK
+
+	foo = { 1, 2, 3 };       // Compile error
+
+	 
+
+	int[] bar;
+
+	bar = { 1, 2 , 3 };      // Compile error (!)

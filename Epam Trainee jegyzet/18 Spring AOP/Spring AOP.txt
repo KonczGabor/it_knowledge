@@ -1,0 +1,201 @@
+AOP: egy koncepció: definiálunk egy funkcionalitást(mérje a funkció lefutásának idejét) mindezt úgy hogy az eredeti osztály errõl ne is tudjon.
+
+Aspect: arra jó h ha van vamilyen üzleti logika, akkor bizonyos feladatokat (Cross cutting concerns) szeretnénk elválasztani ettõl.
+	Ezek nem szorosan az üzleti logika részei:
+		Naplózás
+		Biztonság
+		Tranzakció menedzsment
+		caching
+
+Elképzelhetõ megoldások: Öröklõdés, delegáció(kompozíció segítségével)
+
+Ezek nem versenyeznek, hanem kiegészítik egymást:
+	AspectJ:
+		Szabvány, mindent megvalósít (heavyweight)
+		Fieldekre is lehet rátenni aspekteket
+	SpringAOP
+		Ennek csak egy részét, azokat amikre a Springnek szüksége van.
+		Csak metódusokra/konstruktorra tudunk rátenni joinpontot
+		Runtime weaving -> csak dinamikus proxykra mûködik, new-val létrehozottakra alapból nem, de ezt is meg lehet oldani Spring segítségével.
+		Pointcuttal bean nevére is tudunk hivatkozni, ennyivel több.
+	JBoss AOP
+
+Join point: Itt hajtsd végre amit szeretnék:
+	Csak metódusra lehet rátenni
+	pl.: Ha ez a metódus elindul itt kezdd el mérni h mennyi ideig fut.
+	Kivétel ha keletkezik.
+	Construktorra- ha elkészül az adott osztály egy példánya.
+	
+Pointcut: Kifejezés: Hogy ezek a joinpointok hol vannak. Gyakorlatilag eg filter.
+
+Aspect: Mit, mikor és hol kell csinálni.
+	Spring AOP-ban Aspectre-nem lehet Aspect-et rátenni.
+	
+Advice Típusok (5):
+	Before advice: mielõtt egy adott esemény bekövetkezik. (Metódus meghívását nem lehet megakadályozni, csa Error-ral)
+	
+	After returning advice: Akkor fut le ha normálisan lefutott a metódusunk (Ha nem volt hiba, kivétel) Visszakaphatjuk a metódus visszatétérési értékét egy adot változatban.
+	
+	After Throwing: Ha a metódusunk hibát dobott, akkor rollback-elõdjön. Pl.: Elkalphatunk valamit és dobunk helyette egy saját E-t.
+		A hiba dobását nem akadályozza meg, de megtudhatjuk hogy mi volta hiba, mielõtt elszáll a program, ha nincs lekezelve.
+	
+	After (finally) advice: Minden esetben le fog futni
+	
+	Around advice: Az eredeti metódus/konstruktor helyett fog meghívni. Más visszatérési érték is lehet.  Mennyi ideig futott. Elõtte-utána.
+		Az eredeti osztály nem tud róla h rá lett aggatva egy aspekt.
+		Itt ProceedingJoinPointot kapunk, nem sima JoinPointot
+		Ki lehet szûrni a személyes adatokat, h azokat ne adja vissza nem megfelelõ jogosultság esetén..
+
+Target Object: Amire rá lett aggatva. Egy objectre többet is rá lehet aggatni.
+
+Introduction: Új mezõket, metódusokat lehet létezõ osztályokhoz hozzá adni. Implementálhatunk interfészt anélkül h az osztály tudna róla.
+
+Weaving: Folymat, process, amivel megfogjuk a target objectokat és rá tesszük az aspektekt.
+	Mikor történhet meg? 
+		Compile time: Már fordítás idején más kód kerül bele.
+		
+		Classload time: Amikor a classloader betöltiaz osztályokat akkor waveli meg.
+		
+		Runtime (Proxyzás): Nem az eredeti osztály bájtkódja fog módosulni, hanem fog köré példányosítani egy új objektumot. 
+			A proxynak kívülrõl úgy kell kinéznie mint az eredeti object.
+		
+	
+Unit teszteléssel nem lehet tesztelni az aspekteket, ki kell próbálni integration tesztekkel.	
+
+PL.:
+
+Be kell tenni a pom.xml-be egy dependency-t:
+
+<dependency>
+	<groupId>org.aspectj</groupId>
+	<artifactId></artifactId>
+	<version>1.7.3</version>
+</dependency>
+----
+
+
+@Aspect
+@Component
+public class AdottLogoloOsztaly{
+	private static final Logger logger = LoggerFactory.getLogger(AdottLogoloOsztaly.class);
+	
+	@Before("execution(* com.epam.botor.domain.Weapon.shoot(...))")
+	public void doAccesCheck(final JoinPoint joinPoint){
+	String targetObjectClassName = joinPoint.getTarget().getClass.getSimple();
+	
+	Looger.debug(targetObjectClassName + " is shooting!");
+	}
+	
+}
+
+Be kell kapcsolnia springben az aop-t,
+	src/main/resources
+		bean.xml
+			Namespaces fül bepipálni az aop-t és az beleszerkeszti a file-ba(Source fül).
+
+Még meg kell adni hogy ebbõl a komponens annotációval ellátott osztályból csináljon bean-t:
+	src/main/resources
+		bean.xml
+			<context:component-scan base-package="com.epam.botor.aspects"/>   //Végignézi az ebben a csomagban lévõ cuccokat.
+
+Be kell kapcsolni magát az aop-t
+	src/main/resources
+		bean.xml
+			<aop:aspectj-autoproxy/>
+			
+	Vagy Javában:
+		@Configuration
+		@EnableAspectJAutoProxy
+		public class AppConfig{}
+		
+--------------
+@Aspect alapból nem csinál beant magából a java osztályból
+
+aop proxy koncepciója:
+	Csak publikus metódusokra lehet rátenni.
+	Bean prost processor nem tud elkapni setterek init time alatt.
+	
+	Kell hogy a target osztányak legyen agy no-args konstruktor is, ami 2 szer fut le.
+	
+	Vagy implementál a proxy egy interfészt és tartalmazza az advise-t
+	
+	Vagy az eredeti osztályt extendálja a CGLIB segítségével
+
+		Force CGLIB:
+			<aop:aspectj-autoproxy proxy-target-class="true"/>
+
+Pointcut language: Csak metódfuttatásra lehet joinpointot tenni.
+	Pl.:
+		@Pointcut("execution (* com.epam.botor.domain.Wapon.shoot(...))")
+		public void weaponShooting(){}
+		
+		@Before("weaponShooting")
+		public void logUsage(final JoinPoint joinPoint){...}
+		
+
+	Pattern típusok:
+		Modifiers: ilyen láthatóságú metódusokat keres, spring aop-ben csak a public játszik.
+		
+		return type: ilyen visszatérésüeket keres.
+		
+		name: metódus nevek
+		
+		parameter: metódus paraméterekre keres rá
+
+
+	Egy aspektre nem lehet aspketet rátenni.
+	
+	Hivatkozások:
+		jointPoint.getThis() visszadja a proxy objektumot.
+		jointPoint.getTarget() visszadja a megpoxyzott, eredeti objektumot.
+
+final metóduskat nem lehet advice-olni.		
+		
+JoinPoint:
+	Advice elsõ paramétereként kell h szerepeljen
+	A proceed() metódust kell meghívni az Around esetén
+
+Advice-ok sorrendezése:
+	Precendencia értékek megadásával.
+		
+		Legmagasabb fut le elõször Aa Before-nál.
+		A legalacsonyabb fut le elõször az After-nél.
+		
+		Ha egy advice különbözõ aspekteben van definiálva, de ugyanarra a joinpointra mutatnak akkor undefinied a a végrehajtás sorrendje.
+		
+		Springben van egy Ordered interfész, vagy az @Order annotációval.
+		
+		
+Introductions: Futás idõben implementálja a target osztály egy adott interfészt.
+		Meg kell adni egy implementációt
+		Azt azt implementáló osztály ne legyen absztrakt és legyen default konstruktora.
+
+Method injection: Spring core-ban introduction-höz hasonlít. A target osztály absztrakt metódussal rendelkezik és azt meg tudjuk valósítani.
+	Legyen argumentum nélküli konstruktora. 
+	Lehet metódusokat felülírni is.
+	Az így létrejött objektumot nem lehet serializálni (az objektumot kiírni bájtfolyamra.)
+	
+Aspektek létrehozási modellje.
+	Alapból singletonok.
+	
+	@Configurable pontosan a @Container ellenkezõje.
+		Azt mondja h az objektet a konténeren kívülrõl fogjuk létrehozni.
+		spring-aspect.jar-t fel kell venni h ne legyenek warningok a logban.
+		
+		configba fel kell venni a <context:spring-configured>
+		
+		Itt már nem a spring aop-t, hanem az aspectj-fogjuk használni. A spring aop-n keresztül fogjuk bekonfigurálni.
+
+
+
+
+
+
+
+
+
+
+
+
+
+

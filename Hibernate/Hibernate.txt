@@ -1,0 +1,25 @@
+Framework for persisting(saving/retrieving) Java objects in database
+
+Csökkenti az alacsony szintű SQL kódok mennyiségét
+
+ORM = Object Relation Mappingot biztosít
+
+CRUD=Create Read Update Delete objects
+
+Hibernate és JDBC kapcsolata:
+	A Hibernate vajójában teljesen felhasználja a JDBC-t, gyakorlatilag körülölelve azt. Egy újabb réteg a JDBC-n.
+
+Saving Java Object woth Hibernate:
+	//1. create Java object
+	Student myStudent= new Student("John", "john@bestprovider.com");
+	
+	//2. save it to the database
+	int theId = (Integer)session.save(myStudent); //A save után visszatér az id-val
+	
+Retrieve Java obj:
+	Student myStudent = session.get(Student.class, theId);
+
+Retrieve Java objects:
+	Query query = session.createQuery("from Student");	//Hibernate Query Language
+	
+	List<Student> students = query.list();	

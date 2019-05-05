@@ -1,0 +1,14 @@
+Metódus szignatúra:
+	A metódus neve, a paraméterek és azoknak sorrendje. A visszatérési érték nem tartozik bele.
+
+Ha több metódus hívja egymást és az utolsónak van konkrét visszatérési értéke, viszont az első void, akkor az első hívásának helyén fordítási hiba lesz ha ott paramétert várnak, hiába bír a sokadik visszatérési értékkel:
+
+public class Dolls {
+	public void nested() { nested(2,true); } // g1
+	public int nested(int level, boolean height) { return nested(level); }
+	public int nested(int level) { return level+1; }; // g2
+	
+	public static void main(String[] outOfTheBox) {
+		System.out.print(new Dolls().nested());		//A sout konkrét éréket várna, a g1 viszont void, hiába térvissza a g2 értékkel.
+	}
+}

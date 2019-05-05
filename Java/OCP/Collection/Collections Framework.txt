@@ -1,0 +1,368 @@
+
+Collection: Group of elements in a single Object.
+
+A Collection API maga is egy interfész.
+		A Collection egy interfész
+		A List egy interfész ami a Collection-bõl származik
+		Az ArrayList egy osztály ami megvalósítja a List interfészt, tehát tranzitíve a Collection-bõl származik. 
+	Nem bír index-ekkel.
+	
+A Collections pedig egy statikusokat szolgáltató osztály.
+	
+
+Olyan osztályokat tartalmaz, melyek megvalósítják a List, Map, Queue és Set interfészeket.
+Alapvetõen két nagy root interfész van: a Collection és a Map.
+java.util olyan osztályainak halmaza, melyek collection-ök tárolására szolgál.
+Az ArrayList egy class, ami a List interfészt valósítja meg.
+Az Array nem része a Collections Frameworknek.
+
+--------------
+
+List: elemek vezérelt gyûjteménye, melyben egy adott elem többször is elõfordulat. Index alapján elérhetoek az elemek. //myList.get(1) - visszadja a második elemet, myList.get(new Integer(1)), megkeresi a listlában az elso elofordulást az 1-es Integernek.
+
+Set(Halmaz): Olyan gyûjtemény mely nem engedi meg egy adott elem duplikációját.
+
+Queue(Sor): Olyan gyûjtemény mely az elemeket valamilyen egyedi sorrend szerint tartalmazza a feldogozás számára. Tipikus példa a FIFO, de más rendezések is lehetségesek.
+
+Map(Térkép): Olyan gyûjtemény melynek elemei kulcs-érték(Key-Value) párok, melyben minden kulcs egyedi. 
+//Nem valósítja meg a Collection interfészt. Nem osztály, csak interfész így magában. A SortedMap is csak egy interfész nem pedig osztály.
+
+---------------
+
+Interfész				Class
+
+Map       		:     	HashMap, TreeMap and HashTable. 
+SortedMap 		:     	TreeMap 
+NavigableMap 	: 		TreeMap, ConcurrentSkipListMap.  
+Set       		:     	AbstractSet and HashSet 
+SortedSet 		:     	TreeSet 
+NavigableSet 	:  		TreeSet, ConcurrentSkipListSet  
+List      		:     	AbstractList, LinkedList, Vector, ArrayList
+		
+		
+---------------
+
+Az alábbi collection-ök nem tartalmazhatnak null-t:
+
+	TreeSet: A sort() miatt
+	TreeMap: A sort() miatt
+	ArrayDeque: a null már foglalt visszatérési érték
+	HashTable: Mert egy régi szar.
+	
+	//A map-ek value-ként természetsen bármennyi null-t tartalmazhatnak.
+
+---------------
+
+A Vector és a HashTable thread safe
+
+---------------
+
+Common Collection methods:
+
+	int size()
+	boolean: isEMpty()
+	boolean contains (Object element)
+	boolean add(E element)
+	remove add(E element)
+	Iterator<E> iterator()
+
+---------------
+
+Array
+
+	//Az Arrays egy Utility class, nem pedig collection.
+	Egy beépített adatstruktúra, mely tartalmazhat objektumokat és primitíveket egyaránt, de egyszerre csak egy típust.
+	Elemek száma: .length változó segítségével érhetõ el.
+
+	List<String> list = Arrays.asList(array);  tömböt List-té konvertál.
+	String[] array2 = (String[]) myList.toArray(); List-et tömbbé konvertál
+
+	Ha egy tömbbõl listát képeztünk akkor megmarad köztük egy kapcsolat miszerint ha egyiknek változik az értéke, a másiké is vele együtt változik, kivéve ha méretbeli változást akarunk eszközölni, akkor kivétel fog dobódni.
+
+---------------
+			
+Tömbböl létrehozott List és az Array kapcsolata:
+
+	Bármelyiket változtatom, a másikat magával húzza!
+		String[] stringArray = {"alma", "banan"};
+		List myList = Arrays.asList(stringArray);
+		myList.set(0, "korte");			// stringArray: ["korte", "banan"] ; myList : ["korte", "banan"]
+		stringArray[0] = "kivi";		// stringArray: ["kivi", "banan"] ; myList : ["kivi", "banan"]
+		myList.remove("banan");			// => java.lang.UnsupportedOperationException mert a tömb létrehozása után már átméretezhetelen és össze vagyunk vele kötve
+		myList.remove(1);			// => java.lang.UnsupportedOperationException mert a tömb létrehozása után már átméretezhetelen és össze vagyunk vele kötve. A remove túl van terhelve index és Obj szerint is ki tud venni. Csak az elso talalatot veszi ki.
+		
+		myList.set(0,1);				// => java.lang.ArrayStoreException: java.lang.Integer mert ez egy String tömb és össze vagyunk kötve vele
+		//System.out.println(myList);
+		//System.out.println("Array" + Arrays.toString(stringArray));
+
+---------------
+
+ArrayList 
+
+	Alapból a size()-a 0.
+			Nincs capacity-je.	//Csak a szükséges memória méretet foglalja le.
+			NotThreadSafe
+			Fast
+
+	Egy objektum, ami több más objektumot tartalmaz. Gyakorlatilag egy átméretezhetõ tömb (A sima tömböt nem lehet átméretezni: hozzátenni, törölni belõle). 
+	Több különbözõ típusú elem is belekerülhet ha nem szûkítjük generics-szel.
+			List lista = new ArrayList();
+			lista.add(1);
+			lista.add("valami");
+
+	Primitíveket nem tartalmazhat.
+	Az elemeinek elérési ideje konstans, hozzátenni és kiolvasni már idõigényesebb, emiatt olyankor használjuk ha fontosabb a gyors válasz mint a módosítások.
+	elemeit a get()-tel érjük el.
+	Az elemek számát a size() adja vissza.
+	Nem kötelezõ megadni a taratlmazandó elemek típusát.
+	Példányosításnál elhagyható a típus megadása, a redundanciát felváltja a gyémánt operátor:
+
+	ArrayList nevek = new ArrayList();
+
+	List<String> names = new ArrayList<String>();
+	List<String> names = new ArrayList<>();
+
+---------------
+
+LinkedList:
+
+	Elsõ és utolsó elem elérési ideje konstans, a többié lineáris. Sorok megvalósítására használják.
+	Java 1.2 ben a Vector volt helyette, ami szálbiztos, de lassú. Ma már mással oldják meg a szálbiztosságot. Egy dynamic array. Initial size = 10. Ha megtelt 100%-kal emeli a kapacitását, míg az ArrayList csak 50-nel. //Vektor sok memóriát wasteel.
+	A Stack még ami kikopott (Stack extends Vector), helyette az ArrayDeque használatos.
+	Mind a List, mind a Queue interfészt implementálja.
+
+	A remove metódus túlterhelt, alaból adott indexû elemet veszi ki, de ha objektumot adunk meg, akkor azt keresi ki.
+	
+-------------
+
+ArrayList és LinkedList	összehasonlítása	
+
+	Az ArrayList-et gyorsabb olvasni mint a LinkedList-et, mert az indexek elérése konstans ideju, még beletenni, kitörölni lassabb, mert tologatni kell a többi elemet hozzá.
+	Ezzel szemben a LinkedList minden eleme mutat az elozore és a következore, s a mutatók átcímzésével gyorsabban bele tudunk tenni/hozzáadni új elemeket.
+	A LinkedListnél csak az elso és utolsó elem elérés konstans ideju.
+	
+---------------
+
+
+Metódusok:
+
+	add(): true-val tér vissza ha sikeres.
+
+	E get(int index) Returns element at index
+
+	int indexOf(Object o) Returns first matching index or -1 if not found
+
+	E set(int index, E e) Replaces element at index and returns original
+
+	remove(): true-val tér vissza ha sikeres. Csak az elsõ találatot szedi ki. Ha int-tel hívjuk(a metódus túl van terhelve) akkor az adott indexû elemet szedi ki.
+
+	boolean isEmpty()
+
+	int size()
+
+	void clear()
+
+	boolean contains(Object object)
+
+---------------
+
+Searching and Sorting:
+
+	Array:
+
+		int[] numbers = {6,9,1,8};
+		Arrays.sort(numbers); // [1,6,8,9]
+		System.out.println(Arrays.binarySearch(numbers, 6)); // 1
+		System.out.println(Arrays.binarySearch(numbers, 3)); // -2 = amelyik indexen lennie kellene ([1] + (+1)) * (-1))
+
+	List:	
+		List<Integer> list = Arrays.asList(9,7,5,3);
+		Collections.sort(list); // [3, 5, 7, 9]
+		System.out.println(Collections.binarySearch(list, 3)); // 0
+		System.out.println(Collections.binarySearch(list, 2)); // -1
+		
+	Collections.sort(amitSortolniSzeretnénnk, (String a, String b) -> {return b.compareTo(a)});
+
+	Collections.sort(amitSortolniSzeretnénnk, (a, b) -> {return b.compareTo(a)});
+
+-------------
+
+Deque:
+
+	Deque can act as a Queue as well as a Stack.
+	if you need a stack, use an ArrayDeque instead.
+
+	A verem esetében a front és a top ugyanaz.
+
+	Deque is a Queue not a List.
+
+
+-------------
+
+Rendezések:
+
+	int[] numbers = {6,9,1,8};
+	Arrays.sort(numbers); // [1,6,8,9]
+	System.out.println(Arrays.binarySearch(numbers, 6)); // 1
+
+	List<Integer> list = Arrays.asList(9,7,5,3);
+	Collections.sort(list); // [3, 5, 7, 9]
+	System.out.println(Collections.binarySearch(list, 3)); // 0
+	
+---------------
+
+Set:
+
+	HashSet:
+		
+		hashCode() metódus segítségével kapja vissza gyorsan az elemeit, ami konstatns idõbeni hozzáférést eredményez a HashTable segítségével.
+		Betevés után elveszítjük a sorrendet. A legygyakrabban használt set.
+
+	TreeSet:
+	
+		Rendezve tartja az elemeit, cserébe a betevés, kivétel lassabb, mert újra kell rendezni a struktúrát.		
+		Az elemeket vízszintesen írja ki, fentrõl lefelé haldava.
+		Megvalósítja a NavigableSet interfészt
+
+			NavigableSet Interface plusz metódusai:
+
+				lower(E e): kisebb				//az adott elemhez legközelebb esõ, annál kisebb elem. Ha nincs akkor null.
+				floor(E e: kisebb egyenlõ		//az adott elemhez legközelebb esõ, (vagy egyenlõ!). Ha nincs akkor null.
+				ceiling(E e): nagyobb egyenlõ	//az adott elemhez legközelebb esõ, (vagy egyenlõ!). Ha nincs akkor null.
+				higher(E e): nagyobb			//az adott elemhez legközelebb esõ, annál nagyobb elem. Ha nincs akkor null.
+				
+				NavigableSet<Integer> set = new TreeSet<>();
+				for (int i = 1; i <= 20; i++) set.add(i);
+				System.out.println(set.lower(10)); 			// 9
+				System.out.println(set.floor(10)); 			// 10
+				System.out.println(set.ceiling(20)); 		// 20
+				System.out.println(set.higher(20)); 		// null
+		
+	Ha olyan elemet adunk hozzá, amit már tartalmaz, akkor a hozzáadás ignorálásra kerül s false-szal tér vissza.
+	Nem tartalmazhat null-t.
+	
+---------------
+
+Queue:
+
+	Akkor használjuk amikor az elemek hozzáadása és eltávolítása specifikáltan történjen. Alapból FIFO.
+	A LinkedList egy double ended queue. Not a pure queue.
+	
+	Az ArrayDeque egy double ended queue. Pure queue. (Sokkal hatékonyabb mint a LinkedList)
+		Nem tartalmazhat null-t mert a null egy speciális visszatérési értéke a rajta dolgozó metódusoknak.
+
+	Metódusok:
+
+		boolean add(E e): A sor végére tesz egy elemet siker esetén true, ellenkezõ esetben ex.
+
+		E element(): Visszadja a következõ elemet, vagy üres sor esetén ex.
+
+		boolean offer(E e): A sor végére tesz egy elemet és akkor is visszatér ha nem volt sikeres.
+
+		E remove(): Kiveszi és visszatér a következõ elemmel, ha üres akkor ex. Nincs a metódus túlterhelve, szóval a List remove()-jával ellentétben nem keresi ki az indexet, csak az objektumok között megy végig.
+
+		void push(E e): Egy elemet nyom a sor elejére.
+
+		E poll(): Kiveszi és visszatér a következõ elemmel, ha üres akkor null. Poll-ja csak a Queue-nak van (Mégis mûködik a Deque-en). (Sor elején kezdi)
+
+		E peek(): Visszatér a következõ elemmel (nem veszi ki), vagy null-lal ha a sor üres. (Sor elején kezdi)
+				
+				
+										Ha sikerül:				Ha nem sikerül		
+		A sor végére tesz elemet:
+			boolean add(E e):			true					ex
+			boolean offer(E e):			true					false
+			
+		A sor elejére tesz egy elemet:
+			void push(E e):													Stack
+			
+		Visszaadja a következõ elemet:
+			E element():				element					ex	
+			E peek():					element					null
+			
+		Visszadja és ki is veszi a
+		következõ elemet:
+			E remove():					element					ex
+			E pop():					element					ex			Stack
+			E poll():					element					null
+		---------------
+
+	Stack:
+
+		A tetjére teszünk és a tetejérõl veszünk el, helyette már az ArrayDeque-t használjuk.
+
+		Metódusok:
+
+			void push(E e): Egy elemet nyom a sor elejére.
+
+			E peek(): Visszatér a következõ elemmel (a tetejérõl, de nem veszi le), vagy null-lal ha a sor üres.
+
+			E pop(): Kivesz az tetejérõl és visszatér vele, vagy ex.
+
+		offerFirst(): Az elejére (a verem tetjére) tesz.
+		offerLast(): Az aljára (a verem aljára) tesz.
+
+	--------------
+	LIFO (stack), people say push/poll/peek. 
+	FIFO (single-ended queue), people say offer/poll/peek.
+	
+--------------
+
+Map
+
+	Akkor használjuk ha az értékeinket egy kulcs segítségével szeretnénk azonosítani.
+	Nem Extendálja a Collection interfészt, csak a Collection Freamowork része.
+	Egy eleme az "entry", ami kulcs/érték pár.
+
+
+	HashMap: Kivenni és betenni konstans idõ (a kulcsokat hash table-ben tárolja), viszont az elemek rendezetlenül kerülnek be.
+		Régi változata a:
+			Hashtable: szálbiztos, viszont elavult. Lassú. Nem enged null key-t, se null value-t. //kis t van a nevében: Hashtable.
+			
+	LinkedHashMap: Megtartja az elemek betevési sorrendjét.
+			
+	TreeMap: Kivenni és betenni idõigényes, viszont ez keyek mindig rendezve vannak. (Ha olyat teszünk bele, ami nem comparable, akkor exc). Hozzáadni és elérni az egyes elemeket idoben O(log n).
+		Nem tartalmazhat null key-t, de null value-kat igen.
+	
+	Metódusok:	
+		
+		put(K, V) -ot használ, nem add()-ot!
+			Ha beleteszünk olyan kulcsot, ami már volt, akkor nem lesz EX, hanem felülírja.
+			null-t is bele lehet tenni mind kulcsnak, mind értéknek, és ki is lesz írva.
+			ConcurrentHashMap-ba viszont nem lehet null. Se kulcsként, se értékként. NullPointerException -t fog dobni már mikor megpróbáljuk beletenni.
+		
+		entrySet(): visszadja az összes enytry-t.
+		keySet(): visszaadja az összes kulcsot.
+		values(): visszadja az összes value-t.
+		//nincs olyan h contains(Obj o), helyette:
+		containsKey(E e)
+		containsValue(E e)
+		size()		
+		putIfAbsent():	
+			Megnézi h van-e már ilyen kulcs, s ha nincs berakja.
+			Ha van, megnézi h adott kulcson van-e már érték és csak akkor teszi be az új értéket ha eddig az null volt.
+		merge():
+			Akkor használjuk ha egyéni logika szerint akarjuk updatelni a value-kat:
+				Kikeressük a kulcsot, és ha megtaláltuk megnézzük a régi és az új értéket, és eldöntjük h mi maradjon, vagy frissüljön.
+					Ehhez kell egy BiFunction, ami kap két értéket(a régi value-t ás az új value-t) és visszadja az eredményt:
+						Map<String, String> favorites = new HashMap<>();
+						favorites.put("Jenny", "Bus");
+						BiFunction<String, String, String> mapper = (v1, v2) -> v1.length() > v2.length() ? v1: v2;
+						favorites.merge("Jenny", "Skyride", mapper);
+						//null key esetén bekerül az új key-value
+						//null value esetén bekerül az új key 
+						//BiFunction<String, String, String> mapper2 = (v1, v2) -> null; esetén kitörli az entry-t ha egyeznek a kulcsok.
+						
+	Így kell bejárni egy map-ot kulcs/érték párral:
+		Map<String, String> map = ...
+		for (Map.Entry<String, String> entry : map.entrySet())
+		{
+			System.out.println(entry.getKey() + "/" + entry.getValue());
+		}
+
+---------------
+
+
+
+
+

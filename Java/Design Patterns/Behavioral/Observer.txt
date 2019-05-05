@@ -1,0 +1,23 @@
+Egy a többhöz kapcsolat, mely során ha egy adott objektum állapota megváltozik, akkor a rajta dependálók
+értesülnek és autómatikusan updatelődnek.
+
+A több, aki figyel azok az observerek, akit observálnak az a subject.
+Az observerek beregisztrálják magukat a subject-hez, hogy azon azon bekövetkező változásokról notify-olódjanak.
+Ha már nem érdekli őket a subject akkor leiratkoznak.
+
+Gyakran hívják ezt a modelt Puiblisher-Suubscriber modellnek is.
+
+IT példa:
+	Valaki egy UI-on lekért információkat és később ha a db megváltozik akkor befrissól az egyszer már "kirenderelt" UI
+	
+A subjet általában bír egy interfésszel, jelen esetben az az interfész az ISubject:
+		void register(Observer)
+		void unregister(Observer)
+		void notifyObservers()
+		
+A Subject-nek feladata h implementálja az ISubject interfészt.
+
+Az Observernek bírnia kell egy:
+			void update() metódussal
+			
+Egy observer több subjectre is feliratkozhat.

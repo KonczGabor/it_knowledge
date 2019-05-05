@@ -1,0 +1,99 @@
+Singleton:
+
+Az osztálynak csak egy példánya létezhet a memóriában. Ezen osztozik a többi osztály és szál.
+Hasznos, mert növeli a teljesítményt azáltal hogy újrafelhasználható adatot tart közelségben és azt nem kell minden esetben külön tárolni, majd visszatölteni.
+
+Természetesen minden fieldje privát.
+
+Általában public static getInstance() -szal érjük el, ami vissza ad egy private static final instance referenciát.
+
+A többi metódus megkapja a synchronized-ot is nem csak a public-ot.
+
+Privát konstruktora miatt csak közvetlenül lehet példányosítani, ezért öröklési szempontból az osztály effecively final-nak számít.
+
+Lazy instantiation: Amikor újrafelhasználható objektum példányosítása a rá való igény időpontjában kezdődik el, nem pedig annak osztályának betöltődésekor.
+Első használatkor érezhető késedelem figyelhető meg a programban. Alapból nem thread safe. 
+Az osztály betöltődésekor való statikus inicializáló blokkban történő példányosítás viszont igen.
+
+Alapvetően kétféle paradigma szerint tudjuk létrehozni.
+	Eager Loading (a class betöltődésekor egyből létrejön az objektum)
+	Lazy Loadin	(csak akkor fog meghívódni a gyártási folyamat, amikor először szükségünk van a Singleton-ra)
+	
+Eager:
+	Eager Loading egyik vállfaja a statikus referencián keresztül történő példány létrehozás:
+		
+		public class HayStorage{
+
+			private int quantity = 0;											// a fieldek private-ek
+			
+			private static final HayStorage instance = new HayStorage();  		// final-nak kell lennie, nehogy átirányíthassuk a pointert. 
+			
+			private HayStorage();												// private, nehogy más konstruktor elérhető legyen, így implicite final-lá tettük az osztályt.
+			
+			public static HayStorage getInstance(){
+				return instance;
+			}
+			
+			public synchronized addHay(int amount){								//synchronized-dé kell tenni az objektumon dolgozó metódusokat.
+				qunatity+=amount;
+			}
+
+		}
+		
+	Másik Eager Loading módozat egy egész statikus blokk használata a példányosításra:
+
+		private static final instance;
+		
+		static{
+			instance = new HayStorage;
+			//Perform additional steps
+		}
+		
+Lazy:
+
+	Logikai ellenőrzés, nem szálbiztos!
+
+		public class HayStorage{
+
+			private int quantity = 0;											
+			
+			private static HayStorage instance;
+			
+			private HayStorage();											
+			
+			public static HayStorage getInstance(){
+				if(instance == null){
+					instance = new HayStorage();		//Nem szálbiztos! Több szál is befuthat abba az állapotba amikor még mindketten azt látják hogy az instance a null-ba mutat, és gyártanak egyet-egyet/többet-többet.
+				}
+				return instance;
+			}
+			
+			public synchronized addHay(int amount){								
+				qunatity+=amount;
+			}
+
+		}
+		
+	Szálbiztos, de nem optimális, hiszen sokat várakoztat:
+	
+		public static synchronized HayStorage getInstance(){
+			if(instance == null){
+				instance = new HayStorage();		
+			}
+			return instance;
+		}
+	
+	A Double-Checked-Idioma javítja a performanciát:
+	
+		private static volatile HayStorage instance;	//volatile megakadályozza hogy a kód optimalizáció miatt felboruljon a sorrend az elérés és a végrehajtás között. //Nem lesz vizsgán.	
+	
+		public static  HayStorage getInstance(){
+			if(instance == null){					//Külső vizsgálat
+				synchronized(HayStorage.class){		//Rálocolunk az osztályra - belső feltétel
+					instance = new HayStorage();	
+				}
+			}
+			return instance;
+		}
+	
+

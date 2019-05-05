@@ -1,0 +1,35 @@
+Ha egy metódus példány változót használ akkor az adott szinten meghívott metódus osztályával megegyezõ példány változót fogja meghívni, nem megy végig a láncon és keresi ki a leg specifikusabb metódus osztályához tartozó változót.
+	Ha egy változó ugyanolyan néve meg van adva az õs osztályban, és õs referenciával mutatunk rá egy, a gyerekben felülírt metódussal, akinek van ugyanolyan nevû változója, mint az õsének, akkor
+	meghívódik az ösön a metódus, de hoppá ilyen metódus a gyerekben is van, aminek van egy változója ugyanolyan néven mint az õsnek, de már nem megy vissza az õshöz, a sajátját fogja használni. 
+	Mindenki a saját szintjén megtalált változót használja, mert az fordítási idõben belegyógyul.
+	
+	 abstract class Widget {
+	     String data = "data";
+	     public void doWidgetStuff() {}
+	 }
+	 
+	 class GoodWidget extends Widget{
+	     String data = "big data";
+	     public void doWidgetStuff() {
+	         System.out.println(data);
+	     }
+	 }
+	 
+	 public class WidgetUser{
+	     public static void main(String[] args) {
+	         Widget w = new GoodWidget();
+	         w.doWidgetStuff();
+	     }
+	}
+	
+	This question illustrates the fundamental aspect of overriding, which is that it is the actual class of object and not the class of the reference type that determines which instance method will be invoked.
+	Here, actual class of the object pointed to by w is GoodWidget and therefore GoodWidget's doWidgetStuff will be invoked. This method prints the data field, which brings us to the second important concept.
+	
+	Access to fields (and static methods) is bound at compile time and is never polymorphic.
+	That is why if a field (or a static method) by the same name is defined in the base class as well as the derived class,
+	it is class of the reference (and not the class of the actual object) that determines which field will be accessed.
+	Here, the variable used to access data field is "this" (which is implicit) and it is of type GoodWidget and therefore GoodWidget's data field will be used.
+	If you try to do System.out.println(w.data); in the main method, it will print data because the class of the reference used to access the data field is Widget and not GoodWidget. 
+
+
+Ha másik metódust hív és az felül van definiálva, akkor kikeresi a legspecifikusabbat.

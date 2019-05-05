@@ -1,0 +1,1 @@
+Az algoritmusokra, az objektumok által elvégzendő feladatokra, illetve az azok közti kommonikációra összpontosít. 

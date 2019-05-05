@@ -1,0 +1,283 @@
+Throwable, Exception, RuntimeException használatához nem kell semmit külön importolni, mert a java.lang.* részei, ami ugye alapból importálódik.
+
+----------------------
+
+UncheckedExceptions (Nem kötelezõ elkapni):
+	ClassCastException : amikor az objektumot inkompatibilis referencia típusra kasztolom.
+	ArrayIndexOutOfBoundsException : ha nem létezõ sorszámra hivatkozok.
+	IllegalArgumentException : Ha nem megfelelõ típusú paramétert küldök a metódusnak, vagy mapba akarok gyûjteni de nem adtam meg merge metódust és már van value az adott helyen
+	IllegalStateException: 
+	ArithmeticException : Pl.: Ha nullával osztunk.
+	ArrayStoreException: Ha rossz típusú adatot akarunk letárolni a tömbbe.
+	DateTimeParseException: január 40.
+	MissingResourceException: key vagy ResourceBoundle hiányzik.
+	
+	
+CheckedExceptions (Kötelezõ elkapni, vagy metódus fejben deklarálni):
+	IOException
+	FileNotFoundException
+	ParseException (Stringet ha numberré akarunk konvertálni)
+	NotSerializableException	
+	SQLException
+	ClassNotFoundExcepption
+	NoSuchFieldException
+	
+----------------------	
+		
+Az Error-t nem recommended h elkapjuk, még ha szándékoltan dobjuk is:
+ Ez így fordul csak nincs sok értelme:
+	public static void main(String[] args) {
+        try {
+            throw new Error();
+        }catch (Error e){}
+    }
+
+----------------------	
+
+A thorws-t a metódus deklarálás során a praméter fej után kell tenni, a throw-t annak törzsében definiáljuk. 
+A throws után több exception is állhat, nem muszáj valóban el is dobniuk az adott típusú exceptiont:
+	public void moreException() throws IOException, SQLException{}
+
+	A catch blokkok nem fognak lefordulni ha olyan CheckedException-t akarunk elkapni ami valójában nem is dobódhat. 	//Feleslegesen ne parázzunk!
+		RuntimeException-ökre felkészülhetünk akkor is ha valójában nem dobunk direktbe.
+
+
+Kicsit trivial:
+	A catch nem csak az éppen olyan ..Exceptiönt, hanem ha leszármazottja a catch-nek, akkor a catch elkapja. Pont úgy ahogy maga az Exceptiön is el kap bármit, ami Exceptiön típusú.
+
+----------------------
+
+Tricky!:
+
+    public void m() throws SQLException {	//A csel hogy már fordítás idoben tudjuk hogy itt egy SQLException van beburkolva, nem muszáj az Exception-t kezelni, elég az SQLException-t!
+        try{
+            throw new SQLException();
+        }catch(Exception e) {
+            throw e;	//Kötelezok vagyunk kezelni, de úgy döntöttünk hogy nem kezeljük hanem deklaráljuk.
+        }                
+        
+    }
+	
+----------------------
+	
+Finally:
+
+	Mindenképpen lefut, nem feltétel h elõtte belelépjünk egy catch-be.
+	Muszáj h kapcsos zárójellel legyen deklarálva, ellentétben az if-fel ahol egysoros utasítás esetén elhagyhatjuk.
+	Mielõtt az exceptiön kiesne, a finally ág még megcsinálja a dolgát, és csak utána bugyog fel a metódusból.
+	Ha nem kaptuk el a hibát, vagy a catch maga dobott hibát, és a finally is dob hibát akkor a finallyé fog felbugyogni.
+	Nem garantált h minden sora lefut a blokknak, lévén hogy õ maga is tartalmazhat pl.: try-catch-finallyt.
+		Ha a finally-ban van return és tényleg el is jut odáig a vezérlés, akkor minden addigi hibát, vagy más eredményt lehetõség van eldobni:
+			try {
+			}catch (Exception e){
+				throw new Exception("catch");
+			}finally {
+				return ;		//A fordító okos és úgy értelmezi h ez a checked exception le lett kezelve. Végülis..ez is egy mód. 
+			}
+	
+		Ha finally-ban dobunk exception-t akkor az addigi összes primary és supressed exception is  "elfelejtõdik":
+			try (JammedTurkeyCage t = new JammedTurkeyCage()) {
+				new IllegalStateException("turkeys ran off");
+			} finally {
+				throw new RuntimeException("and we couldn't find them");	
+			}
+		
+	
+----------------------
+	
+A try-catch-finally struktúra nem ugyan az mint a try-with-resources
+
+	Közös:
+
+		Az if-fel ellenétben itt minden utasítást blokkokba kell foglalni, nem hagyhatjuk el a "{}"-t.
+
+		A try blokkon belül deklarált változók nem látszanak ki abból, sem a catch, sem a finally számára nem elérhetõek.
+		
+		Catch elõtt nem állhat finally.
+		
+		Akármilyen mélyen egymásba ágyazhatunk try-catch blokkokat, a CheckedException dobását-t bámelyik külsõ catch, vagy throws le tudja kezelni és le is kell.
+		
+		Kötelezõ hogy a különbözõ catch-ek az egyre specifikusabbaktól az egyre generikusabbak felé tarsanak lefele.
+		
+		Egy try-hoz tartozó catch()-ek közül csak egy futhat le. Azon belül lehet újabb try-catch-finally, azon belül is csak egy kaphat el, és így tovább..
+		
+		Ha egy metódus belsejében szépen le van kezelve a hiba, de deklaráltuk a fejében h õ throws valamit, akkor a metódus hívásának a helyén kezelni kell azt a hibatípust, 
+		kivéve ha RuntimeException, akkor nem muszáj az adott függvényt a hívás helyén kezelni, hiába jelentetteük be h mi throws-olunk RuntimeException-t.
+	
+		Ha szánt szándékkal dobunk egy UncheckedException-t azt az ég világon sehol sem muszáj lekezelni. Nem kell körbevenni try-catch blokkal és az õt hívó metódus fejében sem kell deklarálni. 
+		
+		Nem tudunk dobni olyan CheckedException-t amire nincs esély h megtörténjen, fordítási hibát eredményez.		
+		
+		Egy metódust, ami throws-sol nem írhatunk felül további, vagy szélesebb Exception-nel (szûkebbel igen), VISZONT teljesen elhagyhatjuk az throws záradékot!
+				
+		Ha Unchecked exceptiont várunk a catch ágban akkor kötelezõ hogy az a try, vagy resourceblokkból dobva legye. 
+		
+		Ha egy Exception-t újra akarok dobni(wrap) akkor az csak olyan, vagy szûkebb lehet, mint amit elkaptam.
+		
+		Akár elkaptuk, akár nem a try blokkból kikerülõ Exceptiont, a close metódusok meg fognak futni.
+		
+		Egymásba ágyazott try-catch blokkok esetén nem adhatunk meg ugyanolyan nevû paramétert, mint ami már kint deklarálva lett 
+			try {
+				throw new IOException("Disk not found");
+			} catch (Exception e) {
+				try {
+					throw new FileNotFoundException("File not found");
+				} catch (FileNotFoundException e) { // Ez az "e" kitakarná a külsõt, le kell cserélni másra!
+					System.out.print("Failed");
+				}
+			}
+
+----------------------			
+
+	TRY:		
+		Kötelezõ, hogy vagy legalább egy catch, vagy a finally álljon a try után.
+
+----------------------		
+		
+	TRY-WITH-RESOURCES:
+	
+		Mind az egy vagy több catch, mind a finally elhagyható egyszerre.
+		A try blokk kap egy metódus fejet, amiben az erõforrásokat felsorakoztathatjuk, de csak olyanokat, melyek megvalósítják a Closable vagy AutoClosable interfészt.
+			Ha csak egy erõforrást deklarálunk, akkor a ";" az utasítás végérõl elhagyhatjuk, illetve ha többet, akkor az utolsó végérõl
+		
+			AutoClosable:
+				public void close() throws Exception{}	//Bármilyen Exception override során elhagyható, specifikálható, de nem generalizálható.
+				Bad Practice ha generikus Exceptiont dobunk, vagy állapot módosítást hajtunk végre a close metódusban. Megengedett, de ellenjavallt.
+				Az AutoClosable részben deklarált erõforrás változók effectively final-ok, elérhetõek, de nem lehet õket redeklarálni.
+				A close metódus autómatikusan meghívódik, de ha még a tryban mi is meghívjuk nem fog történni semmi, nem okoz szintaktikai problémát.				
+				Ha a resourceok lezárása közben exception dobódik, akkor még nem fordulunk egybõl a catch-ekhez, megvárjuk a többi resource lezárását is, majd csak azok meghívása után fordulunk a catch-ek felé.
+				Ha a closable metódus dob Exception-t akkor azt le kell kezelni a catch-blok/kokban, vagy deklarálni(tovább dobni (mainben valószínû a vizsgán)) a hívás helyén.	
+				
+		Nem kell nekünk kézzel lezárogatni, a deklarálási sorrendhez képest FORDÍTOTTAN lezárulnak maguktól a resource blokk erõforrásai.
+		
+		A "láthatatlan close" blokkok lefutásának helye/ideje:
+		
+			try (BufferedReader r = Files.newBufferedReader(path1);
+			BufferedWriter w = Files.newBufferedWriter(path2)) {
+			// protected code
+			} <=Pontosan ennek a zárójelnek a képzeletbeli ponja után közvetlenül, még a cath elõtt történik meg az erõforrások lezárogatása.
+			
+		Az erõforrás változók láthatósága:
+			A resource blokkban létrehozott erõforrások csak a try-ig látszódnak el, sem a catch sem a finally nem látja õket.
+		
+			try (Scanner s = new Scanner(System.in) // <== Ezt a fejet hívom resource blokknak
+			{
+				s.nextLine();		// <== Ez itt a try blokk
+			} catch(Exception e) {
+				s.nextInt(); // DOES NOT COMPILE - Itt már nem látszik az "s"
+			} finally{
+				s.nextInt(); // DOES NOT COMPILE - Itt már nem látszik az "s"
+			}
+		
+		Supressed Exception-s
+			Amit elõször dobunk el az lesz a primary, amit elnyomunk az a supressed.
+			Ha a try blokkunkban történik ez Exception az lesz a priamry, annak végén kezdõdik az erõforrások lezárása, tehát azok lesznek supressed-ek:
+						
+----------------------
+
+Ha felülírjuk az AutoClosable close() metódusát h ne ne dobjon semmilyen Exceptiont, attól még a TRY-WITH-RESOURCES blokkban ki kell tenni az általános Exception kezelést, mert csak futás idoben
+derül ki h VALÓJÁBAN olyan close()-t hívunk meg a lezárás során ami	nem dob exception-t:
+
+class MyResource implements AutoCloseable {
+    @Override
+    public void close() {		//Override során minden Exception-t elhagyhatunk
+        System.out.println("Closing");
+    }
+}
+
+public class Test {
+    public static void main(String[] args) {
+        try (AutoCloseable resource = new MyResource()) {
+
+        } catch (Exception e) {			//Ezt kötelezõ kitenni, hisz polimorfikusan mi csak egy AutoClosable-t látunk, ami Exception-t dob, hogy mi valóban mit adtunk be, az csak futás során derül ki.
+            e.printStackTrace();
+        }
+    }
+}
+	
+		
+
+----------------------
+
+Multi catch:
+
+	Azt a célt szolgálja hogy csökkentsük a redundanciát.
+	A multi catch-ben megadott kivétel típusok nem állhatnak egymással azonos örökösödési ágon pl.:
+		The exception FileNotFoundException is already caught by the alternative IOException
+		De közös õssel rendelkezhetnek, pl ha mind a kettõ valamilyen RuntimeException. Ilyenkor másik ágon vannak, csak közös helyrõl származnak.
+			
+		try {
+			Path path = Paths.get("dolphinsBorn.txt");
+			String text = new String(Files.readAllBytes(path));
+			LocalDate date = LocalDate.parse(text);
+			System.out.println(date);
+
+		} catch (DateTimeParseException | IOException e) {	//Csak a végére tehetünk egyetlen változót
+			e.printStackTrace();					//Itt az "e" effectively finallá minõsül multicatch esetében, tehát nem kaphat más értéket. Sima try-catch esetén felüldefiniálható az "e"
+			throw new RuntimeException(e);         
+		}
+		
+
+----------------------
+
+Print StackTrace:
+
+	try {
+			throw new CannotSwimException();
+		} catch (CannotSwimException e) {
+			e.printStackTrace();
+		}
+	
+----------------------
+	
+A fõ különbség a Closable és AutoClosable között hogy az AutoClosable bármilyen kivételt dobhat, a Closable csak IOExceptiont. 
+RuntimeExceptiont bármelyik dobhat, az nem számít. (Szóval pl. a Closable nem dobhat Exceptiont, de IOExceptiont és bármilyen RuntimeException igen.)
+Closeable extends AutoCloseable. (A Closable van származtatva az AutoClosable-bõl.)
+
+
+
+In order for a class to be created in the try clause, Java requires it to implement an interface
+called AutoCloseable. // Csak az tehetünk be a resource blokkba ami megvelósítja az AutoClosable interfészt.
+
+A catch blokk a primary exc-et hivatott elkapni, hiába tudná elkapni a supressed-et, már mással kell foglalkozni, a primary-é a porond.
+
+A resource blokkban lévõ erõforrások lezárása a try{} blokk után történik meg, a catch blokkok lefutása elõtt.
+
+Az erõforrások lezárása fordított sorrendben történik, mint ahogy létrehozva lettek. A lezárási irány tehát lentrõl felfelé halad.
+
+Ha dobunk egy excp-et a try-ban, majd a finally-ban, és a try-ét nem tudja elkapni senki akkor a try-é nem minõsül supressednek, hanem az egyszerûen elvész, 
+mert a finallyban dobottnak le kell futnia mindenképp. Ez rossz kódolási stílus, mert így elvesztünk egy kivételt.
+
+
+Ha egy fgv több kivételt is throws-ol, akkor azokat elkaphatjuk sorra egymás után, vagy egy mutlicatch-csel is akár.
+
+	public void multiCatch() throws SQLException, DateTimeParseException {
+		try {
+			parseData();
+		} catch (SQLException | DateTimeParseException e) {
+			System.err.println(e);
+			throw e;
+		} 
+	}
+
+Vagy a kettõt eggyel is lehetséges, de ilyenkor mást is elkaphat, mivel generikusabb:
+
+	public void rethrowing() throws SQLException, DateTimeParseException {
+		try {
+			parseData();
+		} catch (Exception e) {
+			System.err.println(e);
+			throw e;
+		}
+	 }
+
+Ha resource lezárásakor excp dobódik, addig nem kerül át a vezérlés a catch-ekhez amíg a többi resource lezárása is meg nem történik. 
+Így akár több exp is egymásra halmozódhat a és csak a legutolsó megy át a catch-ekhez. //? nem biztos.
+ 
+ Az erõforrások akkor is lezárásra kerülnek, ha a kód kivételt dobott (még a különbözõ erõforrások esetén is), nyílván mert még nem értünk el a catch ágakhoz.
+ 
+ Ha a try is dob és a lezárás is, akkor a a try-é elnyomja a lezáráskor keletkezett kivételt.
+ 
+ A try blokk lezárássa után közvetlenül, még a catch-ek bekövetkezte elõtt kezdenek el lentrõl fölfele bezárulni az erõforrások.
+
+

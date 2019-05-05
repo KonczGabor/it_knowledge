@@ -1,0 +1,4 @@
+A line commentnek 
+	//-rel kell kezdődni, 
+	akárholy állat,
+	és bárhány/ követheti a kezdő "//"-t szóval ez legit: ////// myComment

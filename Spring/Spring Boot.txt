@@ -1,0 +1,11 @@
+A @SpringBootApplication több dolgot foglal magába:
+	@Configuration
+	@ComponentScan
+	@EnableAutoConfiguration
+	
+	Ha valamit az autoconfigon felül szeretnénk testre szabni, azt egy külön osztályban a @Configuration -val kel megtenni
+	Ezeket majd úgyis felkapdossa a component-scan
+	
+Az ég világon semmilyen viewresolvert nem kell bállítani, sem dispatcher servletet nem kell konfigurálni egy quicstarthoz:
+	csak egy Controller és a thylmleaf a templates alá. html-re végződve.
+	Nem kell létrehozni semmilyen WEB-INF mappát.

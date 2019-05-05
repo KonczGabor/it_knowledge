@@ -1,0 +1,132 @@
+Java 7 - Compilation:
+
+Nem szerencsés a JDK-ta Program Files-ba tenni, a szóköz miatt. Helyette a C:\ használatos.
+
+javadoc HelloWorld.java -d doc	//a "-d" azt jelenti h melyik mappába tegye a dokumentációt
+
+System.exit(0);					// a 0-at mondja meg, hogy hogyan lépett kia program. Pl.: "-1"  esetén küldhetünk smsm-ta fejlesztõnek hajnali hatkor h baj van.
+
+Jar file majdnem olyan mint egy zip file. Rendelkezik manifest file-lal. (meg lehet benne adni h melyik class induljon el benne.)
+Elõször lefordítjuk a jar filet, és utána a class-okat csomagoljuk jar-ba.
+
+-d vel meg lehet adni globális változókat a fordítás során.
+
+jar cfe invaders.jar Game *.class *.gif 
+
+ cf: create file.
+ e: executive:
+ 
+	mi legyen a neve.
+	Mibõl.
+
+jar cf: create 
+jar cfe a létrehozand  jar file neve, meg a futtatható(Main) class meg még * class *gif is (ami még kellhet bele)
+jar uf: update
+jar xf: extract
+jar tf: test
+
+jvisualvm: monitor program
+jconlse: monitor program
+
+system.getporperty.
+-Dkey=value define or override system variable.
+	
+Argumentum megadás. Valami porperty: java -Dkey1=alam Helloworld
+
+Felsõ memóraikorlát: java MemoryLeak -Xmx100m
+Memórai foglalás: java MemoryLeak -Xms100m
+
+jconsole  
+
+javap: visszabontja a class file-t h lássuk mi van banne, mintha ".java" lenne.
+
+Statikus import nem csak statikus tagokat, de konstansokat is magával húz, hisz azok final static-ok.
+
+Futtatás:
+
+Maga a hierarchia visszafele történjen.
+
+A fileban normál sorrendben pontokkal elválasztva
+
+A Forrdításnál normáls orrendben perjellel
+
+A futtatásnál normáls sorrendben pontokkal elválasztva.
+-------------
+
+strictfp = lebegõpontos számítások különbözó architekrúrákon történõ futtatása esetén ugyanra az eredményre történõ késztetése.
+
+
+replace: Stringben kicserél mindent, replaceAll pedig regexp-szerint kicseréli az újra.
+
+
+Integer -128 tól 127 ig nem hoz létre új objektumot, ilyenkor valuOf és boxing is játszik. (==)
+
+Attól még nem immutable egy objektum h minden tagja public v final és nincsenek setterjei, az is kell hogy ha mondjuk van egy list-ja akkor annak elemei se tudjanak változni.
+
+Ctrl+Shift+L akutális gyors gombok listája
+Next editor Ctrl+F6 helyette ctrl+tab vissza meg ctrl+shift+tab
+
+Ctrl-m ablak minimalizálása.
+
+Ctrl+shift+r : open resource csak java filokat keres
+
+Ctrl+shift+t: java osztályokat keres.
+
+Ctrl+o: az adott osztályban gyors keresés a metódusok és mezõk között.
+
+alt+shift+r : rename the local variable in everywhere.
+
+kijelölni mindent (ctrl+a) majd ctrl+1: minden nem használt final lesz.
+
+ctrl+7 ki és visszakomment.
+
+ctrl+shift+i => inspect a részutasításra.
+
+ctrl+3: display
+
+jobbklikk az osztályon -> open type hierarchy
+
+jobklikk a metóduson -> open call hierarchy 
+
+pull up, push down a refaktorban õsbe, gyerekbe áthelyezi az adott változót. Lehet mást is tud. 
+
+ctr+o: quick outline. Ha kétszer nyomod meg akkor azokat is mutatja, amiket õ örököl.
+
+easyshell plugin a marketplacebõl a package explorerben oda nyit ablakot ahol jobklikkelsz.
+
+ctrl+1 az adott változón és convert local variable to field hogy statikus legyen.
+
+A fordítást a projekt gyökerébõl kell kiadni.
+
+Az Eclipse-ben a clean gomb arra jó hogy ha elcsúszik a forrásfiletól a lebuildelt, akkor azokat kitörli és újra buildel. Olyankor lehet amikor utólag kerülnek be dependency-k. Néha segít.
+
+Degug: CTRL+3: odaugrik a QuickAcces-re
+
+-=Logging=-
+log4j
+
+Java Util Logging (JUL) fapad, minimál cuccokra jó lehet, amúgy vanank benne hibák. appenderek vannak (File, Console, Null -ide írnak)
+
+Apach Commons Logging: (ACL) .first facade (több probléma mint megoldás) Performancia Issue-k, közös interfészen lehetett konfigurálni hogy milyen logging framework-re megy ki,de Ceki Gülcü újraírta. 
+
+Simple Logging Facade for Java (SLF4J) Más framework-öket tud vezérelni, de önmagában is állhat (core?). Elõnye h tudjuk alatta cserélgetni a logging framework-öket, nem kell újraírni a kódbázist.
+
+LogBack- újra lett írva a log4j, dinamikusan lehet változtatni. Autómatikusan újraolvassa a konfigot. Nem kell az alkalmazást újraindítani érte. XML alapon újrakonfigurálható.
+
+A jelenlegi standard az SLF4J LogBack háttérrel.
+
+eclipec.exe: visszaállítja az Eclipse-t eredeti, plugin nélküli verzióba.
+
+Minden osztály loggere legyen private static final.
+Tipikusan factroy hozza létre.
+
+Objektumok azonosítója egy sha 40 bájtos karaktersorozat.
+
+git diff HEAD^2 : a head és annak második szülõje közti különbség.
+
+Index file = staging area.
+
+git log --oneline
+
+Stashing: Ha van valamim, amit még nem commitolttam be és szeretnék kicheckutolni egy másik branch-re akkor csak úgy engedi ha a változtatásokat vagy commitolom, vagy elstashelem elõtte.
+Az így stahs-be tett dolgokat késõbb ki vehetem a másik stashbõl is.

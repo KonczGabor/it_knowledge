@@ -1,0 +1,16 @@
+Encapsulation:
+	A mezők és a velük műveleteket végző metódusok kapcsolatrendszere az enkapszuláció. Minél szorosabb, annál jobb.
+
+	Egyik megvalósítása:
+		Mezők és metódusok olyan kombinálása hogy a mezók ne legyenek elérhetőek kívülről közvetlenűl, 
+		csak a rajtuk műveleteket végző metódusaik segítségével.
+		
+Java Bean: Ez egy dizájn principle ami az enkapszuláció segítségével eléri h az adatokat egy objektummá llítsa össze.
+	A fieldek privátok
+	
+	A getterek public és camelCase  
+		kis boolean esetén is, nagy esetén get:
+			public boolean isDancing();
+			public Boolean getDancing();
+			
+	setterek is publikusak és camelCase

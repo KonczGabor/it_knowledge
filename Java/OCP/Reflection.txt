@@ -1,0 +1,1 @@
+Reflection is a technique used in Java to look at information about the class at runtime.

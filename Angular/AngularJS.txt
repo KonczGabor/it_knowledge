@@ -1,0 +1,20 @@
+Ez a legrégebbi változat, a 2.0 már csak simán Angular
+
+MVC:
+	Model: a data
+	Veiew: a HTML template system
+	Controller: Az adatokat köti hozzá a template hez (A JS)
+	
+Olyan könnyû használatba venni mint a bootstrap-pet, vagy mint a jQuery-t
+https://angularjs.org/
+
+Alegkirályabb feature e hogy az adatokat magával az alkalmazéással össze lehet kötni(binding), erre használjuk a direktívákat.
+
+A kódnak azt a részét ahol szeretnénk magát az angulart használni ng-app direktvás divbe kell csomagolni.
+
+A direktíva nem más csak egy fancy név az utasítás(command) helyettesítésére. ng-vel kezdõik a nevük és úgy használjuk õket, 
+mint html attribútokat.
+
+ng-model egy form elementen belül deklarált változó, ami elérhetõ a scriptek és a template számára egyaránt. Two-way data binding
+
+Az adatok negjelnítsésére a dupla bajuszt használjuk {{}} Nem kell írni külön js-t h elérjük ezzel az expression-nel a modell-t.

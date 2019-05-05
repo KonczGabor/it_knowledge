@@ -1,0 +1,3 @@
+A tömbnek length-je van:
+	myArray.length;
+A list-nek size()-a.	

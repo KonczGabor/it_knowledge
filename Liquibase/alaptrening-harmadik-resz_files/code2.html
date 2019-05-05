@@ -1,0 +1,23 @@
+
+<!-- saved from url=(0043)http://zerotohero.hu/minitrening/code2.html -->
+<html><head><meta http-equiv="Content-Type" content="text/html; charset=windows-1252">
+<link rel="stylesheet" href="./github.css">
+<script src="./highlight.pack.js.letöltés"></script>
+<script>hljs.initHighlightingOnLoad();</script>
+</head>
+<body>
+<pre><code class="xml hljs ">
+<span class="hljs-tag">&lt;<span class="hljs-title">changeSet</span> <span class="hljs-attribute">id</span>=<span class="hljs-value">”2014.08.03-create-jobs-table”</span> <span class="hljs-attribute">author</span>=<span class="hljs-value">”ZTH.user”</span>&gt;</span>
+	<span class="hljs-tag">&lt;<span class="hljs-title">sql</span> <span class="hljs-attribute">splitStatements</span>=<span class="hljs-value">”true”</span>&gt;</span> 
+		CREATE TABLE jobs ( 
+			job_id VARCHAR(10) NOT NULL, 
+			job_title VARCHAR(35) NOT NULL, 
+			min_salary DECIMAL(8, 0) UNSIGNED, 
+			max_salary DECIMAL(8, 0) UNSIGNED, 
+			PRIMARY KEY (job_id)
+		); 
+	<span class="hljs-tag">&lt;/<span class="hljs-title">sql</span>&gt;</span> 
+<span class="hljs-tag">&lt;/<span class="hljs-title">changeSet</span>&gt;</span>
+</code></pre>
+
+</body></html>

@@ -1,0 +1,72 @@
+Csak azok a változók és metódusok hívhatók meg expilicit kasztolás nélkül az objekmtumon, 
+amilyennel az arra rámutató referencia rendelkezik.
+------------------------
+
+
+Attól mert még vissza kasztolunk egy objektumot az õsére, attól még csak a változók állítódnak vissza,
+a metódusok továbbra is polimorfikusan viselkednek.
+
+class Widget {      
+	String data = "data";     
+	public void doWidgetStuff() {       
+		System.out.println(data);     
+	}  
+}  
+
+class GoodWidget extends Widget{     
+	String data = "big data";      
+	public void doWidgetStuff() {}  		//ez lesz meghívva.
+}  
+
+ public class WidgetUser{     
+	public static void main(String[] args) {         
+		Widget w = new GoodWidget();         
+		((Widget)w).doWidgetStuff();    
+	}     
+}
+
+System.out.println(w.data); 				//prints data         
+System.out.println(((GoodWidget)w).data); 	//prints big data
+------------------------
+
+Õs osztály metódusából hívott másik metódus, melyet a gyerekben felülírtunk, a gyerekben fut le,
+nem marad meg azonos szinten, polymorfikusan lemászik:
+
+	abstract class Animal {
+		public void careFor() {		//1.
+			play();					//2.
+		}
+		public void play() {		// <= nem ez!
+			System.out.println("pet animal");
+		} 
+	}
+	
+	class Lion extends Animal {
+		public void play() {		//3.	<=ez hívódik meg!
+			System.out.println("toss in meat");
+		} 
+	}
+	
+	public class PlayWithAnimal {
+		public static void main(String... args) {
+			Animal animal = new Lion();
+				animal.careFor();			//0.
+		} 
+	}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

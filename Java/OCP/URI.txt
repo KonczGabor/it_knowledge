@@ -1,0 +1,5 @@
+uniform resource identifier (URI)
+	is a string of characters that identify a resource. It begins with
+a schema that indicates the resource type, followed by a path value. Examples of schema
+values include file://, http://, https://, and ftp://. The java.net.URI class is used to
+create and manage URI values.

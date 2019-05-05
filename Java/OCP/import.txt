@@ -1,0 +1,46 @@
+Egy osztály attól még lefordul mert:
+	nem használt,
+	redundáns
+importokat tartalmaz.
+
+Ha viszont importolni szeretnénk valamit, amit nem élrünke le, akkor nem.
+
+A "*" csak az adott class minden osztályát húzza be, de nem megy rekurzívan mélyebbre.
+
+A Date lehet több  helyen is, importolni kell a megfelelőt, ha használni szeretnénk.
+
+import static és nem static import.
+	Egy osztályon belül csak a statikus tagokat húzza be.
+	
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

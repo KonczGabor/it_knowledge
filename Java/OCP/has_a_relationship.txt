@@ -1,0 +1,14 @@
+Azt reprezentálja hogy egy objektumnak része-e/tartalmazz-e az adott érték/et, tulajdonság/ot
+
+class Bird{
+	Beak beak;
+}
+
+class Beak{
+	color String;
+	Integer size;
+}
+
+Bird has-a Beak
+
+class SeaBird extends Bird{}	//Also has a Beak by inheritance

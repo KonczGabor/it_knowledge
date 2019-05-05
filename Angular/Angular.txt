@@ -1,0 +1,227 @@
+Angular by Gooogle
+Client side JS programming Framework
+Dinamikus funkcionlaitások elérése kliens oldalon (egy oldalon történjen minden újrahívások nélkül.)
+Angular 2 nem kompatibilis visszafele.
+
+	Amik biztos h működnek kliens oldalon	
+		HTML	Az elemtjei a dom fa node-jai.
+		CSS		meg lehet adni inline/block/külön file
+		JS		Dynamic programming langugage, Compiled and Interpreted language. Arra van h változtassa dom-ot a browser-ben (User interaction). SPA=SinglePageApplication (már említett ne kllejen újrahívni az oldalt feeling.)
+		
+	Angular JS lets you extend HTML vocabulary.
+	Custom elements in HTML.
+	
+		Eddig a JQerry-s megközelítésben (Imperatív programozás - How to do it):
+			Találjuk meg az elemtet
+			Futtasunk valamiféle logikát
+			Updateeljük az elementet
+			
+		Ezzel szemben az Anguláros módszerrel (Deklaratív progrmozás - What to do)
+			Deklaráljunk egy element típust
+			Definiáljunk valamilyne logikát (call date)
+			Használjuk az elemet típust
+			
+	Custom elements:
+	
+	<html ng-app>   //megadja h angulart akarunk használni
+	<head>
+		<script src="angular.js"></script>
+	<head>
+	<body ng-init="hourOfDay = 10" > JS inicializáció nem kell használni a var kulcsszót
+
+		<div ng-controller="Main">
+			<H1>Hello Angular!</h1>
+			<p ng-if="hourOfDay < 12">Good morning</p>
+			<p ng-if="hourOfDay > 17">Good evening</p>
+			<p>The hour of the day is: <span ng-bind="hourOfDay"></span></p>
+			<p>The hour of the day is: <span>{{hourOfDay}}</span></p>
+		</div>
+		
+		<script>
+			function Main(){
+				consoloe.log("Main function called"); //not recommended global functions
+			}
+		<script/>
+		
+		
+		
+		
+	</body>
+</hmtl>	
+
+
+(Two-way)Data binding: Ha valami a templaten változik akkor a Script is létre fog hajtani bizonyos változtatásokat.
+	
+
+ng-app 
+	Auto bootstrap an Angular JS application
+	The ng-app directive tells AngularJS that the <div> element is the "owner" of an AngularJS application.
+	root element
+	
+ng-init
+	for initilaizating code
+	Evaluate expressions
+	The ng-init directive initializes AngularJS application variables.
+	<div ng-app="" ng-init="firstName='John'">
+		<p>The name is <span ng-bind="firstName"></span></p>
+	</div>
+	You can use data-ng-, instead of ng-, if you want to make your page HTML valid.
+	
+	Don't use this tag, depricated, useless.
+
+ng-if
+	if the expression is true an element will be added to the dom.
+	false esetén kiveszi, nem lesz elérhető.
+	
+ng-bind
+	Egy attribútumot hozzáadunk egy elementhez. 
+	(The ng-bind directive binds application data to the HTML view.)
+	Egy üzleti adatot adunk meg egy html elementnek.
+	Ugyanaz mint a {{hourOfDay}}, nem kell hozzá ellement
+	
+ng-model
+	The ng-model directive binds the value of HTML controls (input, select, textarea) to application data.
+	A html elementek értékeit kötjük az alakalmazás paramétereihez.
+	
+ng-controller
+	mielőtt végrehajtaná a blokkját meghívja az adott funkciót
+	
+AngularJS modules define AngularJS applications.
+
+AngularJS controllers control AngularJS applications.
+
+<div ng-app="myApp" ng-controller="myCtrl">
+
+First Name: <input type="text" ng-model="firstName"><br>
+Last Name: <input type="text" ng-model="lastName"><br>
+<br>
+Full Name: {{firstName + " " + lastName}}
+
+</div>
+
+<script>
+var app = angular.module('myApp', []);			//Csinálj egy app nevű változót, ami az angular.module álal a myApp applikációra mutasson.
+app.controller('myCtrl', function($scope) {		//Erre a változóra kösd fel a myController nevű kontrollert
+    $scope.firstName= "John";
+    $scope.lastName= "Doe";
+});
+</script>
+
+
+Angular célja: Egy idő után már a JS és Jquerry karbantartása nehézkes. Loosely Coupled structures.
+Könnyebben tesztelhető, unit tesztek is lehtségesek.
+
+Archtecture:
+	Front-end: ami a browseren fut (HTML, CSS, TypeScropt, Angular)
+	Backend: data, processing.
+	Az API (Application Programming Interface) -ek általában endpointok, amik elérhetőek HTTP reqiestek segítségével.
+	
+nodejs =a böngészőn kívül is végre tud hajtani js-t.
+	Ha fel van téve akkor az npm tool is települ, aminek a segítségével ThirdPratyLibaries-ekekt is tudunk telepíteni.
+
+Angular CLI = angular command line interface. Angular projecteket és boiler plate kódokat lehet vele geneérálni, illetve depolyable package-eket.
+	npm install -g @angular/cli
+		a -g azt jelenti h global, tehát mindneki számára elérhetővá válik.
+	ng --version
+	ng new projektnév,
+	ng serve - csinál egy saját szervert localhost -ra.
+	
+Mappa struktúra:
+	e2e: EndToEnd: Autómata endtoend tesztek, amik egy valódi user-t szimulálnak, hasonló mint a user acceptance.
+	node:modules: 3pl -k. Ezekből csomagoljuk be azokat amikre szükségünk van.
+	src:
+		app: Minden alkalmazásban van legalább egy modul és egy component.
+		assets: statikus assetek: img/icons
+		environments: configurációk a különböző környezetekre: prod/stage
+			maint.ts: a progam belépési pontja
+			polyfills: ha valamit nem támogat a böngésző oda van betuszakolva megoldás.
+			styles.css: global css
+			test.ts: tesztek felépítése
+	.editorconfig: ha többen dolgozunk, akkor mindenkinek közösek legyenek a beállításai
+	karma.conf.js: config file for karma: js test runner
+	package.json:fontos!
+	protractor.conf.js. e2e ang tests
+	tsconfig: a typeScript compiler számára vannak beállítások.
+	tslint.json: sttaikus kódanalizátor a ts számára.
+	
+Webpack HMR: Hot Module Replacement
+
+AngularJS (2010) Túl komplex volts
+Angular2 (2016) Teljesen új. Angular néven szoktak rá hivatkozni. Angular2+
+Angular3: nincs
+Angular4:
+	
+TypeScript a külső halmaz, benne van a JS.	
+	Strong typing
+	OO
+	Compile-time errors
+	Ami JS-en lefordúl az Typescripten is fog.
+	
+	npm install -g typescript
+	
+	tsc --version		:TypeScriptCompiler
+	
+	tsc main.ts => lefordítja main.js -re a compiler
+	
+	node main.js 		//futtatás
+	
+	let != var
+		var: nem blokkhoz, hanem a legközelebbi function-höz kötött.
+		let: ez már normálisan működik, mint pl.: Javában, csak a legközelebbi lokkban látszik.
+		let-tel nem lehet dinamikusan váltani a változók típusát.,ha deklarálásnál nem definiáljuk azt.
+		Ha csak deklarálunk, akkor utólag is változhat. Viszont olyan in van h deklarálásnál típust megadunk, 
+		de értéket nem, ilyenkor is típusossá válik. let a: number;
+		
+	nuber
+	boolean
+	string
+	any
+	number[]=[1,2,3];
+	let f: any[] = [1, true, 'a', false];
+	
+	const ColorRed = 0;
+	
+	enum: related konstants.
+		enum Color {Red, Green, Blue};
+		
+Ha nincs megszorítva egy változó típusa, akkor nem fog működni az IDE kódsegédje sem, 
+hacsak megszorítást(Assertions) nem teszük rá (<string>message).endsWith('c');
+VAGY (message as string).endsWith('c'); A különbség h az egyik rá is kasztolja, a másik csak futásidőben "rásegíti".
+		
+	component: reusable logically realated stuffs
+		navbar, course, sidebar
+		
+			Create a component
+			Register it in a module
+			Add an elelmnt in an HTML markup
+	
+	module: group of related components
+		Courses, Messaging, Instructor, Admin
+	
+ng g c komponens//g: generate c:component sokkal hatékonyabb, mintha mi magunk irogatnénk be a komponens létrehozásához szükséges kódokat.
+Akárhányszor amikor olyan direktívát használunk amely változtatja a dom-ot egy *-ot kell tenni a neve elé:
+	  <ul>
+        <li *ngFor="let course of courses">
+            {{ course }}
+        </li>
+    </ul>
+	
+ng g s komponens//g: generate s:service	
+
+npm install bootstrap --save: store bootsrap in an npm location
+
+CTRL+SHIFT+P: package.json =>bekerült a bootstrap dependencia	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+		
+		

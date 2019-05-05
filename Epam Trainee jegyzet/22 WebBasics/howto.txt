@@ -1,0 +1,18 @@
+<!-- https://mvnrepository.com/artifact/javax/javaee-api -->
+<dependency>
+    <groupId>javax</groupId>
+    <artifactId>javaee-api</artifactId>
+    <version>7.0</version>
+    <scope>provided</scope>
+</dependency>
+
+web.xml változás esetén újra kell indítani a TomCat-et
+
+web-inf:
+	web-xml (Milyen esetekben essen be hozzá a hívás)
+	
+	<servlet>
+		<servlet-name>Time Servlet</servlet-name>                //Ebbõl az osztályból hozunk létre példányt és ennek kell majd átadni a hívást.
+		<servlet-name>/TimeServlet</servlet-name>
+	</servlet>
+	

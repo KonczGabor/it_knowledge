@@ -1,0 +1,178 @@
+Újabb mint  az xml és az annotációk
+
+Azoknak, akik nem szeretik keverni a kettõt
+
+Spring 3.0-tól.
+
+Nincs appplicationContext.xml file
+	helyette egy AppConfig file-t érdemes létrehozni az App.class mellett. Erre a file-re kell rátenni a @Configuration annotációt.
+	
+	@Configuration
+	public class AppConfig {}
+	
+@Bean metódus szintû annotáció
+	@Bean(name ="customerService")
+	public CustomerService getCustomer Servuce){}
+	
+	
+	
+setteresÁtadás:
+	@Configuration
+	public class AppConfig {
+
+		@Bean(name = "customerService")
+		public CustomerService getCustomerService() {
+			CustomerServiceImpl customerService = new CustomerServiceImpl();
+			customerService.setCustomerRepository($Itt hivatkozunk$getCustomerRepository());
+			return customerService;
+		}
+
+		@Bean(name = "customerRespository")
+		public CustomerRepository $Erre$getCustomerRepository() {
+			return new HibernateCustomerRepositoryImpl();
+		}
+
+	}
+	Itt nem lehet csak paramétert váró konstruktor. Lennie kell egy dafultnak is, ami persze csak úgy jön létre ha nincs semmilyen konstruktor. Ha van, akkor nekünk kell megírni a paraméter nélkülit.
+	
+Konstruktor injection:
+
+	@Configuration
+	public class AppConfig {
+
+		// @Bean(name = "customerService")
+		// public CustomerService getCustomerService() {
+		// CustomerServiceImpl customerService = new CustomerServiceImpl();
+		// customerService.setCustomerRepository(getCustomerRepository());
+		// return customerService;
+		// }
+
+		@Bean(name = "customerService")
+		public CustomerService getCustomerService() {
+			CustomerServiceImpl customerService = new CustomerServiceImpl($Itt hivatkozunk$getCustomerRepository());
+			return customerService;
+		}
+
+		@Bean(name = "customerRespository")
+		public CustomerRepository $Erre$getCustomerRepository() {
+			return new HibernateCustomerRepositoryImpl();
+		}
+
+
+	}
+	Lennie kell egy paramétert átvevõ konstruktornak, viszont setternek már nem muszáj.
+	
+	
+Autowired:
+	@ComponentScan({"com.pluralsight"}) -Ebben a tartományban fog nézelõdni.
+	
+	Adott:
+	
+		@Configuration
+		@ComponentScan({ "com.pluralsight" })
+		public class AppConfig {
+			
+			@Bean(name = "customerService")
+			public CustomerService getCustomerService() {
+				CustomerServiceImpl customerService = new CustomerServiceImpl();
+				return customerService;
+			}
+
+			@Bean(name = "customerRespository")
+			public CustomerRepository getCustomerRepository() {
+				return new HibernateCustomerRepositoryImpl();
+			}
+		}
+		
+		----
+		
+		public class CustomerServiceImpl implements CustomerService {
+
+			@Autowired
+			private CustomerRepository customerRepository;
+
+			public CustomerServiceImpl() {
+				System.out.println("Const without parameter");
+			}
+
+			public CustomerServiceImpl(CustomerRepository customerRepository) {
+				System.out.println("Const with parameter");
+				this.customerRepository = customerRepository;
+			}
+
+			public void setCustomerRepository(CustomerRepository customerRepository) {
+				System.out.println("Setter");
+				this.customerRepository = customerRepository;
+			}
+
+			@Override
+			public List<Customer> findAll() {
+				return customerRepository.findAll();
+			}
+
+		}
+
+
+	------------------------------
+	
+	És ha kitöröljük a customerRespository beant:
+	
+	@Configuration
+		@ComponentScan({ "com.pluralsight" })
+		public class AppConfig {
+			
+			@Bean(name = "customerService")
+			public CustomerService getCustomerService() {
+				CustomerServiceImpl customerService = new CustomerServiceImpl();
+				return customerService;
+			}
+		}
+		
+		----
+
+	@Repository("customerRepository")         //Ezt itt megadva végigkeresi ezt: @ComponentScan({ "com.pluralsight" }) és megttalálja az eddig bean ként létrehozott Repository-t. Ez esetben name attrribute alapján.
+	public class HibernateCustomerRepositoryImpl implements CustomerRepository {
+
+	
+	@Override
+	public List<Customer> findAll(){
+		List<Customer> customers = new ArrayList<>();
+		
+		Customer customer = new Customer();
+		
+		customer.setFirstName("Gabor");
+		customer.setLastName("Koncz");
+		
+		customers.add(customer);
+		
+		return customers;
+				
+	} 
+	
+	
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

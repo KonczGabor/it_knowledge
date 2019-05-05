@@ -1,0 +1,20 @@
+
+<!-- saved from url=(0043)http://zerotohero.hu/minitrening/code4.html -->
+<html><head><meta http-equiv="Content-Type" content="text/html; charset=windows-1252">
+<link rel="stylesheet" href="./github.css">
+<script src="./highlight.pack.js.letöltés"></script>
+<script>hljs.initHighlightingOnLoad();</script>
+</head>
+<body>
+<pre><code class="xml hljs ">
+<span class="hljs-tag">&lt;<span class="hljs-title">changeSet</span> <span class="hljs-attribute">id</span>=<span class="hljs-value">"2014_08_03_alter_jobs_table"</span> <span class="hljs-attribute">author</span>=<span class="hljs-value">"02Hero.user"</span>&gt;</span> 
+	<span class="hljs-tag">&lt;<span class="hljs-title">sql</span> <span class="hljs-attribute">splitStatements</span>=<span class="hljs-value">"true"</span>&gt;</span> 
+		ALTER TABLE jobs ADD avg_salary decimal(8, 0) UNSIGNED; 
+	<span class="hljs-tag">&lt;/<span class="hljs-title">sql</span>&gt;</span> 
+	<span class="hljs-tag">&lt;<span class="hljs-title">rollback</span>&gt;</span> 
+		ALTER TABLE jobs DROP avg_salary; 
+	<span class="hljs-tag">&lt;/<span class="hljs-title">rollback</span>&gt;</span> 
+<span class="hljs-tag">&lt;/<span class="hljs-title">changeSet</span>&gt;</span>
+</code></pre>
+
+</body></html>

@@ -1,0 +1,5 @@
+Opern Source search server, based on apache Lucene
+Written in Java
+Cross-platform
+Big Focus on scalability - distributed from the ground up
+Designed to takae data from any source, analyze it and search through it

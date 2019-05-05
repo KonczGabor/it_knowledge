@@ -1,0 +1,12 @@
+A metódus szignatúrája a neve és a paraméterlista.
+
+Overload esetén a igyekszik a legszûksebb lehetõséget választani:
+
+1: Pontos match
+2: Superclass
+3: szélesebb primitív
+4: autobox
+5: varargs
+
+null is not an object.
+

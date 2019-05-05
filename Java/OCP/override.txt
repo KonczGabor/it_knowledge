@@ -1,0 +1,19 @@
+
+
+
+Akkor sikeres ha:
+	Az acces modifierek ugyanolyannak, vagy megengedõbbek.
+	Nem muszáj exceptiont dobnia, még checked-et sem.
+		Ha dob, nem lehet szélesebb a checked exception, mint amit felül szeretne írni.
+	Runtime exceptiont bármikor dobhat.
+	A visszatérési értéknek kovariánsnak kell lennie: azaz specifikusabb, vagy unagyolyan lehet mint amit felülír.
+	A paraméterek típusának, számának és sorrendjének meg kell egyeznie.
+	Tehetjük final-lé.
+	A statikus elõtag nem számít felülírásnak, csak kitakarásnak. Le se fordul, hacsak maga a feülírandó metódus is static eleve.
+
+@Overridea
+Akkor hazsnáljuk ha azt akarjuk h direkt elfail-eljen az felülírás ha nem sikerül helyesen megcsinálnunk. 
+Ha véletlenül elgépelnénk valamait, vagy megváltozna a 
+Nem a dokumentáció elõsgítését szolgálja.
+
+

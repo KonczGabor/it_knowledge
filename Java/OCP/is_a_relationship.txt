@@ -1,0 +1,9 @@
+instanceof operátor a probléma megoldó.
+
+Öröklődési fának taga-e amit keresünk.
+
+Car is a Vehicle.
+
+Tranzitív. Nem kell h közvetlen lestármoazottja legyen.
+
+SportCar is a Vehilce.

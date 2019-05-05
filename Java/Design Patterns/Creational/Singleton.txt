@@ -1,0 +1,28 @@
+Biztosítja hogy egy adott osztály csak egy példánya létezhessen a rendszerben.
+
+Való életbeli példa: 
+	Egy foci csapat kapitánya
+	
+IT példa:
+	Általában erőforrások: Fileredszer, nyomtató.
+	
+Requirements:
+		A konstruktornak private-nek kell lennie.
+		A példényosítás során meg kell győződnünk h még nem létezik obejektum.
+			Ha igen akkor azt használjuk, 
+			Ha nem akkor létrehozunk egyet.
+			
+	A lazy intitialization nem thread safe!:
+		if(myFileSystem == null){
+				myFileSystem = new FileSystem();
+			}
+	
+	Használhatunk helyette synchronized módosítót a metóduson:
+		publis sctatic synchronized FileSystem getInstance(){
+			if(myFileSystem == null){
+				myFileSystem = new FileSystem();
+			}
+		}
+	
+	Eager initialization már ClassLoad time létrejön az objektum és VM biztosítja h ez csak egyszer történhet meg:
+		

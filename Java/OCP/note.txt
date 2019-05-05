@@ -1,0 +1,5 @@
+String: length()
+Array.
+
+LIFO (stack), people say push/poll/peek. 
+FIFO (single-ended queue), people say offer/poll/peek.

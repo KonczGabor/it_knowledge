@@ -1,0 +1,9 @@
+Állapottartó objektum. Létrehozása után értékei, hivatkozott adatok értékei nem változhatnak.
+Így segíti elő a szálbiztosságot.
+
+Feltételek:
+	Minden fieldet a konstruktor állít be.
+	Minden field privat és final.
+	Nincsenek setterek. //Nem állítunk be semmit lértrehozás után.
+	A referenciák sem mutathatnak mutable objektumokra, és mi is csak másolatokat adunk ki. Pl ArrayList.
+	A metódusokat feülírásának megakadályozása.		//final az osztály elé.

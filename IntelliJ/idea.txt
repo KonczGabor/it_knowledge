@@ -1,0 +1,14 @@
+A run mellett balra lévő Project Build gomb hatására létrejön egy out mappa, egy futtatható állománnyal.
+MEg kell adni h mit szeretnénk buildelni, mert pl. ha létrehozunk egy új package-et akkor azt nem buildeli újra csak a már meglévőt.
+
+Ha run-ra kattintunk akkor nem jön létre target mappa, hanem megint az out mappába-ba ír. Le kell fordítani a 
+forrás fileokat h legyen mit megfuttatni.
+
+Ha a project view-ban törlünk akkor az a filerendszert is érinti.
+
+Az Intellij és Maven modulokat 1:1 megfeleltetésként kell leképezni.
+
+Az Ideá-ban modul szinten is meg lehet adni a java nyalvi szinteket.
+
+Az intellij mindent projekt-ként akar kezelni: ha megnyitunk egy sima MAven modul-abba is beleírja a saját idés bejegyzéseit
+az .iml file-ba.

@@ -1,0 +1,93 @@
+We said that Comparator is a functional interface because it has a single abstract method.
+Comparable is also a functional interface since it also has a single abstract method. However,
+using a lambda for Comparable would be silly. The point of Comparable is to implement
+it inside the object being compared.
+
+
+Difference 												Comparable 			Comparator
+Package name 											java.lang 			java.util
+Interface must be implemented by class comparing? 		Yes 				No
+Method name in interface 								compareTo 			compare
+Number of parameters 									1 					2
+Common to declare using a lambda 						No 					Yes
+
+
+Rendezési prioritás: "space", számok, nagybetű, kisbetű
+
+Hasonlítás: adott.compareTo(amihez);
+
+0: 	Ha az adott elem egyenlő a másikkal
+-: 	valemennyi: Ha az adott elem kisebb annál, mint amihez hasonlítjuk, ILYENKOR CSERÉLÜNK!
++: 	valemennyi: Ha az adott elem nagyobb annál, mint amihez hasonlítjuk
+
+private int id;
+public int compareTo(Animal a) {
+	return id – a.id;				=>növekvő // a.id – id
+}
+
+A comparable-ben felülírjuk az equals()-t:
+
+public class Product implements Comparable<Product> {
+int id;
+String name;
+public boolean equals(Object obj) {
+if(!(obj instanceof Product)) {
+return false;
+}
+Product other = (Product) obj;
+return this.id == other.id;
+}
+public int compareTo(Product obj) {
+return this.name.compareTo(obj.name);
+} }
+
+-------------------------comparator-------------------------
+
+
+public class Duck implements Comparable<Duck> {
+	private String name;
+	private int weight;
+	
+	public Duck(String name, int weight) {
+		this.name = name;
+		this.weight = weight;
+	}
+	
+	public String getName() { return name; }
+	public int getWeight() { return weight; }
+	public String toString() { return name; }
+	
+	public int compareTo(Duck d) {           	//Ez a Comparable-é.	
+		return name.compareTo(d.name);
+	}
+	
+	public static void main(String[] args) {
+		Comparator<Duck> byWeight = new Comparator<Duck>() {		//Ez itt egy anonymus belső osztály, amit ki lehetne váltani
+			public int compare(Duck d1, Duck d2) {					//egy lambda kifejezeéssel, mert hát a Comparator is egy generikus interfész. 
+				return d1.getWeight()—d2.getWeight();
+			}
+		};
+		
+		Comparator<Duck> byWeight = (d1, d2) -> d1.getWeight()—d2.getWeight();
+		Comparator<Duck> byWeight = (Duck d1, Duck d2) -> d1.getWeight()—d2.getWeight();
+		Comparator<Duck> byWeight = (d1, d2) -> { return d1.getWeight()—d2.getWeight(); };
+		Comparator<Duck> byWeight = (Duck d1, Duck d2) -> {return d1.getWeight()—2.getWeight(); };
+		
+		List<Duck> ducks = new ArrayList<>();
+		
+		ducks.add(new Duck("Quack", 7));
+		ducks.add(new Duck("Puddles", 10));
+		
+		Collections.sort(ducks);									//A Comparable compareTo-ját hívja
+		System.out.println(ducks); // [Puddles, Quack]				
+		
+		Collections.sort(ducks, byWeight);							//A Comparator copmare -jét hívja
+		System.out.println(ducks); // [Quack, Puddles]				
+	}
+}
+
+A treeSte-be való bepakoláshoz is kell tudni sort-olni, amit kétféle képpen lehet megcsinálni:
+1, Implementáljuk a Comparable interfészt és az osztály egy saját compareTo metódusa mellett nem kell a treeSet-nek paramétere legyen.
+2, Csinálunk egy(lehet több különbözőt is) comparator objektet, amit átadunk a new treeSet(paraméterének).
+
+

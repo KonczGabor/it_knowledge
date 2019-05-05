@@ -1,0 +1,678 @@
+import java.util.concurrent.*;
+
+Thread:
+	Az oprációs rendszer számára a végrehajtás legkisebb egysége.
+	
+	Thread Típusok:
+		Rendszer szintû
+		User által definiált
+		Daemon threadek:
+			pl.: GarbageCollcector. Ha egy programban már csak deamon threadek futmnak akkor a program rendszerint lezárja magát.
+			
+	Minden thread kap valamennyi idõt a thread scheduler-tõl, ha abba nem fér bele akkor lép életbe a context switch, 
+	aminek szintén van egy idõköltsége hogy a thread állapotát elmentse és a következõ körben onnan folytatni tudja (save-reload).
+	
+----------------------------------------
+
+A thread-ek fontosságát egy integer alapú thread priority hivatott eldönteni:
+	Thread.MIN_PRIORITY 1
+	Thread.NORM_PRIORITY 5
+	Thread.MAX_PRIORITY 10
+	
+----------------------------------------
+
+Fontosabb Thread fgv-ek:
+	boolean isAlive()
+	String/void getName()/setName()
+	get/setPriority(int)
+	Thread.currentThread().getPriority()
+
+----------------------------------------
+
+sleep() vs wait():
+
+	sleep esetén adott ideig várakozunk
+	
+	wait estén addig amíg fel nem ébreszt valaki egy notify-jal.
+
+----------------------------------------
+
+Process:
+
+	az egymással összefüggõ, közös környezetben lévõ threadek csoportja.
+
+	Közös környezet az, ahol közvetlenül tudnak ugyanabban a memóriatérben kommunikálni.
+
+
+
+	Thread lifecycle:
+
+		New Thread (start)
+		Runnable (run)
+		Running (sleep)
+		Waiting (notify, elapsed time)
+		Dead
+	
+----------------------------------------
+
+States:
+
+	New: Created but not started
+	Runnable: executing in the JVM
+	Blocked
+	Waiting
+	Timed_waiting
+	Terminated
+	
+----------------------------------------
+
+@FunctionalInterface public interface Runnable {
+	void run();
+}
+
+	Nincs paramétere és nem ad vissza adatot.
+
+	//Ezzel szemben a Callable interfész call() metódusa adattal tér vissza és dobhat checked exceptiont.
+
+----------------------------------------
+
+
+Alapvetõen kétféleképpen definiálhatunk egy taskot:
+
+	1 (Delegálás): A Thread konstruktornak átadunk egy Rubbanle objectet (Az átadott objektum osztálya implementálja a Runnable interfészt),
+	vagy lambda kifejezést. //Létrejön egy Thread objektum és el kell indítani a start() metódust.
+		
+		public class PrintData implements Runnable {        	//More common
+			public void run() {
+				for(int i=0; i<3; i++)
+					System.out.println("Printing record: "+i);
+			}
+			public static void main(String[] args) {
+				new Thread(new PrintData()).start();	//el is kell ám indítani! Beletesszük egy Threadbe konstruktorába.
+			}
+		}
+		
+	2: A Thread osztályból származtatunk egy sajátot, ami felülírja a run() metódust. Ezen elindítjuk a start() metódust.
+		public class ReadInventoryThread extends Thread {	//Less common
+			public void run() {
+				System.out.println("Printing zoo inventory");
+			}
+			public static void main(String[] args) {
+				new ReadInventoryThread().start();	//el is kell ám indítani!
+			}
+		}
+
+	//A Thread egy teljes értékû osztály, aminek van egy teljes értékû run implementációja, míg a Runnable csak egy FunkcionálisInterfész.
+
+----------------------------------------
+
+Implementing Threads with lambda:
+
+	Worst way: Creating Inner class:
+		 public static void main(String[] args) {
+			Runnable myRunnable = new Runnable() {
+				@Override
+				public void run() {
+					System.out.println("Anonymus");
+				}
+			};
+			new Thread(myRunnable).start();
+		}
+
+	Better way: Implemnting Runnable with lambda:
+		    public static void main(String[] args) {
+				Runnable myRunnable = () -> {
+						System.out.println("Anonymus");
+					};					
+				new Thread(myRunnable).start();
+			}
+			
+	Best way: Using lambda to pass locally implemented Runnable-object to the Thread cst:
+			public static void main(String[] args) {
+				new Thread(() -> {
+					System.out.println("I'm a lambda");
+				}).start();
+			}
+		
+----------------------------------------
+
+Runnable vs Callable:
+
+	Mindkettõ @FunctionalInterface
+
+		Runnable:
+			public abstract void run();
+			A Future result visszatérési értéke null a runnable metódusnak, mivel a runnable() void.
+			a get() mindig null-t fog visszadni.
+	
+		Callable:
+			A Callable tud dobni checked exceptiont is.
+			@FunctionalInterface public interface Callable<V> {
+				V call() throws Exception;
+			}
+	A Futuret.get() throws a checked InterruptedException and ExecutionException, amit le kell kezelni
+	
+----------------------------------------
+
+synchronized keyword
+
+	Csak nem-absztrakt példány metódusokra alkalmazható.
+	Egymásba ágyazható. -deadlock veszély másik hasonló metódus esetén.
+	A synchronized method cannot be executed simultaneously by more than one thread on the same object.
+	A run()-t lehet synchronized-dé tenni.
+	Nem lesz tõle a az adott kód atomi, mert más szál megszakíthatja.
+	
+----------------------------------------
+
+join():
+
+	Az a thread amelyik meghívja az várakoztatja saját magát amíg egy másik be nem fejezõdik (i.e. finishes its run() method).
+	Ilyenkor nincs szükség lock-ra.
+		Adott Thread t1
+		main
+			t1.join()	//A maint megvárakoztatom addig amíg t1 be nem fejezi a futását.
+			
+----------------------------------------
+
+Polling: az a folyamat amikor bizonyos idõközönként (adott ideig) csekkolgatunk egy adatot. 
+
+
+public class CheckResults {
+
+	private static int counter = 0;
+
+	public static void main(String[] args) throws InterruptedException {
+
+		new Thread(() -> {
+			for(int i=0; i<500; i++) CheckResults.counter++;
+		}).start();
+
+		while(CheckResults.counter<100) {
+			System.out.println("Not reached yet");
+			Thread.sleep(1000); // 1 SECOND
+		}
+
+		System.out.println("Reached!");
+	}
+}
+-------------------------------------
+
+ExecutorService:
+
+	Lehetõséget ad a pooling-ra: szálak létrehozása/kiosztása/visszavétele, ...
+	Lehetõséget ad a scheduling-re: ütemezés
+	Még akkor is javallott a használata ha csak egy plusz szállal szeretnénk dolgozni.
+
+	Concurrency API biztosítja az Executors factory class-t hogy létrehozhassunk ExecutorService object-eket, amiknek átadhatjuk a thread-jeinket.
+
+		Az ExecutorService interfész nem implementálja az AutoClosable-t, szóval nem használhatjuk a try-with-resources-ban. Viszont a finally-ban le lehet zárni:
+
+		ExecutorService service = null;
+		try {
+			service = Executors.newSingleThreadExecutor();
+			// Add tasks to thread executor
+			…
+		} finally {
+			if(service != null) service.shutdown();		//Az ExecutorService-t le kell kapcsolni, különben a végtelenségig várakozni fogunk.
+		}
+				
+	Típusai: 
+	
+		SingleThreadExecutor:
+			Aszinkron feladatok számára.
+			Garantálja hogy a neki végrehajtásra átadott threadek egymás végrehajtódása után fussanak le:
+				service.execute(() -> System.out.println("Printing zoo inventory"));
+				service.execute(() -> {for(int i=0; i<3; i++)
+					System.out.println("Printing record: "+i);}
+					);
+				sout "I'm from main"	
+				//A main thread attól még közbe ékelõdhet a saját utasításaival a STE folyamatai közé, 
+						csak az biztos h azok egymáshoz képest folyamatosak pl.:
+							Printing zoo inventory
+							I'm from main
+							Printing record: 0
+							Printing record: 1
+							Printing record: 2
+						
+		ScheduledExecutorService:
+		
+			Létrehozása:
+				ScheduledExecutorService service = Executors.newSingleThreadScheduledExecutor();
+				
+			Négy fajtája:
+			
+				schedule(Callable/Runnable, delay, TimeUnit)
+				
+				scheduleAtFixedRate(Runnable, initDelay, delay, TimeUnit):
+					Egy meghatározott delay után adott peridusonként fut le
+					Nem érdekli h az elõzõ lefutott-e, õ akkor is minden percben meg fogja hívni magát, 5 perc után:
+						service.scheduleAtFixedRate(command,5,1,TimeUnit.MINUTE);
+						
+				scheduleAtFixedDelay(Runnable, initDelay, delay, TimeUnit):
+					Egy meghatározott delay után biztosítja hogy két task között ugyanannyi legyen az eltelt idõ.
+					
+				//Az utolsó kettõ mivel végtelen ideig futhat, nem gyõzné hova tárolni a Callable eredményeit(Future).	
+
+		//newSingleThreadExecutor() is equivalent to calling newFixedThreadPool() with a value of 1.		
+		
+		//scheduleAtFixedRate() amikor az a fontos hogy az adott idõben valami megtörténjen, pl minden reggel megnézzük hogy az állatok egészségügyi állapotát az állatkertben, függetlenül attól hogy egy csekkolás akár 2 óráig is eltarthat.
+
+		//scheduleAtFixedDelay() Miután feltöltöttük a kaját(lehet h sok idõ) adott idõ elteltével újra hozzákezdünk feltölteni.	
+		
+-------------------------------------						
+	
+Shutting down a Thread Executor:
+
+	Miután végeztünk a threadek futtatásával, FONTOS h le is zárjuk az executort, mert nem démon szál lévén magától nem adja vissza a vezérlést és a program lehet h nem fog tudni terminálódni.
+		if(service != null) service.shutdown();
+		
+	ShuttingDown LifeCycle:
+		Két fázisú: Elõször csak kiadjuk az igényt:
+			shutdown(): innentõl kezdve az isShutdown() == true, de a még futásban lévõ thread-eket végrehajtja, újakat viszont nem fogad.
+			Ha minden folyamattal végzett akkor isTerminated() == false állapotba lép.
+		Ha azonnal le akarjuk kapcsolni akkor a shutdownNow() parancssal visszakapjuk a besubmittált, de el nem kezdett task-okat: List<Runnable>. 
+			Hasznos, mert elõfordúlhat hogy egy thread magától soha nem állna le. 
+		
+-------------------------------------
+
+	Submitting Tasks:
+	
+		ExecutorServiceInstance.execute(Callable)	Nem adható át, mert void visszatérést várunk és a Callable visszatér Future<T>-vel.
+		ExecutorServiceInstance.execute(Runnable)	Átadható
+		ExecutorServiceInstance.submit(Callable)	Átadható
+		ExecutorServiceInstance.submit(Runnable)	Átadható csak null-/okat fog visszaadni
+		
+		
+		4 féle lehetõség:
+			execute: void viszatérés
+			submit:  submit(Callable<T> task) visszaad egy Future<T> objektumot, tehát az támogatja a Callable kifejezést, mint paramétert
+					sima Future<?> submit(Runnable task) Runnable-es változata is van.
+					
+			<T> List<Future<T>> invokeAll(Collection<? extends Callable<T>> tasks) throws InterruptedException:
+				Végrehajtja az adott feladatokat és szinkron visszaadja ugyanabban a sorrenden, egy Future-ök listájába a resultokat mint ahogy be lettek adva.
+				Addig vár amíg mind el nem készül
+				Timeoutos változata is van
+				
+			<T> T invokeAny(Collection<? extends Callable<T>> tasks) throws InterruptedException, ExecutionException:
+				Végrehajtja az adott taskokat: szinkron belapakol és az elsõt visszadja.
+				Addig vár amíg egy el nem készül, a többit törli.
+				Timeoutos változata is van
+
+-------------------------------------
+
+Thread Pool:
+	
+	Elõre létrehozott, újrafelhasználható thread-ek halmaza.
+	
+	A fõ különbésg a single-thread-ed és a pooled-thread-ed executorok között, h a pooled-thread-ed executor esetén nem vagyunk rászorúlva az egymásutániságra, párhuzamosan is futhatnak a thread-ek.
+	Ha elfogynak a thread-ek akkor egy várakozási sorba kerülnek a taskok.	
+
+	newCachedThreadPool() = sok rövid életû thread esetén, kötetlen méret, asynchronous hívások esetén.
+
+	newFixedThreadPool() = mindet egyszerre futtaja amíg van elég thread a fix méretû poolban, ha elfogyott akkor vár míg fel nem szabadul egy.
+
+	newScheduledThreadPool() = hasonló mint a scheduleAtFixedRate(), ennek segítségével el lehet kerülni az a taskok "átlapolódását"
+	
+-------------------------------------
+
+Procik számának kiiratása:
+
+	System.out.println(Runtime.getRuntime().availableProcessors());
+	
+-------------------------------------
+
+Atomic: 
+
+	Olyan tulajdonsága a mûveletnek mely azt fejezi ki hogy más thread által meg nem szakítható. 
+	//A ++a nem ilyen, mert egyszer olvas, egyszer "visszaír".
+		
+	Atomic adattípusok:
+	
+		AtomicReference A generic object reference that may be updated atomically
+		AtomicBoolean 
+		AtomicInteger 		
+		AtomicLong 		
+		
+		AtomicReferenceArray An array of generic object references in which elements may be	updated atomically
+		AtomicLongArray A long[] which elements may be updated atomically
+		AtomicIntegerArray: An int[] which elements may be updated atomically
+			
+	Atomic mûveletek:
+		get()
+		set() = "=" értékadás operator
+		getAndSet = visszadja a régit és beállítja az újat.
+		--a/++a = decrementAndGet/incrementAndGet()
+		a--/a++	=getAndDecrement/getAndIncrement
+		
+	Atomic osztály használata:
+		private AtomicInteger sheepCount = new AtomicInteger(0);
+		System.out.print(sheepCount.incrementAndGet()+" ");
+			private void incrementAndReport() {
+		}
+	
+	Az atomosság használata során egy kiírás még nem lesz helyes sorrendû többszálas vezérlés esetén, csak elkerüljük hogy többször ugyanaz az adat szerepeljen.
+
+	Ha valami szinkronizálva van nem minden esetben szükséges még atomicot is rádobni, úgy se nyúl addig hozzá senki.
+	
+-------------------------------------
+
+Szinkronizáció:
+
+	Gyakoraltilag nem más mint az adatok konzisztenciájának megõrzése terjesítmény csökkenés árán.
+	
+	Synchronized Blocks:
+		Guard object(más néven monitor) megakadályozza h a többi szál hozzányúljon ahhoz a blokkhoz amit õ épp fog:
+			SheepManager manager = new SheepManager();
+			synchronized(manager) {
+			// Work to be completed by one thread at a time
+			}
+
+		Ez a helyes sorrend implementálása:
+			public class SheepManager {
+			
+				private int sheepCount = 0;
+				
+				private void incrementAndReport() {
+					synchronized(this) {				//önmagunkra szinkronizálunk
+						System.out.print((++sheepCount)+" ");
+					}
+				}
+				
+				public static void main(String[] args) {
+					ExecutorService service = null;
+					try {
+						service = Executors.newFixedThreadPool(20);
+						SheepManager manager = new SheepManager();
+						for(int i=0; i<10; i++)
+							service.submit(() -> manager.incrementAndReport()); //random h melyik szál fog odérni, de megáll az tuti akinek nincs lockja.
+					} finally {
+						if(service != null) service.shutdown();
+					}
+				
+			}
+			
+	Szinkronizált metódusok:
+	
+		A példány metódusok bármilyen objektumra(ügyeljünk h minig ugyanarra és h más ne használhassa) rászinkronizálhatnak, de célszerû önmagunkra.
+			private void incrementAndReport() {
+				synchronized(this) {
+					System.out.print((++sheepCount)+" ");
+				}
+			}
+		
+		Egyel kényelmesebb megoldás a beépített lehetõségek használata, ami ugyanazt csinálja mint fentebb:
+			private synchronized void incrementAndReport() {	//A synchronized kulcsszó a visszatérési érték elõtt bármilyen sorrendben állhat.
+				System.out.print((++sheepCount)+" ");
+			}
+			
+		A statikus metódusok az Osztályra magára és nem példányára kell h szinkronizáljanak:
+			public static void printDaysWork() {
+				synchronized(SheepManager.class) {
+					System.out.print("Finished work");
+				}
+			}		
+		Vagy a kényelmesebb változat:
+			public static synchronized void printDaysWork() {
+				System.out.print("Finished work");
+			}		
+			
+		//Példány metódus is szinkronizálhat Class objektumra, nem lesz belõle fordítási hiba, 
+		csak mivel minden példány ugyanarra az objektumra fog szinkronizálni, ezért performanciát vesztünk.	
+		
+-------------------------------------
+
+Concurrent Collections:
+
+	Mi magunk is "fel tudnánk okosítani" egy Collection-t h a mûveleteit synchronized-dá tesszük, de erre nyújt kényelmes megoldást a Concurrency API.
+	
+	Ha egynél több thread egyszerre akar hozzáférni egy nem konkurens collectionhöz, akkor ConcurrentModificationException-t kapunk:
+		for(String key: foodData.keySet())	//Ez megakadályozta volna: new ConcurrentHashMap<String, Object>();
+			foodData.remove(key);
+						
+	Blocking(Queue/Deck):
+		vár egy timelimit-ig és ha nem sikerül belerakni(offer), akkor:
+			false
+			
+		Ha adott ideig nem sikerül kiszedni (poll):
+			null
+		
+-------------------------------------
+
+CopyOnWrite Collections:
+
+	List<Integer> list = new CopyOnWriteArrayList<>(Arrays.asList(4,3,52));
+
+		for(Integer item: list) {
+			System.out.print(item+" ");
+			list.add(9);
+		}
+
+	System.out.println();
+	System.out.println("Size: "+list.size());
+
+	When executed as part of a program, this code snippet outputs the following:
+	4 3 52
+	Size: 6
+
+	Létrehoz egy másolatot az új értékekkel, de az eredetit járja be. 
+	Így nem jöhet létre végtelen ciklus, illetve ha nem használnánk a CopyOnWrite elõtagot, akkor ConcurrentModificationException dobódna a sima ArrayListen.
+	Hátránya hogy sok memóriát fogyaszt, mivel minden módosítás során egy új struktúra jön létre.
+	
+-------------------------------------
+
+
+Parallel streams:
+
+	Hátránya hogy a mûveletek nem lesznek szinkronizáltak, azt a fejlesztõnek kell kieszközölnie, vagy konkurens kollekciókat használnia.
+	
+	Minden stream lehet parallel.
+
+	Létrehozása:
+
+		Stream<Integer> stream = Arrays.asList(1,2,3,4,5,6).stream();
+		Stream<Integer> parallelStream = stream.parallel();
+
+		Vagy:
+
+			Stream<Integer> parallelStream2 = Arrays.asList(1,2,3,4,5,6).parallelStream();
+	
+	Ha egy parallel és egy szekvenciális stream-et konkatenálok az parallel lesz:
+		Stream.concat(Stream s1, Stream s2)	//s1.isParallel() == true
+	
+	Ha straemeket kilapítok akkor mindenképp szekvenciális jön létre:
+		flatMap()
+	
+	Parallel stream-ek esetén simán elõfordulhat hogy az egyik thread termináló operátora már lefutott, a másik még csak az intermediate-operátorokon ügyködik:
+		Arrays.asList("jackal","kangaroo","lemur")
+		.parallelStream()
+		.map(s -> {System.out.println(s); return s.toUpperCase();})		//Az biztos h egy UPPER nem elõzhet meg egy lowercase-t, de a párok bármilyen sorrendben, közbeékelten feltûnhetnek.
+		.forEach(System.out::println);
+	
+		Lehetséges kimenet:
+			kangaroo	//Order no guaranted
+			KANGAROO	//Aready terminated
+			lemur
+			jackal
+			JACKAL
+			LEMUR
+			
+	Combining parallel streams' results:
+		
+		reduce():
+			Egyetlen elemet kapunk vissza (single object)
+			Legcélszerûbb a három paraméteres változata:							
+				System.out.println(Arrays.asList('w', 'o', 'l', 'f')
+				.stream()						//identity: "" az identity
+				.reduce("",(c,s1) -> c + s1,	//accumulator(biFunction): (c,s1) -> c + s1 : az épp aktuális elemet konkatenálja az identity-vel megegyezõ típusú változóval
+				(s2,s3) -> s2 + s3));			//combiner(binaryOperator): (s2,s3) -> s2 + s3)	
+			
+			Nem parallel stream-ek estén sincs gond a rész-egységek összefûzési sorrendjével, mert a Stream API megakadályozza ezt, amíg a következõ megszorításokat betartjuk: 
+				Az identity-nek ugyan azt az állapotot kell reprezentánia minden elem számára.
+				Az accumulator-nak állapotmentesnek és asszociatívnak(szabadon zárójelezhetõnek) kell lennie. (a kivonás nem az!)
+				A combiner szintén stateless, asszociatív és kompatibilis az identity-vel
+				
+			parallel stream, egyparaméteres reduction:		
+				Stream<String> ohMy = Stream.of("lions", "tigers", "bears").parallel();
+				ConcurrentMap<Integer, String> map = ohMy					//A közös kulccsal bíró value-k egy Stringbe lesznek vasalva	
+				.collect(Collectors.toConcurrentMap(String::length, k -> k,	//Itt az interfész egy ConcurrentHashMap-ra fog rámutatni a reduction eredményeként
+				(s1, s2) -> s1 + "," + s2));								//Egyezõ kulccsal bíró értékek legyenek konkatenálva.
+				System.out.println(map); // {5=lions,bears, 6=tigers}	
+			
+			parallel stream, egyparaméteres reduction groupingBy-jal:				
+				Stream<String> ohMy = Stream.of("lions", "tigers", "bears").parallel();
+				ConcurrentMap<Integer, List<String>> map = ohMy.collect(		//A közös kulccsal bíró value-k egy List-be lesznek pakolva	
+				Collectors.groupingByConcurrent(String::length));				//groupingBy() heylett
+				System.out.println(map); // {5=[lions, bears], 6=[tigers]}		//a value Stringek listája.
+					
+		
+		collect():
+			Az eredmények egy collection-be tárolódnak le.
+				Legcélszerûbb a három paraméteres változata:
+				Stream<String> stream = Stream.of("w", "o", "l", "f").parallel();
+				SortedSet<String> set = stream.collect(ConcurrentSkipListSet::new, 	//supplier
+				Set::add,															//accumulator	
+				Set::addAll);														//combiner
+				System.out.println(set); // [f, l, o, w]
+			Fontos h konkurens collection-öket használjunk ha sortolni akarunk:
+				ConcurrentSkipListSet: A treeSet konkurens változata
+				ConcurrentSkipListMap: A treeMap konkurens változata
+				
+			Egy-paraméteres collect:
+				Stream<String> stream = Stream.of("w", "o", "l", "f").parallel();
+				Set<String> set = stream.collect(Collectors.toSet());
+				System.out.println(set); // [f, w, l, o]							//Semmiféle rendezés nem történik
+				
+				Lefut, de elveszítjük a többszálúság által nyújtott gyorsaságot:
+					Stream<String> stream2 = Stream.of("w", "o", "l", "f", "1", "2", "3").parallel();
+					List<String> list = stream2.collect(Collectors.toList());
+				
+				System.out.println(list); // [w, o, l, f, 1, 2, 3]
+				
+	//A skip és a limit lassítja a parallelStream-et, mert újra hagyományos streamként kell viselkednie.
+				
+				
+--------------------------------------
+
+Konkurens folyamatok menedzselése:
+
+	Egymásra hatással lévõ threadek összehangolásásra nyújt megoldást a CyclicBarrier és a ForkJoinPool
+	
+	CyclicBarrier:
+		Szálak megállítására szolgál, hogy azok bevárják egymást egy adott helyen. Amint mindenki megérkezik mehetnek tovább.
+		Overloadolt esetben amikor a "forgó ajtó tovább görgetéséhez elegendõ ember gyûlt össze" még megfuthat egy Runnable-t.:
+			CyclicBarrier c2 = new CyclicBarrier(4,() -> System.out.println("*** Pen Cleaned!"));
+		Ha a forgóajtó átfordul, akkor új ciklus kezdõdik. 
+		Ha a forduláshoz szükséges szálak fixek és kevesebb érkezik meg mint amennyi a limit, akkor örökké várakozni fogunk, 
+			mert a futó threadek nem engedik leállni az alkalmazást (nem dameon státuszuak). Figyeljünk tehát hogy maradék nélkül osztható legyen az indított Threadek száma a CB küszöb értékével.
+		Az adott thread a CyclicBarrier await() fgv-ét hívja meg magán h várakozzon.	//nem wait()!!!	 hanem await()!!!	
+		
+
+	Fork/Join Framework:
+		Nem minden esetben tudjuk elõre hogy potosan hány szálra lesz is szükségünk.
+		A rukurzívan felbontható feladatok rész-egységeit külön threadek indíthatják el autómatikusan.
+		Kötelezõ lépések:
+			1. Create a ForkJoinTask - közös absztrakt osztály:
+				Lehet RecursveAction absztrakt osztállyal:
+					Nem ad vissz értékét - Runnable párhuzam	
+					void compute():
+						feltételvizsgálat? alapkoncepció: selfcall by invokeAll(..)
+				Vagy RecursiveTask absztrakt osztállyal:	
+					Visszatér egy értékkel - Callable párhuzam,	<T> compute():
+						RecursiveTask<Double> otherTask = new WeighAnimalTask(weights,start,middle);
+						otherTask.fork();	//Elindíom a másik szálat
+						return new WeighAnimalTask(weights,middle,end).compute() + otherTask.join();	//a join() az én szálamat várakoztatja a másik szál végeredményére. 
+					main:
+						ForkJoinTask<Double> task = new WeighAnimalTask(weights,0,weights.length);
+						ForkJoinPool pool = new ForkJoinPool();
+						Double sum = pool.invoke(task);
+						System.out.println("Sum: "+sum)
+			2. Create the ForkJoinPool.
+			3. Start the ForkJoinTask.
+
+				pl.:
+				ForkJoinTask<?> task = new WeighAnimalAction(weights,0,weights.length);
+				ForkJoinPool pool = new ForkJoinPool();
+				pool.invoke(task);
+				
+				Nem garantált h mindenki ugyanakkora feladatot kap. 
+
+--------------------------------------
+	
+A konkurens osztályok rendezik az írást/olvasást az összes thread között, míg a synchronized classok nem:
+	List<Integer> copy2 = Collections.synchronizedList(original);
+	for(Integer w: copy2)
+		copy2.remove(w);	//No para
+		
+	Queue<Integer> copy4 = ConcurrentLinkedQueu(original);
+	for(Integer w: copy4)
+		copy4.remove(w);	//ConcurrentModificationExceptionent
+		
+	
+--------------------------------------
+
+forEachOrdered:
+
+	Arrays.asList(1,2,3,4,5,6)
+		.parallelStream()
+		.forEachOrdered(s -> System.out.print(s+" "));
+
+	//1 2 3 4 5 6 forEachOrdered-del az eredeti sorrendet kapjuk vissza, de sebesség csökkenés árán.
+	
+	//The findAny() method can return any element of the stream, regardless of whether the stream is serial or parallel. 
+		While on serial streams this is likely to be the first element in the stream, on parallel streams the result is less certain. 
+
+--------------------------------------
+
+Scaling:
+	is the property that, as we add more resources such as CPUs, the results gradually improve.
+	Minél több erõforrást vonunk be a teljesítmény javítása érdekében.
+
+--------------------------------------
+
+
+Deadlock: két vagy több thread örökre blokkolva lett, egymásra várnak. (rókák) //Elõször valami azért kiíródik (nem megjósolható), exc sem dobódik.
+	Úgy lehet ellene védekezni hogy a monitorokat a megfelelõs sorrenben foglaljuk le.
+
+Starvation: Egy thread nem fér hozzá egy erõforráshoz, mert azt más használja.
+
+Livelock: 2 thread megpróbál kijönni deadlockból. A 2 róka odaér a kajához, de nem tudja megenni. Lock és unlcok folyamatok futnak körbe-körbe.
+
+Race condition: Két feladat amiknek egymás után kéne végrehajtódniuk egyszerre hajtódnak végre. //Account létrehozása, egy számláló növelése.
+
+--------------------------------------
+
+Ha több feladat lett egy thread executornak adva mint ahány thread elérhetõ, 
+akkor egy belsõ queue-ba kerülnek ezek a feladatok és abban várakoznak az új thread-ekre.
+
+--------------------------------------
+
+Itt két Thread object jön létre:
+	TestClass tc = new TestClass();			//1
+	new Thread( tc.new Runner() ).start();	//2
+
+Thread[] t = new Thread[5];					//Itt nem jön létre egy thread object sem, ez csak egy array, ami 5 Thread object-et tud tárolni.
+
+--------------------------------------
+
+yield():
+
+Idõszakosan megállítja az adott thread-et és engedi hogy egy másik fusson. Erõsen platform függõ.
+
+Concurency: Amikor egy feladatot szétbontunk több kisebb darabra és egyszerre futatjuk azokat.
+
+Multitasking: Is a process, handling by the operation system. Time slicing.  
+
+Multithreading:
+
+Parallelism: amikor tényleg egyszerre egymás mellett fut a két folyamat. Nem minden concurrency parallel, mert azok várhatnak egymásra.
+
+A processzorban különbözõ szintû cache-ek vannak (L1,L2,L3-minél kisebb annál gyorsabb és annál beljebb van) 
+és ezek között kialakulhat az adatinkonzisztencia.
+
+sleep()-elni csak saját magunkat tudjuk. //Thread.slepp(milisec);
+
+Mi befolyásolhatja a feladatok végrehajtását:
+	-Scheduler
+	-Processor
+	-Threads
+

@@ -1,0 +1,5 @@
+Komplexitás csökkentése
+Kohézió magas legyen, kötés a csomagok között alacsony legyen.
+
+Common Closure Principle.
+	Single Responsibility principle a csomagokra, csak nagyobb mértékben.

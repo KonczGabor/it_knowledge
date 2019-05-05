@@ -1,0 +1,181 @@
+Internationalization(i18n):
+
+	Nyitotottá teszem a programomat nyelvek, pénz és dátumformátumok számára. A képességet biztosítom ezek könnyen törtnõ adaptálhatóságára egy architektúrális/moduláris szemlélettel, az 18n-nel.
+	
+----------------------------
+
+Localization(l10n):
+		
+	Lehetõvé teszem hogy a felhasználható számára preferált nyelvi-kultúrális-geopolitikai beállítások(formátumok), valóban elérhetõk legyenek, ezen csomagokat implementálom egy erre képes rendszerbe.
+	
+----------------------------
+
+Locale:
+	java.local.Util
+
+	Geográfiai-kultúrális-politikai terület.
+
+	Locale locale = Locale.getDefault();		//hu_HU
+	
+	Kötelezõ formátuma:
+		Elõször áll a kisbetûs kötelezõ nyelvi kód, majd azt követi egy opcionális NAGYBETÚS országkód. A kettõt "_"-sal kell összekötni.
+
+		Hibák:
+		
+			US 		//Nyelv magában állhat, de országkódhoz ki kell tenni a nyelvet. Egy országban több nyelvet is beszélhetnek (Canada)
+			enUS 	//Hiányzó "_"
+			US_en 	//Fel vannak a kódok cserélve
+			EN 		//A nyelvkód kisbetûs.
+		
+	Létrehozása:
+		System.out.println(new Locale("fr")); // fr
+		System.out.println(new Locale("hi", "IN")); // hi_IN
+	
+		Builder pattern-nel:	//porperty-k sorrendje természetesen szabad.
+			Locale l1 = new Locale.Builder()
+				.setLanguage("en")
+				.setRegion("US")
+				.build();
+			
+			Locale l2 = new Locale.Builder()
+				.setRegion("US")
+				.setLanguage("en")
+				.build();
+				
+			Lehetõség van így helytelen formátumok létrehozására is:
+				Locale l2 = new Locale.Builder() // bad but legal
+					.setRegion("us")
+					.setLanguage("EN")
+					.build();
+
+
+		
+----------------------------
+
+Resource Bundle:
+
+	Local specifikus adatokat tartalmazza egy map-hez hasonlóan kulcs-érték párokkal.
+	A Resource Bundle megvalósítása lehet egy property file(csak String értékek engedélyezettek), vagy egy Java osztály(a value bármi lehet).
+	
+	Property File Resource Bundle:
+	
+		Létrehozása:
+			Zoo_en.properties
+				hello=Hello
+				open=The zoo is open.
+				
+			Zoo_fr.properties
+				hello=Bonjour
+				open=Le zoo est ouvert
+				
+		ResourceBundle létrehozása: (A resources mappa alá javallot)
+			ResourceBundle rb = ResourceBundle.getBundle("A File neve amelyikben keressen", [locale_amit_concatenál_a_keresendõ_ReseourceBundleFile_nevéhez]); //Statikus metódus, nem a new-val hozom létre a ResourceBundle-t
+			
+		Érték kikékése ResourceBundle-bõl kulcs alapján:
+			rb.getString("hello");	// Ha nem talál ilyen kulcsot => MissingResourceException
+			
+		Format:
+			Értékpárok megadása:
+				animal:dolphin	//":" bármely oldalára tette feleslges space-eket kiszedi
+				animal dolphin	//A felesleges space-eket kiszedi
+			
+			kommentek:
+				sorkommentek:
+					#
+					!
+					
+			A spacek a kulcs elõtt és az érték után ignorálódnak
+			Olvashatóság kedvéért újsor ba "\" -se lehet törni, gyakorlatilag az új sor karaktert escapeli.
+			\t : tab
+			\n új sor
+			
+		Kulcsok leválogatása:
+			Set<String> keys = rb.keySet();
+			
+		Értékek kiszedése:
+			keys.stream().map(k->rb.getString(k)).forEach(System.out::println);
+		
+	Properties:	
+	
+		Enged beletenni Objectet k-v helyre, de vissza csak Stringet tud adni, így megfelelõ paraméterek hiányában null lesz visszaadva 
+		
+		Létrehozása:	
+			Properties props = new Properties();
+
+		ResourceBundle-bõl feltöltjük a Properties-t:
+			rb.keySet().stream().forEach(k -> props.put(k, rb.getString(k)));
+			
+		Érték kiszedése kulcs alapján:
+			System.out.println(props.getProperty("kulcs"));	//Ha nincs ilyen, null-t ad vissza
+			
+		Defult érték visszatérése ha adott kulcs nem létezik:
+			System.out.println(props.getProperty("kulcs", "default_érték"));
+			
+		//létezik get metódus ezen a Collection-ön, de az nem terhelhetõ túl default értékkel.
+		
+	Java Class ResourceBundle:
+	
+		Bármilyen Java típust képes értékként tárolni. A kulcsok továbbra is Stringek
+		
+		Létrehozása:
+			class SajatNev extends ListResourceBundle //SajatNev.java kiterjesztés, A ListResourceBundle abstract osztály Object[][] getContents() metódusát kell implementálni.
+			A kulcs-érték párok egy Object[][]-ben tárolódnak
+			
+			ResourceBundle rb = ResourceBundle.getBundle("resourcebundles.SajatNev", Locale.US)	//a resourcebundles a resourcebundle csomag neve, a SajatNev az osztály amit keresünk és az adott Locale, amivel zárul a SajatNev.
+			
+		Érték kiszedése kulcs alapján:
+			Object obj = rb.getObject("kulcs");
+			
+----------------------------
+
+ResourceBundle hívási lánc:
+	A legsepcifikusabbat keresi a hierarchiában.
+	Azonos szinten elõször az osztályt, utána a propertiest részesíti elõnyben.
+	Elõször az országról mondunk le, utána a nyelvrõl.
+	
+		1, A bekért nyelv és ország		(Zoo_fr_FR.java/Zoo_fr_FR.properties)
+
+		2, A bekért nyelv				(Zoo_fr.java/Zoo_fr.properties)
+
+		3, A default nyelv és ország	(Zoo_en_US.java/Zoo_en_US.properties)
+
+		4, A default nyelv				(Zoo_en.java/Zoo_en.properties)
+
+		5, .java						Zoo.java
+
+		6, .properties					Zoo.properties
+
+		7, MissingResourceException		Ha nem talál ilyen kulcsot.
+		
+----------------------------
+
+Formatting numbers:
+
+	Elsõ lépésként létre kell hozni egy NumberFormat-ot.
+		A factory-jának segítségével lehet specifiálni h mire szeretnénk használni Mindegyiknek van egy túlterhelt, Locale-es változata is:
+			Áltlalános céllal:
+				NumberFormat.getInstance()
+				NumberFormat.getNumberInstance(locale)
+			Pénzügyi céllal:
+				NumberFormat.getCurrencyInstance()
+			% formázás:
+				NumberFormat.getPercentInstance(locale)
+			Kerekítés:
+				NumberFormat.getIntegerInstance(locale)
+				
+	Két irányban lehet õket használni:
+		format(): numberbõl Stringet
+		parse(): Stringbõl numbert
+
+	A parsolás addig megy amíg tud, ha el se tud indulni akkor dob csak ParseException:
+		NumberFormat nf = NumberFormat.getInstance();
+		System.out.println(nf.parse(456abc")); // 456
+		System.out.println(nf.parse(2.5165x10")); // -2.5165
+		System.out.println(nf.parse(x85.3"));// throws ParseException	
+		
+		
+----------------------------
+
+
+
+	

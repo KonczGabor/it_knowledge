@@ -1,0 +1,293 @@
+A path String alapú 
+File parent = new File("/home/smith");
+
+--------------------------------
+
+File class:
+
+	File-ok ás Directory-k menedzselésére
+	
+	Create fájl:
+		File parent = new File("/home/smith");
+		File child = new File(parent,"data/zoo.txt");	//Az elsõ paraméter útvonalához köti, ha nem létezik (-null) akkor fallbackel az alap konstruktorra.
+		new File("c:\\book\\java"); 	//escapelni kell a backslash-t
+		
+	Parancsok:
+		boolean	exists():			Returns true if the file or directory exists.
+		String	getName(): 			Returns the name of the file or directory denoted by this path.
+		String	getAbsolutePath():	Returns the absolute pathname string of this path.
+		boolean	isDirectory():		Returns true if the file denoted by this path is a directory.
+		boolean	isFile(): 			Returns true if the file denoted by this path is a file.
+		long	length():			Returns the number of bytes in the file. For performance reasons, the
+							file system may allocate more bytes on disk than the file actually uses.
+		long	lastModified():		Returns the number of milliseconds since the epoch when the file was last modified.
+		delete	delete(): 			Deletes the file or directory. A mappának üresnek kell lenni, ha nem tud törölni, csak visszad egy boolean-t, semmi exc.
+		boolean	renameTo(File): 	Renames the file denoted by this path.
+		boolean	mkdir(): 			Creates the directory named by this path. //Ha már létezik ilyen mappa, akkor nem töröl, nem hoz létre újat, mintha meg sem történt volna a mûvelet
+		boolean	mkdirs():			Creates the directory named by this path including any nonexistent parent directories.
+		String	getParent():		Returns a String, not a File!
+		File	getParentFile():	Ez már File obj-et ad vissza.	//Ha rootra("/") hívjuk akkor null-t kapunk.
+	List<String>file.list			A mappa elemei.
+		File[]	file.listFiles() 
+		
+	java.io.File -ban nincs mv(), move(), copy(), createDirectory() parancs, //Ha move()-olni szertenénk, helyette a renameTo()-val megadhatjuk a helyett ahova átkerüljön.
+	helyette: renameTo(), mkdir(), mkdirs()
+	parancs használatos, másoláshoz pedig be kell olvasni a filet stream()-mel.
+
+--------------------------------
+
+File separator:
+
+	System.out.println(System.getProperty("file.separator"));  	//"\" -windows
+	System.out.println(java.io.File.separator);			//"\" -windows
+	System.getProperty("line.separator");
+
+	Három féle képpen kérhetjük el:
+		java.io.File.separator
+
+		new File(new String()).separatorCharYour
+
+		System.getProperty("file.separator")
+
+--------------------------------
+
+Streamek:
+
+	Adatfolyam, semmi köze a Stream.API-hoz.
+	
+	Beépített stream-ek:
+		System.in
+		System.err
+		System.out
+	
+	A Stream absztrakt osztályok I/O -ra bináris és byte típusú adatokat használnak.
+
+	A Reader és Writer absztrakt osztályok i/o -ra character és String típusú adatokat használnak.
+		character stream-ek (Reader/Writer) elõnyei a byte (InputStream/OutputStream) alapúakkal szemben:
+			-Kényelmesebb szintaxis amikor Stringekkel dolgozunk.
+			-Autómatikus karakterkódolás
+
+	A PrintWriter és PrintStream osztályoknak nincsenek bemenõ megfelelõik, High level osztályok, amik low level osztályok számára
+		nyújtanak formázási lehetõségeket.
+			A print() és write() metódusok nem dobnak I/OExceptiont
+			
+	Wrapping: Hogy ne kelljen mindig ide-oda fordulni a program és a filerendszer között a Buffered felhalmozza és egyszerre hajtja végre a dolgokat.
+		Ha bezárunk egy high lvl strem-et akkor az autómatikusan lezáraj a bewrappelt low lvl straemjét is.
+		
+	A low-level stream közvetlenül férnek hozzá a nyers adatokhoz, míg a high-level streamek a low-lewelekre épülnek,
+	Wrappingolják konstruktoraikkal õket, filterezik:
+		try (BufferedReader bufferedReader = new BufferedReader(new FileReader("zoo-data.txt"))) 
+			{
+				System.out.println(bufferedReader.readLine());
+			}
+
+
+	A high-level streameket is lehet wrappolni: 	//(, még egy ugyanolyan típusú is wrappolhat egy ugyanolyat):
+		try (ObjectInputStream objectStream = new ObjectInputStream(
+			new BufferedInputStream(
+				new FileInputStream("zoo-data.txt"))))
+			{
+				System.out.println(objectStream.readObject());
+			}
+	
+	Closing:
+		Erõforrás, tehát le kell zárni try-with-resource, vagy finally blokkal. 
+		Ha egyik sem történik meg, attól még a kód lefordúl csak resource leak lesz az eredménye.
+		
+	IOException-ök, twr
+		
+	FileInputStream/OutputStream:
+		Legalapabb by stream, read()-del olvas -1ig
+		
+	BufferedInput/OutputStream:
+		byte[] buffer = new byte[1024];			A vödör mérete amivel merni fogunk, ebbe kerül a tartalom.
+		int lengthRead;
+		while ((lengthRead = in.read(buffer)) > 0) {	//-1 jelzi a stream végét
+		out.write(buffer,0,lengthRead);}	a beolvasott | a skip  | és amennyit a beolvasottból ki írni akarunk. 
+			Ez fontos mert utolsó iterációnál üres dolgot is kiírhatunk ha nincs tele a méro, az pedig az eredeti file tartalmával meg nem egyezp contentet eredményez.
+			Tehát sose használjuk így: out.write(buffer)
+		
+	FileReader/Writer:
+		read(String)/write()
+		-1
+		
+	BufferedReader/Writer:
+		public static List<String> readFile(File source) throws IOException {
+		List<String> data = new ArrayList<String>();
+			try (BufferedReader reader = new BufferedReader(new FileReader(source))) {
+				String s;
+				while((s = reader.readLine()) != null) {
+					data.add(s);
+				}
+			}
+			return data;
+		}
+		
+		public static void writeFile(List<String> data, File destination) throws IOException {
+			try (BufferedWriter writer = new BufferedWriter(
+				new FileWriter(destination))) {		//Ha nem létezik a file akkor is létrehozza ha írunk is bele(flush is játszik), nincs semmilyen exc.
+				for(String s: data) {
+					writer.write(s);	//append(s) ugyanezt csinálja
+					writer.newLine();
+				}
+			}
+		}
+		
+	ObjectInput/OutputStream:
+		Kétszer csomagolunk (High lvl->High lvl-> Low lvl)
+		EndOfFile Exception-nal kapjuk el a forrás végét:
+		
+			public static List<Animal> getAnimals(File dataFile) throws IOException, ClassNotFoundException {
+				List<Animal> animals = new ArrayList<Animal>();
+				try (ObjectInputStream in = new ObjectInputStream(
+				new BufferedInputStream(new FileInputStream(dataFile)))) {		//Nem Writerrel, hanem binárissal olvasunk!
+				while(true) {
+					Object object = in.readObject();
+						if(object instanceof Animal)	//Csekkoljuk h olyan-e ami nekünk kell, és nem a != null-t használjuk!
+							animals.add((Animal)object);
+				}
+				} catch (EOFException e) {
+					// File end reached
+				}
+				return animals;
+			}
+			
+			public static void createAnimalsFile(List<Animal> animals, File dataFile) throws IOException {
+				try (ObjectOutputStream out = new ObjectOutputStream(
+					new BufferedOutputStream(new FileOutputStream(dataFile)))) {
+					for(Animal animal: animals)
+						out.writeObject(animal);
+				}
+			}	
+--------------------------------
+
+Flushing:
+
+	A flush()-t csak olyan osztályokon lehet hívni melyek írnak, tehát leszármaznak a Writer, vagy az OutputStream absztrakt osztályból.
+	Vagy bizonyos idõ eltelt után, vagy ha már megtelt a temporary cache, a memóriából kiírjuk az adatokat a filerendszerre.
+	A close() autómatikusan meghívja.	//close()-t hívni egy stream-en ha az már le van zárva teljesen ártalmatlan.
+	Ha viszont flush()-t hívunk egy olyan resource-on ami már le van zárva IOException-t kapunk.
+		
+-------------------------------------
+
+mark(bufferSize):
+
+	-kal megjelölhetjük hogy hová akarunk visszatérni, a stream mely eleméhez a reset() után.	//a mark egész szám 1 tõl indul ás inclusive.
+	//annyival tudunk elõre menni (azt is beleértve) amennyit megmarkoltunk. (~puffer) 			//Milyen hosszú a horgonykötél
+	1234  1-es read után mark()-olva a kettest fogjuk beolvasni ha reset()-elünk.
+	
+	mark() utasítás elõtt a Stream-en célszerû megnézni h engedélyezett-e, különben meg nem jósolható lesz az eredmény:
+		if(inputStreamResource.markSupported()){}
+		
+	reset() -tel vissza rántjuk magunkata horgony pozíciójához. Ha a mark limit után hívjuk meg > exception dobódhat.
+	
+	Ha nem támogatott a markSupported() és nem is ellenõriztünk rá akkor ez elsõ reset()-nél és nem mark()-nál IOException-t fogunk kapni.
+	
+	A read(new char[x]) beolvas x-indexnyi elemet és egy számmal fog visszatérni h ezek közül a beolvasások közül hány volt sikeres.
+
+-------------------------------------
+
+skip():
+	
+	Mitha olvasnánk és eldobnánk egy lépést:
+	InputStream and Reader Abstract classok esetén van csak:
+		System.out.print ((char)resource.read());
+		resource.skip(2)
+		resource.read();
+		System.out.print((char)resource.read());		//Csak két karakter kerül kiírásra az 5 helyett: a kéts Syso.
+
+-------------------------------------	
+
+Serialization/Deserialization:
+
+	Memóriabeli objektum kiírása a filrendszerbe a serialization, ellentette (elõállítani az objektumot nyers adatokból) a deserialziation.
+
+	A Serializable interface nem final, szabadon kiterjesztheto.
+
+	Az ObjectInputStream és az ObjectOutputStream használata szükséges hozzá.
+	
+	Bármilyen osztályt, asbsztraktot, konkrétot, vagy finalt-t lehet serializálni a Serializable marker interfész implementálásával
+	Process heavy osztályokat nehéz szérializálni, ez az oka amiért alapból nem  serializálhatóak az osztályok.
+	Nem kell mást teni, mint implementálni a Serializable interfészt (nem kell megvalósítani semmilyen metódust - marker interfész), 
+	illetve az osztály beágyazottt osztályainak is meg kell ugyanezt tenni, különben NotSerializableException lép fel.
+	Ha valamit nem szeretnénk ebbe belefoglalni, akkor az objekt kapja meg a transient kulcszót, deseralization után null lesz az értéke.
+	
+	Fontos, de nem kötelezõ hogy használjuk a file/class verzió követése céljából egy marker változót:
+		private static final long serialVersionUID = 1L;
+
+	A static változók nem mentõdnek le, mert hát azok nem az adott objektumhoz tartoznak. Ha azt szeretnénk h õk is kerüljekenk kimentésre
+	akkor egy külön példányváltozóba tároljuk le az épp aktuális értéküket. 
+
+	Ha objektumokat deserializálunk akkor nem a (-1)-et, hanem az EOFException -t kell használni.
+	Fontos még egy if instanceof és utána kasztolás is.
+
+	Deserialization során nem futnak le a statikus inicializáló blokkok, sem a konstruktor.
+	A statikus osztálytagok az épp aktuális értéket kapják meg, a példánytagok az adott típus default-ját.
+	A szerailizált osztály elsõ, a Serializable interfészt meg nem valósító szülõjét hívja meg, annak is az argumentum nélküli konstruktorát.	
+		
+--------------------------------------
+
+Console:
+
+	1.6-tól
+	A java.io.Console egy singleton. Ahol le van tiltva ott null lesz a return és nem lesz exc.
+
+        Console c = System.console(); 	//Mivel a cstr-a privát csak így lehet létrehozni!
+			Ha nem csekkelünk rá, simán kaphatunk NPE-t:	
+				final String response = c.readLine("Are u human?");		// if(console != null) {) -ezt kellett volna!
+			
+				
+        String line = c.readLine("Please enter your name:");	//Paraméter nélküli is van
+        System.out.println("Hello, "+line); 
+		
+		A Conolse osztály közvetlen hozzáférést biztosít egy instance-hoz:
+			c.reader() => Reader Obj visszadása
+			c.writer() => PrintWriter Obj visszadása	
+
+		A printf/format közvetlenül, míg a print/println a writeren keresztül hívható csak!:
+			console.printf("The zoo spans 128.91 acres.");
+			console.format("Our zoo has 391 animals and employs 25 people.");			
+			console.writer().print();
+			console.writer().println("Welcome to Our Zoo!");	//A reader a párja
+					
+		A fomrat és a printf között nincs különbség!
+		
+	A PrintStream és a PrintWriter az alacsony Stream-ek számára nyújtanak formázási segítséget.	
+			
+----------------------------------------
+
+Password:
+
+
+	a readPassword nem -Stringet ad vissza, hanem char[] -t; Azért h ne maradjon meg a String poolban amíg a gc le nem fut (biztonsági okok).
+	Console c = System.sonsole();
+	char[] c = c.readPassword("Please enter pwd!");
+	boolean match = Arrays.equals(password,verify);
+	Array.fill(password,'x')
+	Array.fill(verify,'x')
+	
+----------------------------------------
+
+Ha nincs még olyan file-unk amibe írni szeretnénk, akkor készít egyet és nem dob Et.
+Ha már van, akkor azt felülírja, ha azt szeretnénk h csak hozzáírjon: public FileWriter(String fileName,  boolean append)
+
+getParent() returns a String and getParentFile() returns a File object.
+
+-----------------------------------------
+
+Exceptions:
+
+	java.nio.file.InvalidPathException : test.txt
+	is thrown when the argument passed while creating Path object is invalid. For example, "c:c:test.txt".
+
+	java.io.FileNotFoundException
+	maybe thrown by FileInputStream, FileOutputStream, and RandomAccessFile constructors if the file by the given name does not exist.
+
+	java.nio.file.NoSuchFileException: test.txt
+	will be thrown when the program tries to create a BufferedReader to read the file specified by the Path object.
+
+	copy("c:\\temp\\test1.txt", "c:\\temp\\test2.txt"); ha nem létezik a test2.txt, akkor nem dob hibát, hanem megcsinálja és belemásolja.
+
+	You can always create a File object whether or not an actual file or directory by that name exists.
+	
+-----------------------------------------

@@ -1,0 +1,198 @@
+Nested class ami egy másik osztályon belül van definiálva:
+	Mindegyik amelyik nem static az inner.
+	
+Nested class-ok használatának elõnyei: 
+	helper osztályok közelsége. 
+	Ha biztosak vagyunk benne hogy csak az adott helyen akarjuk használni.
+	A kód könnyebb olvashatósága.
+
+4 típusa van:
+
+MEMEBER INNER CLASS:
+
+-Bármilyen láthatóságú lehet.
+-Bármilyen másik osztályból származtatható és megvalósíthat interfészeket.
+-Lehet abstract vagy final.
+-Nem lehetnek saját statikus tagjai.
+-Hozzáférhet a külsõ osztály tagjaihoz (még akkor is ha az private).
+-Nem lehet static.
+-Példányváltozó szintjén van definiálva.
+-A külsõ osztály hozzáférhet a belsõ osztály private tagjaihoz is egy belsõ példányon keresztül.
+
+Gyakorlatilag a külsõ osztály minden példányához külön belsõ osztályok példányai tartoznak.
+Ha létre akarom hozni a belsõ osztály objektumát, elõbb a külsõt kell létrehozni.
+
+Ha lefordítunk egy osztályt, ami belsõ osztályt is tartalmaz, akkor két file fog létrejönni, egy sima és egy ilyen elnevezéssel: Outer$Inner.class
+
+belsõ osztálnyak is lehet belsõ osztálya ~ egymásba ágyazhatók.
+
+Az egymásba ágyazott osztályok birtokolhatnak(has) ugyanolyan nevû változókat, ilyenkor a ".this" az épp legaktuálisabb osztályra mutat, a többire annak nevével és a ".this" -szel együtt hivatkozunk. (B.this.x); (A.this.x); Ha elhagyjuk a ".this"-t akkor az adott osztály változója hívódik meg, amiben állunk, vagy ha neki nics olyan, akkor az egyel kijjebb lévõ.
+
+Az osztályokra így hivatkozunk:  //Egy mélységig nem kötelezõ kaidni a pontot(A.B ->B), kettõnél már kell: A.B.C
+A a = new A();
+A.B b = a.new B();
+A.B.C c = b.new C();
+
+
+Outer.Inner in = new Outer().new Inner();  
+
+------------------------
+
+Elérhetjük a saját belsõ osztályunk privát tagjait is:
+
+	class OuterWorld {
+	
+		private class InnerPeace {
+			private String reason = "none";
+		}
+		
+		public InnerPeace i = new InnerPeace();
+
+		void m() {
+			System.out.println(i.reason);
+		}
+	}
+	
+------------------------
+
+LOCAL INNER CLASS:
+
+	Egy metóduson belül létezik, annak scope-jával jön létre és annak végéig tart.
+
+	-A lokális belsõ osztály speciális változata.
+	-Nincs láthatósági módosítójuk.
+	-Nem lehetnek static-ok és nem tartalmazhatnak static tagokat.
+	-Minden külsõ taghoz hozzáférhetnek.
+	-Nem férhetnek hozzá az õket deklaráló metódus lokális változóihoz, hacsak azok nem (effectively)final-ok.
+
+-------------------------
+
+ANOYMUS INNER CLASS:
+
+	-Olyan lokális belsõ osztály, aminek nincs neve.
+	-Egyazon utasítban deklajáljuk és példányosítjuk a "new" kulcsszóval. Az utasítás vágn a ";" kötelezõ! (Statikus metódusban is lehet õket deklarálni-implementálni.)
+	-Muszáj hogy származtatva legyenek, vagy megvalósítsanak egy interfészt. Ugyanúgy történik mindekettõ megvalósítása, 
+	 emiatt a példányosítás során egyértelmûnek kell lennie hogy mit akarunk megvalósítani. Egy asbztrakt osztályt, vagy egy interfészt? 
+	 Ez alól csak a java.lang.Object a kivétel.
+	-Az interfész metódusnak publikusnak kell lenni a megvalósítás során.
+	-Akkor hasznosak ha egy rövíd implementációt akarunk biztosítani, amit máshol már nem akarunk felhasználni.
+	Egy basztrakt osztályt megvalósítani és egy(vagy több) interfészt implementálni nem lehet egyszerre egy anonymus inner class-szal. 
+	-Még paraméter átadáskor is lehetõség van a velük történõ implementációra.
+	-Nem lehetnek statikus tagjai.
+
+	public class MyClass {
+		interface SaleTodayOnly {
+			int dollarsOff();
+		}
+		public int admission(int basePrice, SaleTodayOnly sale) {return basePrice - sale.dollarsOff();
+		
+		public int pay() { 
+			return admission(5, new SaleTodayOnly() {
+				public int dollarsOff() { return 3; }
+			});
+		}
+		
+	}}
+
+	Implementálás során megkapják a scope-ot és belelátnak direct az iplementálandó osztály vagy interfész scope-jába:
+
+	interface Toy { String play(); }
+	class Gift {
+		public static void main(String[] matrix) {
+			abstract class Robot {}
+			class Transformer extends Robot implements Toy {
+				public String name = "GiantRobot";
+				public String play() {return "DinosaurRobot";}
+			}
+			Transformer prime = new Transformer () {
+				public String play() {return name;} 	// => GiantRobot, hozzáfér.
+			};
+			System.out.print(prime.play()+" "+name);	// Ez nem, fordítási hiba.
+		}
+	}
+-------------------------
+
+STATIC NESTED CLASS:
+
+- Nevével ellentétben nem belsõ osztály. 
+- Statikus változó szinten van definiálva.
+- Lehet példányosítani a külsö osztály példánya nélkül.
+- Expilicit kasztolás nélkül nem tud hozzáférni a belsõ osztály tagjaihoz. Kell egy referencia példány amin keresztül rá tud mutatni másik, vagy saját osztály tagjaira. Saját külsõ osztályának static tagjaihoz nem muszáj referencia példány.
+- Hozzáférhetünk a külsõ osztályból a privát példánytagjaihoz a statikus osztály példányán keresztül. Nem kell a külsõ osztályból példányt létrehozni.
+- Lehetnek privát tagjai.
+- Lehet belsõ statikus osztálya.
+- Lehet belsõ nem statikus osztálya.
+- Lehetnek statikus tagjai.
+- A külsõ osztály hivatkozhat a static nested class tagjaira.
+- Lehet importálni statikusan statikus belsõ osztályt:
+	import csomag.Osztaly.StatikusOsztaly;
+	import static csomag.Osztaly.StatikusOsztaly;
+-lehet abstract
+	A példányosításnál implementálni kell az abstract metódusokat.
+	Nem lesznek a törzs nélküli metódusok autómatikusan abstractok, ellentétben az interface-szel.
+
+
+public class Enclosing {
+	static class Nested {
+		private int price = 6;
+	}
+	public static void main(String[] args) {
+		Nested nested = new Nested();
+	System.out.println(nested.price);		
+	}
+ }
+	----------------------
+ 
+ class Outter {
+	static class Inner{}
+	psvm{
+		new Outter.Inner(); //Így hozunk létre static Inner class objectet. Nem kell a külsõ osztályból is hogy szülessen objektum.
+	}
+ }
+ ----------------------
+ 
+
+
+
+						Member 		Local 		Anonymus	Static
+
+	Láthatóság			all			n/a			n/a			all
+
+	Megvalósíthat		Igen		Igen		Vagy/Vagy	Igen
+	interfészt v
+	Más osztályt?
+	
+	Lehet absztrakt?	Igen		Igen		Nem			Igen
+
+	Lehet final?		Igen		Igen		Nem			Igen
+
+	Külsõ osztály		Igen		Igen		Igen		Külsõ osztály
+	példánytagjait											példánya szükséges
+	eléri?													hogy elérje
+	
+	Külsõ osztály		Nem			Ha final	Ha final	Nem
+	lokális változóit				v e(final)	v e(final)
+	eléri?
+	
+	Lehetnek statikus 	Nem			Nem			Nem			Igen
+	metódusai?
+
+
+Nem statikus belsõ osztálynak lehetnek statikus változói, ha kitesszük a finalt is!	
+
+Statikus metódusban deklarált osztály kilát az összes statikus, fanial és effectively final változóra, de példány és automaticra nem.
+Nem statikus metódusban deklarált osztály kilát az összes példány, statikus, final, efinal változóra, de automatic-ra nem. 
+
+A külsõ osztály példányváltozóinak láthatósága nem számít a belsõ osztály számára.
+A belsõ osztály származtathatja megát a külsõ osztályából, kivéve ha az final. 
+Final külsõ osztálynak lehet belsõ osztálya, de az nem származhat bõle.
+
+-------------------------
+
+
+Ha a TestInner static:		new TestOuter.TestInner();
+Ha a TestInner non-static: 	new TestOuter().new TestInner();  	//vagy: TestOuter to = new TestOuter(); 
+																		to.new TestInner();
+																		
+
+	

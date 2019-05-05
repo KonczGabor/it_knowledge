@@ -1,0 +1,22 @@
+
+
+
+
+
+ 
+ 
+
+		
+
+
+Tárol, visszaad, manipulál, és kommunikál az adatokkal.
+
+
+Közös mûveletek:
+int size()
+boolean: isEMpty()
+boolean contains (Object element)
+boolean add(E element)
+remove add(E element)
+Iterator<E> iterator()
+

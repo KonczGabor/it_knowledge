@@ -1,0 +1,16 @@
+
+
+
+Real-life example:
+	Névsorolvasásnál a haverod (Proxy) utánozza a te (Subject) hangod (mimic), hogy elismerjék a jelenlétedet, holott hiányzol.
+	
+IT example:
+	Egy komplex objektum létrehozása költséges, helyette létrehozunk több proxy-t ami az eredeti heavy object-re mutat,
+	így időt és memóriát tudunk spórolni.
+	
+	Proxy-k fajtái:
+		Remote: elrejtei az eredeti objectet ami egy távoli/elrejtett helyről jön.
+		Virtual: Optimalizációs technika aminek segítségével redukálni tudjuk a heavy objectek létrehozásának számát.
+		Protection: Különböző hozzáfárási szinteket tudunk megadni.
+		Smart: További "house keeping" feladatok hozzáadása. //logok törlése, szálak elengedése, memória felszabadítás, állapot jelzők billengetése, ...
+		

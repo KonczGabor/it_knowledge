@@ -1,0 +1,17 @@
+Functional Programing
+	Function, mint funkció. Az eddigi objektum központú programozási paradigma helyett a funkcók kerülnek előtérbe.
+	A viselkedés.
+		Imperatív programozás:
+			Meg kell modani h mit csinálj és azt hogyan csináld.
+		Deklaratív programozás:
+			Csak azt kell megmondani h mit csinálj!
+		
+Lambda kifejezések:
+	Nagyban hozzájárúl a boiler-plate kódoktól való megszabadulűstól, pl.: anonymus inner classes.
+	
+	
+Stream API:
+	Hasznos arra h ha konkurensen akarunk kezelni közös collectionöket, akkor megoldja.
+	Segít megvalósítani a functional programmingot.
+		
+	

@@ -1,0 +1,356 @@
+import java.time.*;
+
+--------------------
+Creating dates and times:
+
+	LocalDate d = new LocalDate(); // DOES NOT COMPILE
+	LocalDate.of(2015, Month.JANUARY, 32) // throws DateTimeException (32?!)
+
+	System.out.println(LocalDate.now());		//2015–05–25
+	System.out.println(LocalTime.now());		//09:13:07.768
+	System.out.println(LocalDateTime.now());	//2015–05–25T09:13:07.768
+	System.out.println(ZonedDateTime.now());	//2015–05–25T09:13:07.769–04:00[America/New_York]
+	
+	LocalDate date1 = LocalDate.of(2015, Month.JANUARY, 20);
+	LocalDate date2 = LocalDate.of(2015, 1, 20);	// 1 tol indul, nem 0-tól a hónapok számozása!
+	
+	Szerencsére kello precizitás szetint túlterhelhetoek:
+	
+		LocalTime time1 = LocalTime.of(6, 15); // hour and minute
+		LocalTime time2 = LocalTime.of(6, 15, 30); // + seconds
+		LocalTime time3 = LocalTime.of(6, 15, 30, 200); // + nanoseconds
+		
+	Kombinálhatóak:
+	
+		LocalDateTime dateTime1 = LocalDateTime.of(2015, Month.JANUARY, 20, 6, 15, 30);
+		LocalDateTime dateTime2 = LocalDateTime.of(date1, time1);
+		
+		ZoneId zone = ZoneId.of("US/Eastern");
+		ZonedDateTime zoned1 = ZonedDateTime.of(2015, 1, 20, 6, 15, 30, 200, zone);
+		
+		Fontos h példányosításnál Month enumot nem lehet átadni EBBEN az overloadolt metódusban, csak int-et!:
+			public static ZonedDateTime of(int year, int month, int dayOfMonth, int hour, int minute, int second, int nanos, ZoneId zone)
+			
+	Logikailag hibás paraméterek:
+		  System.out.println(" LocalTime.of(5,69) = " +  LocalTime.of(5,69));	//Invalid value for MinuteOfHour (valid values 0 - 59): 69
+	
+--------------------
+
+The date and time classes are immutable, which means that the return value must be used or the operation will be ignored.
+All classess in java.time package such as classes for date, time, date and time combined, time zones, instants, duration, and clocks are immutable and thread-safe.
+
+--------------------
+
+DaylightSavingTime:
+
+	March 13. 1:59 -> 3:00
+
+	November 6. 1:59 -> 1:00
+
+---------------------
+
+	System.out.println(dateTime); // 2020–01–18T19:15
+	dateTime = dateTime.minusSeconds(30);
+	System.out.println(dateTime); // 2020–01–18T19:14:30                 //Eddig nem volt seconds, mostmár az is van!
+	
+---------------------
+
+Lehet plus()-minus() methodokat chainelni, nem csak az utolsó fog érvényesülni, hanem az összes, feltéve ha hozzá is rendeljük az eredeti állapothoz:
+	    LocalDate date1 = LocalDate.of(2017, Month.MARCH, 3);
+        LocalDate date2 = date1.plusDays(2).minusDays(1).minusDays(1);
+        System.out.println(date1.equals(date2));	//true - ugyanarra a napra vissza lettünk állítva (+2-1-1).
+
+---------------------
+
+isBefore():
+
+	private static void performAnimalEnrichment(LocalDate start, LocalDate end) {
+		LocalDate upTo = start;
+		while (upTo.isBefore(end)) { 				// check if still before end
+			System.out.println("give new toy: " + upTo);
+			upTo = upTo.plusMonths(1); 			// add a month
+		} 
+	}
+	
+---------------------
+
+epoch:
+
+	LocalDate-et és LocalTime-ot, ZonedDateTime-ot át lehet konvertálni long-gá, ez az az érték ami eltelet 1970 Január 1 GMT:0-óta long-ban kifejezve.
+	LocalDate.toEpochDay(): napok száma 1970 Január 1 óta.
+	LocalDateTime,ZonedDateTime.toEpochSecond(): Másodpercek száma 1970 Január 1 óta.
+	LocalDate date = LocalDate.ofEpochDay(1); 	// 1970-01-02, mert LocalDate.ofEpochDay(0) = 1970-01-01
+
+---------------------
+
+Period:
+
+	public static void main(String[] args) {
+	
+		LocalDate start = LocalDate.of(2015, Month.JANUARY, 1);
+		LocalDate end = LocalDate.of(2015, Month.MARCH, 30);
+		Period period = Period.ofMonths(1); // create a period
+		performAnimalEnrichment(start, end, period);
+	}
+	
+	private static void performAnimalEnrichment(LocalDate start, LocalDate end, Period period) { // uses the generic period
+	LocalDate upTo = start;
+	while (upTo.isBefore(end)) {
+		System.out.println("give new toy: " + upTo);
+		upTo = upTo.plus(period); // adds the period
+	}
+
+	Builder methods: 
+		Period annually = Period.ofYears(1); 			// every 1 year
+		Period quarterly = Period.ofMonths(3);			// every 3 months
+		Period everyThreeWeeks = Period.ofWeeks(3); 	// every 3 weeks
+		Period everyOtherDay = Period.ofDays(2); 		// every 2 days				//PT48H
+		Period everyYearAndAWeek = Period.of(1, 0, 7); 	// every year and 7 days
+		
+	Chaining Periods:
+	
+		Period buildereket nem szabad chainel-elve használni, mert mindig új Period-ot hoz létre default 0 értékekkel, amit a kapott paraméterrel felülír. Tehát az elozoleg beallitott értékek elvesznek.
+			Period wrong = Period.ofYears(1).ofWeeks(1); // every week
+			Ha olyat szeretnénk hogy több paraméterrel bírjon akkor használjuk az of(year,month,day) -t.
+		
+	Period Formats:	
+	
+		Mindig P-val kezdodik
+		
+		A paraméterek sorrendje kötött:
+			PYMD
+			
+		Ha bármelyik nulla, akkor azt elhagyja:
+			System.out.println(Period.ofMonths(3)); //P3M
+			
+		Nem vált "helyi értéket":
+			System.out.println(Period.of(0, 20, 47)); 	//P20M47D
+			
+		A Period format nem tud tárolni hetet, ezért napra konvertál át:	
+			System.out.println(Period.ofWeeks(9));	//P63D	Mindig napot ad vissza, nem "ugrik feljebb"
+			
+		Exceptions:
+			A periodot hozzá lehet adni date-hez, time-hoz, dateTime-hoz, csak futás idoben fog kiderülni ha nem megfelol értéket akarunk hívni adott értéken:
+				LocalTime time = LocalTime.of(6, 15);
+				Period period = Period.ofMonths(1);
+				System.out.println(time.plus(period)); // UnsupportedTemporalTypeException
+						
+		
+----------------------
+
+Period vs Duration:
+	Alapveto concept hogy a Period-ot nagyságrendje miatt Date-ekkel kapcsolatban, míg a Duration-t a Time-okon használjuk. 
+	DateTime-okon mindkettot lehet.
+	
+----------------------
+
+Duration:
+	
+	DateTime-okon és Time-okokn használjuk, amiket szabályozhatunk vele:
+		day
+		hours
+		minutes
+		seconds
+		miliseconds
+		nanoseconds
+		
+	Duration Formats:
+	
+		Mindig PT-vel kezdodik
+		
+		A 0-értékek "omittálódnak"
+
+		Duration daily = Duration.ofDays(1); // PT24H
+		Duration hourly = Duration.ofHours(1); // PT1H
+
+	A Duraion a Period-dal ellentétben NEM rendelkezik több paraméteres of(day, hour, minute, ...) konstruktorral!
+	Ha pl másfél órát szeretnénk megadni akkor kicsit cselezni kell:
+		Duraion.ofMinutes(90);
+		
+----------------------	
+
+ChronoUnit:	
+
+	Alapvetoen arra szolgál h reprezentálja két idopont különbségét.
+	A Duration sepciális paramétere, a TemporalUnit interfészt megvalósító ChronoUnit osztállyal.
+		Duration daily = Duration.of(1, ChronoUnit.DAYS);
+		Duration hourly = Duration.of(1, ChronoUnit.HOURS);
+		Duration everyMinute = Duration.of(1, ChronoUnit.MINUTES);
+		Duration everyTenSeconds = Duration.of(10, ChronoUnit.SECONDS);
+		Duration everyMilli = Duration.of(1, ChronoUnit.MILLIS);
+		Duration everyNano = Duration.of(1, ChronoUnit.NANOS);
+	Speciális konstansai is vannak:
+		ChronoUnit.HALF_DAYS
+		
+	LocalTime one = LocalTime.of(5, 15);
+	LocalTime two = LocalTime.of(6, 30);
+	LocalDate date = LocalDate.of(2016, 1, 20);
+	System.out.println(ChronoUnit.HOURS.between(one, two)); // 1		Levág, nem kerekít.
+	System.out.println(ChronoUnit.MINUTES.between(one, two)); // 75		
+	System.out.println(ChronoUnit.MINUTES.between(one, date)); // DateTimeException
+	
+	LocalTime t1 = LocalTime.parse("11:03:15.987");
+    System.out.println(t1.plus(22, ChronoUnit.HOURS).equals(t1.plusHours(22)));	=> true;
+	
+----------------------
+		
+Exceptions:
+
+	Annak ellenére hogy a Duration is bír day paraméterrel, nem applikálható Date-en:	//Valójában a day nem közös metszete a Date-nek és a Time-nak, mindegyik a saját megoldását használja.
+		LocalDate date = LocalDate.of(2015, 1, 20);
+		Duration myDuration = Duration.ofDays(1);
+		date.plus(myDuration);		//java.time.temporal.UnsupportedTemporalTypeException: Unsupported unit: Seconds
+		
+	A ChronoUnit-tal megadott értékek felfelé "kerekülnek": 
+		Duration.of(3662, ChronoUnit.SECONDS).toString() //PT1H1M2S			
+					
+----------------------
+
+Instants:
+	
+	Egy adott momentumot reprezentál az univerzum történelmében. Ezt úgy tudja megtenni hogy GMT:0-hoz viszonyítja az adott pillanatot. 
+	
+	Folyamatok között eltelet ido hatékony mérése:
+		Instant now = Instant.now();
+		// do something time consuming
+		Instant later = Instant.now();
+		System.out.println(Duration.between(now, later).toMillis());	//Ha az elso paraméter késobb van mint a második, akkor minusz értkéet fogunk kapni.
+		
+	Zóna információra szükség van az Instant eloállításához:
+		LocalDate date = LocalDate.of(2015, 5, 25);
+		LocalTime time = LocalTime.of(11, 55, 00);
+		ZoneId zone = ZoneId.of("US/Eastern");
+		ZonedDateTime zonedDateTime = ZonedDateTime.of(date, time, zone);
+		Instant instant = zonedDateTime.toInstant(); // 2015–05–25T15:55:00Z		
+		System.out.println(zonedDateTime); // 2015–05–25T11:55–04:00[US/Eastern] 4 óra lemaradás GMT-hez képest
+		System.out.println(instant); // 2015–05–25T15:55:00Z  A "Z"	jelzi h ez egy Instant, hisz korrigálva lett GMT:0-ra
+		
+	LocalDateTime nem tartalmaz zóna információt, ezért nem tudjuk instantok eloállításához csak magában felhasználni.
+	
+	Epoch ot vissza lehet alakítani Instant-tá:
+		Instant instant = Instant.ofEpochSecond(epochSeconds);	// 2015–05–25T15:55:00Z
+		
+	Instanthoz legfeljebb csak napot lehet hozzáadni:
+		Instant nextWeek = instant.plus(1, ChronoUnit.WEEKS); // UnsupportedTemporalTypeException 
+
+
+
+----------------------
+			Can Use with Period? 	Can Use with Duration?
+
+LocalDate 				Yes 			No
+LocalDateTime 			Yes 			Yes
+LocalTime 				No	 			Yes
+ZonedDateTime 			Yes 			Yes
+-----------------------
+
+Daylight Saving Time:
+
+	March 13:
+		01:59->:03:00
+				
+	November 6:
+		01:59->01:00
+		
+		
+	Nem minden országban használnak óraátállítást, ezért engedélyezi h büntetés nélkül belelépjünk abba az órába ami Daylight Saving Time mellett nem létezik:
+		System.out.println(LocalDateTime.of(2016, 3, 13, 2, 30));	//2016-03-13T02:30 A Month.MARCH nem muködik mert ebben az overloadolt metódusban nem várunk Enumot.
+		
+	ZonedDateTime-ot kell használnunk:
+		
+	LocalDate date = LocalDate.of(2016, Month.MARCH, 13);
+	LocalTime time = LocalTime.of(1, 30);
+	ZoneId zone = ZoneId.of("US/Eastern");
+	ZonedDateTime dateTime = ZonedDateTime.of(date, time, zone);	//2016–03–13T01:30–05:00[US/Eastern]
+	dateTime = dateTime.plusHours(1);								//2016–03–13T03:30–04:00[US/Eastern]	
+	
+	Két dolog is történt:
+		1:30 -> 3:30 ra ugrottunk
+		–05:00[US/Eastern] -> 30–04:00[US/Eastern] "közelebb kerültünk" GMT-hez
+		
+	Ugyanez Novemberben:
+		
+		LocalDate date = LocalDate.of(2016, Month.NOVEMBER, 6);
+		LocalTime time = LocalTime.of(1, 30);
+		ZoneId zone = ZoneId.of("US/Eastern");
+		ZonedDateTime dateTime = ZonedDateTime.of(date, time, zone); 	//2016–11–06T01:30–04:00[US/Eastern]
+		dateTime = dateTime.plusHours(1);								//2016–11–06T01:30–05:00[US/Eastern]	Eltávolodtunk GMT-tol
+		dateTime = dateTime.plusHours(1);								//2016–11–06T02:30–05:00[US/Eastern]	Megyünk tovább az új kerékvágás szerint
+
+	Ha már létrehozás során eleve egy olyan órába akarunk belelépni ami nem létezik, akkor autómatikusan megtörténik a léptetés:
+	
+		LocalDate date = LocalDate.of(2016, Month.MARCH, 13);
+		LocalTime time = LocalTime.of(2, 30);
+		ZoneId zone = ZoneId.of("US/Eastern");
+		ZonedDateTime dateTime = ZonedDateTime.of(date, time, zone);	//2016–03–13T03:30–04:00[US/Eastern]
+		
+-----------------
+java.time.format.
+
+Formatting:
+
+	ISO szabvány szerint:
+		2020–01–20
+		11:12:34
+		2020–01–20T11:12:34
+		
+	Short: 		1/20/20 11:12 AM
+	Medium:		Jan 20, 2020 11:12:34 AM
+	
+
+	Elsõ lépésként ki kell kérni egy DateTimeFormattert ami képes bármit megformázni, feltéve ha jól konfiguráljuk be és helyes paraméterekkel/paraméteren hívjuk.
+	Mind a az idõn meg lehet hívni a formattert, mind a formatternek át lehet adni paraméterként az idõt.	
+
+		Amikor a Formatter kapja a time-ot:
+			DateTimeFormatter shortDateTime = DateTimeFormatter.ofLocalizedDate(FormatStyle.SHORT);
+			System.out.println(shortDateTime.format(dateTime)); // 1/20/20
+
+		Amikor a time kapja a Formattert:
+			LocalDate date = LocalDate.of(2020, Month.JANUARY, 20);
+			LocalTime time = LocalTime.of(11, 12, 34);
+			LocalDateTime dateTime = LocalDateTime.of(date, time);
+			System.out.println(date.format(DateTimeFormatter.ISO_LOCAL_DATE));
+			System.out.println(time.format(DateTimeFormatter.ISO_LOCAL_TIME));
+			System.out.println(dateTime.format(DateTimeFormatter.ISO_LOCAL_DATE_TIME));
+			
+			
+		DateTimeFormatterTípusa: 					date				dateTime					Time
+	
+		ofLocalizedDate								OK					csak a date-et írja ki		UnsupportedTemporalTypeException
+
+		ofLocalizedDateTime							UTTE				OK							UTTE
+
+		ofLocalizedTime								UTTE				csak az idõt írja ki		OK
+
+---------------------
+
+	Egyéni formatterek létrehozása:
+		DateTimeFormatter f = DateTimeFormatter.ofPattern("MMMM dd, yyyy, hh:mm");
+		System.out.println(dateTime.format(f)); // January 20, 2020, 11:12
+		
+		Year:
+			yyyy:	2018
+			yy:		18
+		
+		Month:
+			MMMM: 	January
+			MMM:	Jan
+			MM:		01
+			M:		1
+			
+		Day:
+			dd:		01
+			d:		1
+			
+		Hour:
+			hh:		01
+			h:		1
+			
+		Minute:
+			mm:		01
+			m:		1
+			
+		":"
+			Ha ":"-ot akarunk használni //Bármilyen más literál IllegalArgumentException-t dob.
+
+----------------------

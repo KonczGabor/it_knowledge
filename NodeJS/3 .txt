@@ -1,0 +1,6 @@
+Event Listnerek esetén használjunk myEmitter.setMaxListeners(num); azért hogy elkerüljük a memória szivárgást.
+ Listner array-ból kivesz egyyet: myEmitter.removeListener('event', alerter);
+ 
+ Memory leaks: Unused variables (nem remove-olt listenerek)
+ 
+ setImmiediate azonnal végrehajtódik, nem számít hány idõzítés volt elõtte.

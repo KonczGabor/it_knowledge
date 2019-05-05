@@ -1,0 +1,83 @@
+Gradle: build automation tool for manage our dependendcy 
+
+Ellentétben a Maven-nel itt nincs "super parent".
+
+A második buildelés már gyorsabb, mert ami nem változothatott, azokat nem frissíti be.
+
+Képes más build toolokkal együttműködni: Maven, Ant
+
+DSL: Domain Specific Language based heavily on Groovy programming language
+	Groovy is a dynamic language that runs on JVM
+		Very legible(olvasható)
+		Very similar to Java
+
+-----------------------
+		
+GroupId: com.mycompany
+	Artifact: nameoftheproject	
+		Version: 1.0-SNAPSHOT
+		
+-----------------------
+
+Gradle follows the folder hierarcy of Maven procets.
+
+-----------------------
+
+Gradle specific files:
+
+	build.gradle:
+		apply plugin: 'java' This specifies the layout of the folders, how to package things up, etc..
+		repositories: itt keresi mindazon dependenciákat, amiket a "dependencies"-ben megadtunk.
+	
+	gradlew:
+		Gradle wrapper: Provides self installing set up for Gradle
+	
+-----------------------
+
+Nincs különbség egyszeres és kétszere idézőjelek között.
+
+-----------------------
+
+Hogyan alakítsunk át Maven xml dependenciát Groovy dependenciává?:
+	MVN
+		<dependendcy>
+			<groupId>org.apache.commons</groupId>
+			<artifactId>commons-csv</artifactId>
+			<version>1.2</version>
+		</dependendcy>
+		
+	Gradle
+		dependencies {
+			compile group: 'org.apache.commons', name: 'commons-csv', version: '1.2'
+		}
+		
+	A Gradle import esetén a paraméter típusokat is elhagyhatjuk egyetlen value-ként megadva a kívánt depet.:	
+		dependencies {
+			compile: 'org.apache.commons, commons-csv, 1.2'
+		}
+
+-----------------------
+
+Ha IDEÁban a Gradle projects fülön nyomunk egy jobb klikket a projektre akkor úgy is elő lehet hívni az auto import beállítást.
+
+-----------------------
+
+Gradle CLI előhozása:
+	./gradlew
+		
+	----------------------
+	Parancsok:
+		./gradlew dependencies
+			kirajzolja a fát
+
+-----------------------
+
+Versioning:
+	Major(Nem kompatibilis visszafele).Minor(kompatibilis).Patch-[SNAPSHOT](Jelenleg fejlesztés alatt áll, még nem releaseable)
+
+-----------------------
+
+
+
+
+

@@ -1,0 +1,10 @@
+null is not an object!
+
+--------------------------
+
+ public static void main(String[] args) {
+        Integer myInt = null;
+        System.out.println("myInt = " + myInt);	//	myInt = null
+    }
+	
+--------------------------

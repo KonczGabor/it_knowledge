@@ -1,0 +1,2 @@
+Az osztályok és objektumok kapcsolatára fókuszál illetve hogy hogyan alkothassunk relatíve nagy struktúrákat.
+Legfőképp öröklődési mechanizmusok és interfész implementációk kerülnek előtérbe.

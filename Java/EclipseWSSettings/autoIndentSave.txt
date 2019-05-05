@@ -1,0 +1,13 @@
+AUTOINDENT:
+Window->Preferences->Java->Editor->SaveActions
+
+
+AUTOSAVE BEFORE RUN:
+
+Window -> Preferences -> General -> Workspace and there you can check:
+
+Save automatically before build + Build automatically 
+If that doesn't work try this:
+
+Preferences -> Run/Debug -> Launching -> Save dirty editors before launching
+---------------------------------

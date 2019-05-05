@@ -1,0 +1,1 @@
+Attacc file akersni kívánt lemen -> External location -> jdk\src.zip  (a per jel fontos lehet)

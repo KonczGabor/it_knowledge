@@ -1,0 +1,22 @@
+Characteristic 		String 		StringBuilder 	StringBuffer
+
+Immutable? 			Yes 		No 				No
+Pooled? 			Yes 		No 				No
+Thread-safe? 		Yes 		No 				Yes
+Can change size? 	No 			Yes 			Yes
+
+String: null -ra fog mutatni, ha ehhez akarunk konkatenálni, az exception.:
+	public static void main(String... args) {
+		String chair, table = "metal";
+		chair = chair + table;			//EXC
+		System.out.println(chair);
+	}
+	
+Ha lokális változóként deklaráltuk, akkor sem inicializálódik null-ra, mindenképpen értéket kell h kapjon h lefordulhasson a kód.
+
+Kétféle egyenlősége van.
+	A == -ami pontosan a ugyanarra az objektumra mutat a két pointer
+	.equals() -ami a bennük tárolt értéket hasonlítja össze.
+	
+NAGYON FONTOS h a new kulcsszóval létrehozott String mindig új memóra példányt készít, nem a poolban lévőt használja fel újra.
+

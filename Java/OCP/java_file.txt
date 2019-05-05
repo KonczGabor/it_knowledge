@@ -1,0 +1,3 @@
+Több osztályt és interfészt is tartalmazhat, de a public class ból maximum egyet. Tehát nem kötelező h legyen, de ha van, akkor nem lehet másik osztály public láthatóságú.
+
+In a class desclaration the instance, cstr, method names can appear in any order

@@ -1,0 +1,15 @@
+5 scope érhetõ el:
+	Singleton (default) Egy per Spring konténer. Nem egy per JVM.
+	Prototype: Minden kérésnél(request) új példány jön létre.
+	A többi web alapú:
+		Request: Egy bean per HTTP request
+		Session: HTTP Session-ön keresztül.
+		Global: Egy bean per Application
+		
+Ha xml ben deifiniáljuk:
+	<bean name="customerService" class="com.pluralsight.service.CustomerServiceImpl" autowire="byName" scoper="singleton">
+	
+Ha Java-ban: //AOP jar-t rá kell tenni a classpath-ra.
+	@Bean(name="customerService")
+	@Scope("singleton")
+	public CustomerService getCustomerService(){

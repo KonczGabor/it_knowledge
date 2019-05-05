@@ -1,0 +1,2 @@
+Az adatokat és az azokon mûveleteket hajtó metódusokat egységbe szervezem,
+miközben elrejtem ezzel a belsõ koncepciót is.

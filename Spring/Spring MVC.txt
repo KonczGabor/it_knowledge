@@ -1,0 +1,89 @@
+Spring MVC: building webapplications for Java
+	Based on Mode View Controller design pattern
+	
+	Miért használjunk ilyet?
+		Segíti a web requestek állapotának kezelést
+		Validákja a processzálásra váró adatokat
+		A vew layer könnyen konfigurálható (JSP, ThymeLeaf, Velocity, FreeMarker, Grovy)
+	
+	Process flow modell:
+		Bejön a kérés a Browsertől
+		Elkapja a Spring MVC Front Controller, azaz DispatcherServlet (ez már autómatikusan létezik a Spring Framework-ben)
+		Ami delegálja a kérést egy Controller-nek
+		Az készít egy modellt amit vissza ad a Front Controllernek
+		Ami a kapoptt modellel keres egy View-t
+		És a kirenderelt View-t visszaküldi a Browsernek
+		
+	Controller:
+		Contains business logic
+		Kezeli a requesteket
+		Letároltatja, visszakéri az adatokat.
+		Feltölti az adatokkal a modellt
+		Elküldi a megfelelő viewnak a modellt
+		
+	Modell:
+		Közvetíti az adatokat, így ideiglenesen tárolja azokat, de nem a perzisztencia a llényeg, hanem a transmit.
+		~Spring bean
+		
+	View
+		Számos view templatet kezel
+			A legelterjedtebb a JSP, JSTL
+		Kiolvassa a modell-ből a datát és a megjeleníti
+		
+	Elős lépések:
+		Létre kell hozni: WEB-INF/web.xml
+			<web-app>
+				<servlet>
+					<servlet-name>dispatcher</servlet-name>		//Ennek *1
+					<servlet-class>org.springframework.web.servlet.DispatcherServlet</servlet-class>
+					<init-param>
+						<param-name>contextConfigLocation</param-name>
+						<param-value>/WEB-INF/spring-mvc-demo-servlet.xml</param-value>
+					</init-param>
+				</servlet>
+				
+				<servlet-mapping>								//URL mapping
+					<servlet-name>dispatcher</servlet-name>		//És ennek *1 meg kell egyezni
+					<url-pattern>/</url-pattern>				//Ami erre a pattern-re illik, azokra mappel.
+				</servlet-mapping>
+				
+			</web-app>
+		
+		
+		Konfigurálni a DispatcherServlet-et
+			spring-mvc-demo-servlet.xml		
+		
+			<beans>
+				<context:component-scan base-package="mybsepackage"/>	//Component scanninget meg kell adni:
+				
+				<mvc:annotation-driven/>								//Meghatározzuk a bean definíció típusát
+				
+				<bean class="org.springframework.web.servlet.view.InternalResourceResolver">	//Konfigurálni a Spring MVC View Resolvert
+					<property name="prefix" value="/WEB-INF/view/" />
+					<property name="suffix" value=".jsp" />
+				</bean>				
+			</beans>
+		
+	Development process:
+		Create Controller class
+			Annotate a class with @Controller
+				@Controller inherits from @Component, támogatja a scanninget.
+			@Controller
+			public class HomeController{}
+		
+		Define controller method
+			@RequestMapping("/")
+			public String showMyPage(){}
+			
+		
+		Add request mapping to Contorller Method
+		
+		Return view Name
+		@RequestMapping("/")
+		public String showMyPage(){
+			return "main-menu"			//InternalResourceResolver majd megoldja =>/WEB-INF/view/main-menu.jsp
+		}
+		
+		Develop View page
+			
+	

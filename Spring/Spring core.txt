@@ -1,0 +1,609 @@
+Look insied!
+Rod Johnson
+
+Mit nyújt a Spring?:
+	A core azt szolgálta h ne mi kézzel kötögessük össze a szoftverkomponenseinket, 
+	hanem fejlesszük le egymástól amennyire lehet függetlenül, és mind a létrehozásukért, 
+	életciklusukért feleljen egy külsõ rendszer, egy külsõ konfiguráció allapján. 
+	Más építõkövekbõl más születhet.
+	
+	EJB-k használata nélkül. Cél az EE koplexitásának csökkentése.
+	
+	AOP/Proxy használat.
+	
+	Patternek köré épül a best practices.
+		Singleton
+		Factory
+		Abstract Factory
+		Template Method
+	
+	A Tomcat nem application sever, csak webserver viszont könnyû használni és könyebb súlyú. POJO alapú.
+	
+	Cél h a kódtól függetlenól mûküdjön a komponensek létrehozása és azok összefüggése.
+	
+	Kikényszeríti h a komponenseket egymástól függetlenül fejlesszük le, majd õ összekapcsolja.
+	Ez a ragasztó/enyv a dependency injection lesz.
+	
+	Miért jó nekünk? 
+		Egyszerû osztályokat írhatunk, 
+		Tudunk az üzleti domainre fókuszálni.
+		Növeli a tesztelhetõséget
+		Növeli a karbantarthatóságot
+		Növeli a skálázhatóságot
+		Csökkenti a komplexitást
+		A bizniszre fókuszál
+		
+Nagyon leegyszerûsítve a Spring HashMap objektumot rendszere(?).
+	Name-érték párok.
+		
+History:
+	2003 alakulás
+	2004 1.0 release
+	2006 2.0
+	2007 2.5-Annotációk, xml
+	2009 3.0 Web services
+
+	
+	
+Inversion Of Control: Az entitások feladják a controlt a saját függõségeik felett, 
+a dependency injection egy lehetséges megoldás.
+
+a "new" kulcsszóval létrehozott objektumok létrejönnek, de a Spring nem fog tudni róluk.
+
+JNDI: Java Name Directory Interface. Egy szolgáltatást betolunk egy keretrendszerbe és ezen a néven keresztül bárki elérheti.
+	A rendszer fogja tudni hogy az adott szolgáltatás amire hivatkozok hogy az hol van. (Service Locator)
+	
+	
+Deklaratív:
+	Ahelyett hogy azt írnánk le hogy hogyan csinálja meg amire nekünk szükségünk van,
+	ehelyett azt írjuk le hogy mit csináljon, azt majd õ megoldja hogy hogyan.
+	
+Boilerplate kód eltûntetése: a felesleges dolgok eltûntetése, hibák származhatnak belõle. Minél több dolgot átadni egy másik rendszernek.
+
+További ereje a Springnek, de a Core során nem jön elõ.
+	Plusz modulok (Security). 
+	JDBC kezelés.
+	JPA/JDO támogatás.
+	Erõs tranzakciókezelés: Vagy mind, vagy egy se-atomikus mûveletek.
+		Ha a JDBC driver nyújt szolgáltatást tranzakciókezelésre akkor azt használja, ha nem akkor pedig ad maga.
+	
+POJO: semmilyen framework specifikus interfészt nem implementálunk, osztályt nem terjesztünk ki, 
+	maga az osztály, amibõl a POJO lesz mindentõl függetlenül pusztán a domain-hez kötõdve jött létre.
+	
+Bean az egy speciális POJO: Amire speciális megkötések vonatkoznak:
+	A popretyjeihez a getter, setter metódusok neveinek kell hogy tükrözze a property nevét (get-set-is(boolean)).
+	
+Sok dolog a Springben proxykon keresztül történik.
+
+Java SE (J2SE régebben):
+	Swing, Szálkezelés, XML
+	Swing, Szálkezelés, XML
+
+Java EE (J2EE):
+	Specifikáció gyûjtemény:
+		szerver specifikáció
+		webszervíz specifikáció
+		Java Beans specifikáció
+		Amilyen szoftverek ezeket a specifikációkat teljesítik azok  Java EE-nek minõsûlnek.
+		
+Java Been:
+	Entity bean:
+	
+
+A Spring az Enterprise Edition ellenpontjaként jött létre és az EE 6 már átvett sok dolgot a Springtõl.
+	Hollywood principle: Don't call us, we will call you!
+	Fókuszáljunk az interfészekre, arra bátorít, bele kénszerít.
+	Spring nagyban javítja a tesztelés lehetõségeit.
+
+A konfiguráció történhet xml-bõl illetve annotációk mentén, de akkor pont a lényeget veszítjük el.
+	3-astól már egy külön Java osztályban is lehet. Csak hogy ne kelljen xml-hez nyúlni.
+		
+Proxy:
+	Anniyban különbözik a rendes objektumtól, illetve annak meghívásától hogy azt körülbástyázza.
+		Security proxy: valamilyen ellenõrzések: Van-e joga hozzáférni.
+		Relay proxy: Elrejteni h ez az objektum nem is itt van, hanem a világ túlvégén.
+		Lusta felépítés. A proxy-hoz eseik be a hívás és csak utána példányosítsunk.
+
+Java Bean != Spring Bean
+	A Spring Bean-ek azok az objektumok amiket a konfiguráció mentén létrehoz.
+	
+	Amit a beans.xml-ben megadunk az nem egy bean, hanem egy bean definíció! Ennek alapján fog a Spring csinálni nekünk egy beant.
+		Olyan a kapcsolatuk mint az osztály-objektum.
+	A bean definíciónak néhány dolgot magába kell hogy fodlaljon.
+		Ilyen az osztályból kell létrehoznia a Springnek a bean-t.
+		Az Id: xml standard, teljesen egyedi azonosító kell legyen az xml dokumentumon belül.
+		A name tetszõleges számú lehet, de nem szokás
+		Se az id, se a név nem kötelezõ, ugyanúgy fel tudja dolgozni mind a kettõt
+		Ha egy bean-nek id-t és name-t is adok akkor mindkettõn keresztül elérhetõ lesz
+		Aliasokat is létrehozhatunk: legacy kódok esetén hasznos lehet ha két teljesen más elnevezési konvenciót kell összefésülni.
+		Ha nem adunk meg semmit, akkor a Spring autómatikusan generál nekünk egy azonsítót, de akkor közvetlenül nem fogjuk tudni elérni.
+		Ha class attribútumban értékének egy interfészt adunk meg akkor összeszarja magát (?)
+
+		
+Miben jobb az STS mint az Eclipse Spring pluginnel?
+	Sokkal alkalmasabb a Springes feladatokra, viszont még az Eclipse-nél is lassabb.
+	
+Az XSD írja le h mi az ami benne lehet a Bean definícióban. A Bean xmlns-ében lehet konfigurálni a névteret.
+
+Bean definíciók:
+	Kürülbelül olyan a kapcsolat a defínicó és maga a bean között mint az osztály-objektum.
+		A név és az id között az a különbség:
+			A name alatt többet is megadhatok
+				Konverterekkel lehet a megfelefõ típusúra kasztolni a Stringeket (mert a bean-ben ugye csak "Stringet" lehet alapból megadni).
+					Vannak elepértelmezett konverterei a Stringnek.
+			ref: -el id-ra vagy name-re hivatkozunk.
+				Nullától kezdve hivatkozhatunk konstruktor paraméterre ha nevet nem adunk meg.
+			Az id-ból csak egy lehet
+			Ha a kettõ különbözik onnantól két azonosítón keresztül is elérhetõ lesz az adott bean.
+			HA egyet sem adunk meg: A spring generál egy azonosítót, de mi nem fogjuk tudni elérni közvetlenül id-n keresztül, de lehet h nem is kell.
+			
+		Aliasokkal pl legacy rendszerek nameconvention-ok közti szakadékát hidalhatjuk át.
+	Spring Bean: Azok az objektumok amiket a konfiguráció mentén létrehoz.
+		
+Ha nem akarunk teljes elérési útvonalakat megadni a class attribútum értékeként akkor lehetõségünk van h kiszervezzük õket egy 		
+		
+<beans> //Ez ugyebár xsd ami meghatározza h mit írhatunk bele. A tag-ek, attribútumok mind-mind egy névtérhez tartoznak
+	//Hogy egy névtérhez mi tartozhat azt egy xsd adja meg. Itt a névtér a <beans>, amit a ... xsd ír le. XML Schema Definifiton.
+	//xmlns attribútum a névtér neve.
+	<import resurces ="más beaneket is beolvashatunk egy xml-bõl"/>
+<beans/>
+	
+	Pl:	
+		<bean id="ogreWeapon" class="com.gg.spring_sandbox.model.Weapon">
+			<constructor-arg value="Ogre's weapon"/>
+			<constructor-arg value="50"/>
+		</bean>
+		
+		<bean id="ogre" class="com.gg.spring_sandbox.model.Ogre">
+			<constructor-arg value="Ogre"/>		//Ha nem adunk meg name attribútumot a konstruktor argumentum tagnek akkor sorba megy, vagy hivatkozhatunk még paraméter indexre 0-tól kezdve de ne tegyünk ilyet, hagyjuk alapjáraton.
+			<constructor-arg value="100"/>
+			<constructor-arg ref="ogreWeapon"/>	//A kettõ egy referenciával van összefûzve. Referenciánál mindig id-ra vagy névre hivatkozunk.
+		</bean>
+		
+			//A háttérben olyan mintha ez történt volna:
+				Weapon ogreWeapon = new Weapon();
+				Ogre ogre = new Ogre(ogreWeapon);
+		
+		Mivel a paraméterátadás a konstruktoron keresztül törtánik az Ogre class nak is remdelkeznie kell egy Wapon fiel-del ami így beállítódhat.
+
+		Itt felmerül egy probléma h honnan fogja tudni a parser hogy az attribútumként meagadott érték:
+			"100" (mert az xml definícióban csak Stringet tudunk megadni) az most valóban String, vagy int akar lenni? -> konvertereket kell használni:
+	
+	A másik módszer a settereken keresztül történõ beállítás:
+		Literál beállítása:
+			<property name="heroName" ref="SanyiAzOgre"/>
+		Objektum vagy dependencia beállítása:
+			<property name="weapon" ref="ogreWeapon"/>
+			
+		Szükség van hozzá setter metódusra
+		
+	Lehetõség van továbbá az értékek beállítására property fileokon keresztül:
+		0, Megfelelõ bean séma:
+			<?xml version="1.0" encoding="UTF-8"?>
+			<beans xmlns="http://www.springframework.org/schema/beans"
+			  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+			  xmlns:context="http://www.springframework.org/schema/context"
+			  xsi:schemaLocation="http://www.springframework.org/schema/beans
+						http://www.springframework.org/schema/beans/spring-beans.xsd
+						http://www.springframework.org/schema/context
+						http://www.springframework.org/schema/context/spring-context.xsd">
+				...
+			</beans>	
+	
+		1, Properties file létrehozása
+			names.proerties:
+				name=fantastic_ork_name
+				
+		2, Properties file betöltése a Spring config fileban
+			applicationContext.xml
+				<context:property-placeholder location="classpath:my_file.properties"/>
+				
+				<bean ..>
+					<property name="heroName" value="${keyFromProertiesFiles}>"/>
+				</bean>
+				
+		3, Hivatkozás a bean definícióban a properties file kulcsára:
+				value="${keyFromProertiesFiles}"
+		
+	
+	A legrégebbi módszer egy bean elkérésére a BeanFactory-n keresztül történik:
+		final BeanFactory beanFactory = new XmlBeanFactory(new ClassPathResource("beans.xml"));
+		final Character character = beanFactory.getBean("ogre", Character.class);
+		System.out.println(character);
+		
+Az ApplicationContext lényegesen több plusz szolgáltatást tud nyújtani mint a depricated XmlBeanFactory:
+	Autómatikus BeanPostProcessot regisztráció
+	Autómatikus BeanFactoryPostProcessot regisztráció
+	i18n message source támogatás
+	Nem csak Stringként, hanem String[]-t is meg lehet adni a forrásokat.
+	//Nagyobb alkalmazások több application contextbõl szoktak állni
+	ApplicationEvent publication:
+		Események elkapása: bean létrejött, megsemmisült.		
+
+	Ha nem XmlBeanFactory-n hanem ApplicationContext-en keresztül szeretnénk elérni a beanjeinket, akkor magát a beans.xmlt is át kell írni:
+		//De elõtte be kell húzni azt a maven-be:
+			<dependency>
+				<groupId>org.springframework</groupId>
+				<artifactId>spring-context</artifactId>
+				<version>5.1.5.RELEASE</version>
+			</dependency>
+			
+		final ApplicationContext context = new ClassPathXmlApplicationContext("beans.xml");	//Erre cseréltük le a BeanFactory-t.
+		final Character character = context.getBean("ogre", Character.class);
+		System.out.println(character);
+		
+		//Nem kötelezõ explicite meghívni a context.closet()-t mert a shut down hook magátóll meghívja.
+				
+
+		
+		
+ BeanFactory != FactoryBean
+	BeanFactory: ami a beaneket állítja elõ, maga a Spring, az application kontext, akitõl a beaneket tudunk kérni.
+	FactoryBean: az a bean amin keresztül legyártunk egy másik bean-t a BeanFactory-n keresztül.
+	
+Nem konstruktorral hozunk létre hanem reflection API-val.
+
+init metódus: Az inicializáció végetérte után hívódik meg. Paraméterben lehet átadni az osztály uganolyan nevû függvényt.
+
+Reflection API: A Javával együtt született. 
+	Elkérem az objekt osztályát(getClass) és azon mahinálok, amiben minden benne van. 
+		Hátránya h csúnya a kód és lassú. Valószínûleg rossz úton járunk, ha ilyet használunk.
+
+------------------------	
+	
+Bean Scopes
+
+		A scope a a bean életciklusára utal
+			Mennyi ideig él a bean?
+			Hány példány született?
+			Hogyan van megosztva?
+
+	<beans ..>
+		<bean id="myCoach"
+			class="MyCoach.class"
+			scope="singleton">	A default scope a singleton, így jönnek létre alapból a beanek(tehát ezt  sort jelen esetben felesleges volt megadni). //Stateless-ek
+		<bean>
+	</beans>
+	
+	scope-ok:
+		singleton: Egyetlen közös példány
+		prototype:	Minden container request esetén új példényt hoz létre
+		request
+		session
+		global-session
+	
+	
+------------------------
+Az annotációk feldolgozása a Springen belül Bean postprocesszorokkal mûködik.
+
+BeanPostprocesszor minden egyes bean inicializálása elõtt és után is le fog futni és hogy ki mivel foglalkozik azt majd maga eldönti. 
+
+Logolás:
+	Eredetileg Apache commons -log4j, de ki lehet cserélni bármi másra slf4j-re (ami egy API, ami alá azt rakok be amit akarok, pl logback)
+	pom-xml-bõl ki kell szedni, azaz betenni az exclusion részbe. jcl: java commons logging
+	 main-resources ba még be kell tenni egy logback xml-t h hová logoljon.
+	 
+Konstruktor argumentumnak ne adjunk neve.
+	Reflection API-val privát konstruktort is elérhetünk.
+	Konstruktorral való beállítás kiszûrheti a körkörös hivatkozásokat.
+		Egy máglátás: ide a kötelezõket. (Közös álláspont kialakítása)
+
+A setterek imádói szerint túl hosszú lesz a konstruktor.
+	Egy máglátás: ide az opcionálisokat. (Közös álláspont kialakítása)
+	
+Bean definition lehetõségel (Mind a hárommal mindent lehet):
+	XML
+		Elõnyök: A kódtól teljesen független. Dokumentálja a komponenseket és a köztük lévõ kapcsolatot, ad egy architektúrális áttekintést.
+		Hátrányok: Sok midenre jó, nem feltétlen kell mindenre használni
+			Verbose
+		~bean.xml Tárolja a bean konfigurációkat.
+			xsd: ez mondja meg h mi lehet egy névtérben.
+		
+	Annotációk
+		Elõnyök: A feljlesztés során gyorsabb, egyszerûbb
+			A Spring autómatikusan szkenneli a Java classokat a speciális annotációkért
+				Ezt engedélyezni kell a Spring configurációs fileban (általában applicationContext.xml-névre hallgat):
+									<context:component-scan base-package="amelyikcsomagotagyökérnekszeretnémtekinteni_rekurzivankerestehát"/> 
+				@Coponent annotációt kell tenni a class-ra.	
+			Autómatikusan beregisztrálja a beaneket a Spring konténerbe
+			
+		Hátrányok: A kódot teljesen ismerni kell.
+		
+	Java alapú konfiguráció (a kódtól független):
+		Elõnyök: Azoknak akik utálják az xml-t. Típusbiztonság van. Nem kell editor, se konverter (Nem kell stringekkel operálni). 
+		Jobban átlátható mint az xml. Fordítási idõben kiderülhet alapkonfigurációs problémák.
+		Hátrányok: Nehezebben átlátható mint a külsõ konfiguráció.
+				
+		Típus biztos
+		Java fejlesztõknek természetes.
+		
+		Használata:
+			@Configuration a class-ra
+		
+
+Lehet bean-en belül bean-eket létrehozni. Az ogrének lehet olyan fegyvere ami nincs senki másnak.
+
+Bean definíciók örököltethetõek.
+		Lehet közös absztrakt bean definíció, belõle példány nem jöhet létre.
+		
+Összetett(compound) property:
+	Address:
+		city
+		street
+		ZIP
+
+Container lifecycle:
+	Initialization
+	Use
+	Destruction
+			
+			
+	Container Started -> Bean Instantiated -> Dependencies Injected -> Internal Spring Processin -> Your Custom Init Method -> Bean is ready for use -> Container is Shutdown -> Your Custom Destroy Method
+	
+		Pl.: init method: 
+			<bean id="myCoach" class="MyCoach.class"
+				init-method="myStartupMethodFromMyClass" 	// <=> destroy-method // context.close();
+			<bean>
+		
+	depends-on:
+		Ha két bean nem függ össze, de valamiért fontos h az egyik hamarabb jöjjon létre, mint a másik, akkor a másodikra ezt az attribútumot rá kell tenni.
+
+
+-----------------------
+	Method configuration: 
+		A bean life cycle adott pontján futnak le autómatikusan:
+			@PostConstruct			
+			@PreDestroy
+
+-----------------------		
+A lazy initialization springen belül nem annyira mûködik.
+
+	Configuration with Annotations:
+		annotation: special label or marker whoch contains metadata about the annotated language element.
+			Can be processed at compile and run time too_
+		
+
+
+Autowiring:
+		Hatalmas elõnye h összefüggésekket autómatikusan összefûz.
+		Ha nem mûködik(több lehetõség), akkor nekem kell kibogarászni.
+		
+		
+PopertyEditor
+	Nem kell id.
+	meg kell valósítani a PropertyEditorSupport setAsText() metódusát, ami void, mert egy result-ba állít be dolgokat.
+	setValue(-val be kell állítani a visszatérési értéket)
+	A custom editorokat be kell regisztrálni egy map-be a bean xml-ben.
+	Map: Hogy a rendszer meg tudja mondani h az adott bemenethez milyen poerty editorra van neki szükség.
+	
+Converter
+	Itt kell id.
+	conversionService
+	converter() generikus interfész önmagát adja vissza.
+	Lista: id-alapján találja meg.
+	
+Spring Expression language: Value-ba tudunk írni kis kódrészleteket. Spring sajátja.
+	Mit lehet vele csinálni?
+		Értékeket elérni
+		Szûrni
+		Statikus metóduokat elérni
+		
+	SpEL: Spring Expression Language 
+		Így adjuk meg: #{ <expression string> }
+		
+Bean definíciók alapján értelmezi a kollekciókat nem úgy mint magában a javában.
+
+
+Autowiring:
+	Arra jó h a függõségeket nem nekünk kell megadni, hanem a Spring kitatlálja és beilleszti.
+	Attribútum a beatin tag-en defaultból no.
+	Hogy mi alapján válassza ki (lehet egy attribútumot pramary-vé tenni h ha többet adunk meg, akkor azt válasssza.):	
+	
+		no (default)
+		
+		byName: property alapján megy végig, mivel a név is egyedi lehet benne, ezért nem okoz konfliktust
+		
+		típus lapján: futhatunk bele problémákba, mert több bean is lehet ugyanabból a típusból
+		
+		constructor: alapból típus alapján keres
+	
+	Az autowire csak ott fog keresni ahol nincs egyéb referencia.
+	
+	Reflection apival végignézi h milyen setter metódusok vannak és ahhoz név alapján megpróbál kereseni referenciát.
+	
+	Ha többet is talál exceptiont dob.
+	
+Springben minden exception unchecked.
+
+PropertyPlaceholderConfigurer: Meg lehet mondani vele h hol keresse a külön kiszervezett db credentials property file-t.
+	Profilos megoldás jobb lehet: Egy fileban van az összes credentials és indításkor meg lehet adni h melyik szerint konfigurálódjon.
+	
+Környezeti véltozók: "-D" kapcsolóval Javában
+
+Spring konfiguráció: Meg tudom mondani h ez a konfiguráció ilyan profilnél él, ez pedig annál. Egyszerre több profil is élhet.
+
+FactoryBean: ha olyan logikát kell belekötni ami maõgy az xml-ben nagyon macerás lenne, vagy meg se lehetne csinálni.
+
+Annotációk: 5-ös javától. 
+	Az annotációkat a Spring BeanPostProcessorokkal dolgozza fel. Ezeket aktiválni kell. Manuálisan, vagy az annotation config-tag gel õ majd beköti.
+	Az annotációk egy része Spring specifikus, a többi lehet enterprise standard.
+	
+	Miket annotálhatunk?
+		Osztályt
+		Metódust (Konstruktor)
+		Tagváltozót
+		Paramétert
+	
+	Be kell õket kapcsolni a contextben.
+		<context:annotation-config> (csak bekapcsol?)
+		 
+		<beans ..>
+			<bean id="myCoach" class="MyCoach.class"
+				<context:component-scan base-package="amelyikcsomagotagyökérnekszeretnémtekinteni_rekurzivankerestehát"/> 
+			<bean>
+		</beans>
+				
+	@Required
+		Tagváltozóra vonatkozik: Ezt valahol be kell állítani.
+			A listák eleit figyelemen kívül hagyja, nem néz bele, hiába olyan típusú.
+	@Autowired
+		Autómatikus injektálást biztosít class vagy interface számára
+		A Spring végignéz mindent amire @Component annotációt tettünk
+			Interfészek esetén azok közt kerese akik implementálják azt
+			
+		Három különféle Injekciós típust különböztetünk meg:
+			Constructor
+			Setter
+			Field
+		Mikor melyiket használjuk? Megegyezés kérdése, maradjunk konzekvensek.	
+			
+			Constructor:			
+				1. lépés:
+					Definiáljuk a dependált interfészt és az azt implementáló osztályt:
+						public interface FortuneService{
+							public String gerFortune();
+						}
+						
+						@Component
+						public class HappyFortuneService implements FortuneService{
+							public String getFortune(){
+								return "Today is my licky day!";
+							}
+						}
+						
+				2. lépés:
+					Az implementációt használó osztály konstruktorát átalakítjuk egy implementáció befogadására:
+						@Component	
+						public class TennisCoach implements Coach(
+						
+							private FortuneService fortuneService;
+							
+							@Autowired			//Megnézi hogy az összes implementáció közül
+							public TennisCoach(FortuneService theFortuneService){
+								fortuneService = theFortuneService;
+							}
+						)
+					
+			
+		Mezõkre, setterre, Alapból típus, majd név alapján keres.
+			Setteren:
+				@Autovired
+				public void setFortuneService(FortuneService theFortuneService){
+					fortuneService = theFortuneService;
+				}
+								
+			Fielden: (Reflection segítségével)
+				Közvetlen a mezõre, nem szükséges hozzá setter.
+				public class TennisCoach implements Coach{
+					@Autowired
+					private FortuneService fortuneService;
+					
+					public TennisCoach()
+					
+					//No need for setter methods
+				}
+				
+				
+		
+		Amire Autowired-et teszünk az egybõl Required-dé is válik azonnal
+	
+	De mi van akkor ha több implementációs is létezik? Ekkor kerül képbe a: 	
+		@Qualifer
+			Meg tudunk adni bizonyos szûrõ feltételeket. El kéne kerülni a használatát. Bármelyik helyen használhatjuk az @Autovired alatt(annak specifikációjához)
+			@Component	
+			public class TennisCoach implements Coach(
+			
+				@Autowired
+				@Qualifier("happyFortuneService")		//camelCaseClassName
+				private FortuneService fortuneService;
+				
+			)
+		
+	@Componenet("ittAdomMegABeanIdt):	//ha elhagyom a zárójelet akkor autómatikusan generál egy camelCase id-t.
+		Régen így értük el:
+			Coach theCoach = context.getBean("myCoachId", Coach.class);
+		Mostmár az is elég h:
+			Coach theCoach = context.getBean("coachImplementingClassName", Coach.class);
+		Osztályra: Abból az osztályból csinál 1(és csak is egy) bean-t mivel Singleton alapból.
+		Ez a kettõ tehát ugyanaz:
+			XML konfig:
+				Coach theCoach = context.getBean(myCoach, Coach.class);
+			Annotáció alapú konfigurálás:
+				@Component("myCoach")
+				public class Coach {} 
+		
+	
+JSR: Java Specification Request.
+
+----------------------
+Scope meghatározása:
+	@Componenet
+	@Scope("singleton")		//@Scope("prototype"): Minden request esetén új obj
+	public class TennisCoach implements Coach{}
+	
+----------------------
+
+Spring konténer konfigurálásnak 3 módja:
+	Full XML
+	XML Component Scan
+		<context:component-scan base-package="my_package"/>
+	Java Configuration Class
+		@Configuration
+		@ComponentScan("mypackage")
+		public class SportConfig{		
+		}
+
+		és a main-ben:
+			AnnotationConfigApplicationContext context = new AnnotationConfigApplicationContext(MyConfiguraionClass.class)
+			Coach theCoach = context.getBean("tennisCoach", Coach.class);
+----------------------
+
+Java alapú konfigurálás:
+	A Spring konténert Java kódból konfiguráljuk
+		Comonent scan nélkül:
+			@Configuration
+			public class SportConfig{
+				
+				@Bean
+				public FortuneService happyFortuneService(){	//ez a method name lesz az beanId (ezért nem getHappyFortuneService a neve)
+					 return new HappyFortuneService();
+				}
+				
+				@Bean
+				public Coach swimCoach(FortuneService fortuneService){
+					SwimCoach mySwimCoach  new SwimCoach(happyFortuneService);
+				}
+			}
+
+		main:
+			AnnotationConfigApplicationContext context = new AnnotationConfigApplicationContext(SportConfig.class)
+			Coach myCoach = context.getBean("swimCoach", Coach.class);
+
+----------------------	
+
+	Inject values from propert file:
+		1, Create property file:
+			sport.properties
+				name=Caridniss
+				email=caridniss@gmail.com
+		
+		2, Load property file into Spring config:
+			@Configuration
+			@PropertySource("classpath:sport.properties")
+			public class SportConfig{
+			
+			}
+
+		3, Reference values from properties file:
+			public class SwimCoach implements Coach {
+			
+				@Value("${name}")		//prop file key reference
+				private String name;
+				
+				@Value("${email}")
+				private String email;
+				
+			
+			}
+
+----------------------

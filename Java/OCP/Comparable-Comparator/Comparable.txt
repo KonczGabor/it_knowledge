@@ -1,0 +1,21 @@
+Ez egy interfész:
+
+public interface Comparable<T> {
+	public int compareTo(T o);
+}
+
+
+0,The number zero is returned when the current object is equal to the argument to compareTo().
+
+A number less than zero is returned when the current object is smaller than the argument
+to compareTo().
+
+A number greater than zero is returned when the current object is larger than the argument
+to compareTo().
+
+Csökkenõsorrend:
+	  public int compareTo(Object o){
+        return this.damage > ((Tank)o).damage ? -1 : 1 ; // current obj nagyobb, de negatívot adj vissza, így lesz csökkenõ a sorrend.
+    }
+
+		

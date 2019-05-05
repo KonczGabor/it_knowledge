@@ -1,0 +1,37 @@
+PackageManager JavaScript számára
+
+in npm CLI:
+
+	npm install
+		Installálja a dependenciákat
+
+run-s	//Run sequentially - egymásután
+
+run-p	//Run parallel - egymástól függetlenûl
+
+npm -l to discover available npm commands and full usage info
+
+ha csak annyir írunk h node, akkor megkapjuk a node propmtot:
+	node
+	>console.log('hello');
+	
+	To eyit: Ctrl+c two times.
+	
+
+
+npm init -y		// force the module initialization with default values.
+
+npm install module_name	//or npm  i module_name
+
+	install 
+		--save				//kell a futtatáshoz
+		--save-dev			//csak a fejlesztéshez kell
+		--save-optional		//? never met on any real project
+		
+npm remove module_name
+
+npm prune		//mély takarytás
+
+npm dedupe		//ha több modulenak is ugyanaz a dependenciája akkor ezel át lehet azt mozgatni h olyan helyre kerüljön ahol közösen elérik.
+
+npm list		//all dependencies

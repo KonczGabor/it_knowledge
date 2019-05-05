@@ -1,0 +1,693 @@
+1.7-tõl
+
+Non-blocking IO.
+
+Elõre és hátrafele is tud olvasni anélkül hogy blokkolná az az erõforrást.
+
+-----------------------------------------
+
+Amit a legacy java.io.File class tud:
+
+	Kilistáz minden filet egy mappában.
+	Ki tud törölni fileokat és nem üres mappákat.
+	Ki tudja olvasni az utolsó módosítás dátumát.
+
+Ezeken felül a NIO2:
+
+	Támogatja a filrendszer specifikus attribútumokat.
+	Közvetlenül be lehet járni egy mappa struktúrát.
+	Támogatja a szimlinkeket.
+	
+-----------------------------------------	
+
+A Path instance immutable!
+	Path lessTravelled = Paths.get("/highway/street/house/../.");
+	lessTravelled.resolve("spot.txt");	//Ezt el is kérne tárolni valamiben, hasonlóadn mint az új Date-ek esetén:
+											//lessTravelled = lessTravelled.resolve("spot.txt");	=> /highway/street/house/.././spot.txt
+	
+-----------------------------------------
+
+A java.io.File class File objektumát a NIO.2 API Path-ja tudja helyettesíteni.
+//Abszolút, vagy relatív, filera, mappára.
+
+-----------------------------------------
+
+A Path tényleg csak egy elérési útvonal, nem muszáj létezni az adott location-ön magának a filenak h a Path valid legyen, s doglozhassunk vele.
+
+A Path egy interfész, a Paths factory-val lehet példányosítani. Ezért konstruktora sincs.
+	Ha URI(uniform resource identifier)-val hozzuk létre akkor csak abszolút utat fogad el, különben excp 
+
+Fontos hogy ne közvetlenül hozzuk létre a Path objektumot, mert akkor az csak az adott filerendszerre fog vonatkozni és elveszítjük a platformfüggetlenséget.
+	Ezért kell használni a java.nio.files.Paths factory class-t: Path path3 = Paths.get("/home/zoodirector");
+
+Ha varargs-szal hívjuk meg akkor a rendszer útvonal-speraratorát autómatikusan beilleszti:
+	Path path2 = Paths.get("c:","zooinfo","November","employees.txt");	
+	
+-----------------------------------------
+
+Ami az egyik filerendszeren abszolút, az a másikon relatív is lehet (nem a szeparator dönt).:
+	Windows abszolút: 	c:\zooinfo\November\employees.csv
+	Linux realatív:		c:\zooinfo\November\employees.csv
+	
+-----------------------------------------			
+
+atomic operation: egyszerû, tagolhatalan mûvelet, nem lehet részben teljesült.
+
+-----------------------------------------
+
+Creating a path:
+
+	Helyes:
+		FileSystems.getDefault().getPath("puma.txt")
+		new File("tiger.txt").toPath()
+		Paths.get(new URI("cheetah.txt"))
+		Paths.get("cats","lynx.txt")
+		Paths.get("/alligator/swim.txt");		
+		Paths.getPath("ocelot.txt")
+				
+	Heytelen:
+		new Path("jaguar.txt")
+		new FileSystem().getPath("leopard")
+		
+-----------------------------------------
+	
+Working with the Path Object:
+
+	Lehet az operációkat láncolni, mivel azok saját magukkal tének vissza:
+		Paths.get("/zoo/../home").getParent().normalize().toAbsolutePath();
+	
+	-----------------------------------------
+
+	getNameCount();
+	
+		int, ami a path hosszával tér vissza, a gyökér nem számít bele, az elsõ elem a nulladik:
+			Path path = Paths.get("/land/hippo/harry.happy");
+			System.out.println("The Path Name is: "+path);
+				for(int i=0; i<path.getNameCount(); i++) {
+					System.out.println(" Element "+i+" is: "+path.getName(i));
+			}
+			
+			Result:
+				The Path Name is: /land/hippo/harry.happy
+				Element 0 is: land
+				Element 1 is: hippo
+				Element 2 is: harry.happy
+		
+			realatív útvonallal is mûködik				
+	
+	getFileName():
+		Visszaadja a root-tól legtávolabb lévõ elemet, mint Path nem pedig String
+		
+	getParent():
+		Path a visszatérés ha van szüleje, ha nincs akkor null (pl.:root)
+		realatív esetén nem tudom biztosan h mi történik. 
+		
+	getRoot():
+		null-t ad vissza ha a Path relatív
+		
+		Paths.get("../sang").getParent().getParent()	=> null //mert a ".." -nak nincs parentje
+		Paths.get("/sing").getParent().getRoot()		=> "/"	//mert a root -on hívott getRoot() root-ot ad vissza.
+		Paths.get("/song").getRoot().getRoot()			=> "/"	//mert a root -on hívott getRoot() root-ot ad vissza.
+		Paths.get("../sung").getRoot().getParent()		=>	NPE //mert a relatívon hívott getRoot null-t ad vissza, s null-on hívot getParent() az NPE
+		
+	isAbsolutePath():
+		true/false
+	
+	toAbsolutePath():
+		Ha már eleve abszolút volt akkor visszakapjuk, ha relatív, akkor elzarándokol a gyökérig és elénk teszi a feltárt utat összecsatolva az eredeti reatív-val.
+		
+		Feladat:
+			Adott a mappa melyben állunk: /hail
+				Path path1 = Paths.get("../jungle/.././rain..");	// a ".." a végén nem útvonal, hanem a file neve.
+				Ha meghívom path1 = path1.toAbsolutePath() -t 		// => /hail/../jungle/.././rain..  akkor a relatív útvona lévén a mi abszolútunkhoz köti, de nem normalizál.
+				path1 = path1.noramlize() 							// /rain..
+		
+
+	-----------------------------------------
+				
+	String getName():
+	
+		Visszadja a Path változót(annak valahanyadik tagját) Stringként.
+
+			Path p1 = Paths.get("c:\\code\\java\\PathTest.java");
+			System.out.println(p1.getName(3).toString());	=>	IllegalArgumentException	// És nem ArrayIndexOutOfBoundsException
+
+		1: 0-tól indul a számozás.
+		2: a gyökér (c:\) nem számít bele.
+		3: (\) nem része a névnek.
+		4: Negatív vagy nagyobb elemszám esetén: java.lang.IllegalArgumentException és nem null!
+
+	-----------------------------------------
+				
+	Subpath():
+	
+		Nem veszi figyelembe a gyökeret. 0-val indul és exclusive a range.
+
+		Path path = Paths.get("/mammal/carnivore/raccoon.image");
+
+		System.out.println("Subpath from 0 to 3 is: "+path.subpath(0,3));
+		// Subpath from 0 to 3 is: mammal/carnivore/raccoon.image			// Az elsõ "/" lemarad
+
+		System.out.println("Subpath from 1 to 2 is: "+path.subpath(1,2));
+		// Subpath from 1 to 2 is: carnivore
+
+		System.out.println("Subpath from 1 to 1 is: "+path.subpath(1,1)); 
+		// THROWS EXCEPTION AT RUNTIME	
+		
+		Nem normalizál, tehát meghagyja a pontokat:
+		Path lexellsComet = paths.get("./stars/../solar/");
+		lexellsComet = lexellsComet.subpath(0,2)	==>	./stars
+			.resolve("m1.meteor")					==> ./stars/m1.meteor
+			.normalize();							==>	/stars/m1.meteor 
+				
+
+	-----------------------------------------
+
+	relativize():
+
+		Megkeresei két állomány között a legrövidebb utat, kvázi úgy mintha azt egy felhaszáló járná be.
+		
+		Path path3 = Paths.get("E:\\habitat");
+		Path path4 = Paths.get("E:\\sanctuary\\raven");
+
+		System.out.println(path3.relativize(path4));
+		..\sanctuary\raven
+
+		System.out.println(path4.relativize(path3));
+		..\..\habitat
+
+		Vagy mind a kettõnek relatívnak, vagy mind a kettõnek abszolútnak kell lennie!:
+			Path path1 = Paths.get("/primate/chimpanzee");
+			Path path2 = Paths.get("bananas.txt");		//Ez nem abszolút. Egyébként ez se: "./locks"
+			Path1.relativize(path2); // THROWS EXCEPTION AT RUNTIME
+
+		Ha ugyanazon mappában vannak: elobb ki kell lépniük önmagukból h a közös mappában legyenek, s rá tudjanak mutatni a melletük lévore
+			Path path1 = Paths.get("fish.txt");
+			Path path2 = Paths.get("birds.txt");
+			System.out.println(path1.relativize(path2));
+			System.out.println(path2.relativize(path1));
+			Results:
+				..\birds.txt
+				..\fish.txt
+			
+		Ha a forrás és acél ugyanaz, akkor üreset dob vissza.
+
+		Windowson ráadásul még ugyanazon a gyökéren is kell osztozniuk!		
+
+		Nem normalizál:
+				Path p1 = Paths.get("c:\\personal\\.\\photos\\..\\readme.txt");
+				Path p2 = Paths.get("c:\\personal\\index.html");
+				Path p3 = p1.relativize(p2);
+				System.out.println(p3);
+
+				Megoldás: ..\..\..\..\index.html
+		
+			A "."-t és a ".."-t is figyelembe kell venni, úgy kell kezelni mintha ott is valós mappa állna, nem szabad normalizálni.
+
+	-----------------------------------------
+
+	resolve():
+
+		Egy abszolúthoz hozzáragaszt egy relatív útvonalat, a köztes szimbólumokat (..) megtartva (nem normalizál semmit).
+		Amin hívom az az alap, amit hozzá akarok csatolni az a paraméter.
+		Abszolúthoz relatívot simán:		
+			final Path path1 = Paths.get("/cats/../panther");
+			final Path path2 = Paths.get("food");
+			System.out.println(path1.resolve(path2));
+			/cats/../panther/food
+
+		Két abszolút összeolvasztása során a másodikat kapjuk vissza.
+			final Path path1 = Paths.get("/turkey/food");
+			final Path path2 = Paths.get("/tiger/cage");
+			System.out.println(path1.resolve(path2)); 	=>	/tiger/cage
+			
+		Ha relatívhoz fuzünk abszolútot, akkor is az abszolútat kapjuk vissza.
+		
+		Egy relatívhoz egy relatívot minden további nélkül hozzá lehet ragasztani.
+				
+		Példa:
+			Path path1 = Paths.get("/pets/../cat.txt");
+			Path path2 = Paths.get("./dog.txt");
+			System.out.println(path1.resolve(path2)); 	=>	/pets/../cat.txt/./dog.txt
+			System.out.println(path2.resolve(path1)); 	=>	/pets/../cat.txt
+
+	-----------------------------------------
+
+	normalize():
+
+		Kiveszi az útvonalból a felesleges (..)-okat és egy abszolút, redundancia mentes útvonalat hoz létre.
+		
+		Path path3 = Paths.get("E:\\data");
+		Path path4 = Paths.get("E:\\user\\home");
+		Path relativePath = path3.relativize(path4);
+		System.out.println(relativePath);								..\user\home			elzarándokolunk
+		System.out.println(path3.resolve(relativePath));				E:\data\..\user\home	hozzáfuzünk
+		System.out.println(path3.resolve(relativePath).normalize());	E:\user\home			optimalizálunk
+		
+		System.out.println(Paths.get(".").normalize().getNameCount());	// => 1
+
+	-----------------------------------------
+
+	toRealPath():
+		
+		Mivel itt már direktbe kapcsolatba kerülünk a filerendszerrel, ezért szükséges az IOE kezelése.
+		Meg lehet hívni szimlinken, de terhelve kaphat NOFOLLOW_LINKS paramétert h ne lehessen használni a szimlinkeket.
+		Autómatikusan meghívja a noramlize()-t is.
+		Ha relatív útvonalat audunk meg akkor az aktuális mappából ellépeget az adott relatív útvonal mentén a célhoz,
+		és annak az abszolút útvonalát kapjuk vissza.
+			Tehát ha itt állunk:
+				/horse/schedule
+			És ezt hívjuk:
+				try {
+					System.out.println(Paths.get(".././food.txt").toRealPath());
+				} catch (IOException e) {
+					// Handle file I/O exception...
+				}
+			Akkor eloször kilépünk a horse-ba, majd azon belül megkeressök a food.txt-t.
+			Ennek az abszolút útvonala:
+				/horse/food.txt
+	
+-----------------------------------------
+
+Working with Files:
+
+	Itt már a Files-t és nem File class-t kell használni.
+	A File class File instance-okon végez muveleteket,			//Legacy Java.io API
+	A Files helper class Path instance-okon végez muveleteket.	//NIO.2.API
+																							IOE
+		File (Legacy)							Files (NIO2)							
+		file.exists() 				boolean		Files.exists(path)							-	
+		file.getName() 							path.getFileName()
+		file.getAbsolutePath() 					path.toAbsolutePath()
+		file.isDirectory() 						Files.isDirectory(path)						-	
+		file.isFile() 							Files.isRegularFile(path)
+		file.isHidden() 						Files.isHidden(path)						+	(pl: ha nem létezik)
+		file.length() 							Files.size(path)							+	(pl: ha nem létezik)
+		file.lastModified() 					Files.getLastModifiedTime(path)					
+		file.setLastModified(time) 				Files.setLastModifiedTime(path,fileTime)
+void	file.delete() 				void		Files.delete(path)							+	(pl: han nem létezik)
+									boolean 	Files.deleteIfExists						-	(nem dob ha nem létezik)
+		file.renameTo(otherFile) 				Files.move(path,otherPath)					+	(pl: FileAlreadyExistsException)
+		file.mkdir() 							Files.createDirectory(path)					+	(pl: ha nem valid a path)
+		file.mkdirs() 							Files.createDirectories(path)				+	(pl: ha nem elérhetõ a filerendszer)
+												Files.isSameFile(Path,Path)					+	
+File[]	file.listFiles() 			Stream<Path>Files.list(path)
+												
+									Stream<Path>Files.find
+								
+
+	Files.exists(Paths.get("/ostrich/feathers.png")); //nem dob E-t ha nincs ilyen.
+
+	Files.isSameFile(Path,Path) // Ez már dob, ha valamelyik file nem létezik.
+		Nem a file-ok tartalmát, hanem a helyét és az attribútumaikat hasonlítja össze.
+		A két file-nak ugyanazon a helyen (v szimlinkkel elérve) ugyanazzal a névvel kel rendelkeznie.
+	
+	//File.listFiles(): csak az adott mappa tartalmát adja vissza hasonló mint a Files.list, csak az utóbbi Stream<Path> -t ad vissza
+	
+	//Files.walk() ás Files.find() rekurzívan bejárja az adott mappát, nem pedig kilistázza annak tartalmát
+	
+	-----------------------------------------
+	
+	exists():
+		
+		true/false attól függoen h létezik-e file/directory az adott Path-on:
+			Files.exists(Paths.get("/ostrich/feathers.png"));
+			Files.exists(Paths.get("/ostrich"));
+			
+		Nem dob IOException-t.
+			
+	-----------------------------------------
+	
+	isSameFile():
+	
+		Szimlinkek mentén is össze tud hasonlítani két Path-ot h ugyan oda mutatnak-e (file/directory)?
+		Eloször megnézi hogy a két Path equals-e (nem történik normalizáció) és true-t ad vissza ha igen, nem is nézi meg h a f/d létezik-e!
+		Ha nem egyenlo a két Path, akkor megvizsgáljuk az adott f/d-t és ha bármelyik nem létezik akkor IOE-t dob!
+		
+		Nem tartalmat, hanem pozíciót vizsgál.
+		
+	-----------------------------------------
+	
+	createDirectory() és createDirectories():
+
+		Az IO mkdir() és mkdirs()-ja helyett. Az 's'-es verzió létrehozza a még nem létezõ elérési utat is.
+		IOException jöhet létre ha valami az elérési úton(createDirectory) nem létezik vagy, vagy ha nem tudja létrehozni(mert lehet h már létezik olyan file az adott helyen).
+		
+	-----------------------------------------
+	
+	copy():
+	
+		Files.copy(Path,Path), IOE: ha nem létezik, nem olvasható.
+		Ha egész mappát szeretnén másolni arra rekurzív megoldás a legcélszerubb az almappák miatt, mert önmagától nem visz mindent.
+		
+		try {
+			Files.copy(Paths.get("/panda"), Paths.get("/panda-save"));	//A mappát másoljuk
+			Files.copy(Paths.get("/panda/bamboo.txt"),
+			Paths.get("/panda-save/bamboo.txt"));
+		} catch (IOException e) {
+			// Handle file I/O exception...
+		}
+		
+		Túlterhelheto:
+			NOFOLLOW_LINKS
+			REPLACE_EXISTING
+			COPY_ATTRIBUTES
+			
+		Nem csak fileok, streamek is lehetnek sourceok/targetek:
+			try (InputStream is = new FileInputStream("source-data.txt");
+				OutputStream out = new FileOutputStream("output-data.txt")) {				
+					Files.copy(is, Paths.get("c:\\mammals\\wolf.txt"));		// Copy stream data to file, Elso helyen csak Input állhat, Output nem				
+					Files.copy(Paths.get("c:\\fish\\clown.xsl"), out);		// Copy file data to stream, de csak ami az InputStream-bol származik, BufferedReader pl fordítási hibát eredményez.
+			} catch (IOException e) {
+				// Handle file I/O exception...
+			}
+					
+	-----------------------------------------
+	
+	move():
+	
+		Nem csak a location, a file neve is megváltoztatható így.
+		rekurzívan viszi a mappákat fileokkal.
+		
+		try {
+			Files.move(Paths.get("c:\\zoo"), Paths.get("c:\\zoo-new"));		//A zoo-ból zoo-new lesz, a mappa tartalma nem változik
+			Files.move(Paths.get("c:\\user\\addresses.txt"), Paths.get("c:\\zoo-new\\addresses.txt"));	//Átmozgat
+			// Handle file I/O exception...
+		}
+		
+		Nem üres mappát ha próbálunk mozgatni a drive-ok között NIO.2 DirectoryNotEmptyException-t fog dobni.
+		
+		NOFOLLOW_LINKS: ha a forrás szimlink akkor magát a linket és nem a file-t másolja (, magyarán ezt kell bemásolni ha a linket akarjuk mozgatni). Mintha azt mondanénk: "Ne mûködj szimlink!"
+		COPY_ATTRIBUTES: Ha nem adjuk meg akkor is viszi autómatikusan az attribútumokat.
+
+		Ha nincs bekapcsolva a REPLACE_EXISTING, akkor nem írja felül és dob egy FileAlreadyExistsException-t.
+			Helyesen:
+				Files.move(p1, p2, StandardCopyOption.REPLACE_EXISTING);
+	
+		Példa:
+			Files.move(Paths.get("monkey.txt"), Paths.get("/animals"),
+			a monkey.txt-t beleteszi az animals mappába
+			
+	-----------------------------------------
+	
+	delete() és boolean deleteIfExists():
+	
+		Nem üres mappát egyik sem töröl.
+		Szimlinken hívva a szimlinket törli, nem pedig annak targetjét.
+		A különbség az hogy a deleteIfExists(Path) már nem dob IOE-t ha a file/mappa nem létezik,
+		minden más esetben dob, pl ha nem üres.
+		A deleteIfExists false-szal tér vissza ha nem sikeült megtalálni a törlendõt.	
+		
+-----------------------------------------
+
+newBufferedReader(); newBufferedWriter()
+
+	Files.newBufferedReader(Path,Charset); Tudni kell a Charset-et is!
+
+	Path path = Paths.get("/animals/gopher.txt");
+
+	try (BufferedReader reader = Files.newBufferedReader(path, Charset.forName("US-ASCII"))) {
+		// Read from the stream
+		String currentLine = null;
+		while((currentLine = reader.readLine()) != null)
+			System.out.println(currentLine);
+	} catch (IOException e) {
+		// Handle file I/O exception...
+	}
+	
+-----------------------------------------
+
+List<String> readAllLines():
+
+	Files.readAllLines(); returns the results as an ordered List of String values.
+
+	Path path = Paths.get("/fish/sharks.log");
+
+	try {								
+		final List<String> lines = Files.readAllLines(path);		//a Files.lines()-t is be kell csomagolni IOE-be
+		for(String line: lines) {
+			System.out.println(line);
+		}
+	} catch (IOException e) {
+		// Handle file I/O exception...
+	}
+
+	Ha túl nagy és nem fér el a meóriában ideiglenesen, akkor: OutOfMemoryError
+
+-----------------------------------------
+
+Files Attributes:
+	
+	Nem dobnak IOException-t, a visszatérés boolean.
+	
+	Min a BasicFileAttributes, mind a BasicFileAttributeView csak egyzer fordul a 
+	
+	Basic File Attributes:	Minden filerendszeren közös:
+		isDirectory(Path)		//szimlinken keresztül true-t ad vissza ha az egy mappára mutat
+		isRegularFile(Path)		//szimlinken keresztül true-t ad vissza ha az egy filera mutat
+		isSymbolicLink(Path)
+		//Az isHidden()-hez már a BasicFileAttributeView -ot kell elkérni.
+		
+	//Bizonyos filerendszereken egy mappa nevében is lehetnek pontok: my_folder.txt -good to know!
+	Nem dobank IOE-t.
+
+	-----------------------------------------
+
+	isHidden():
+
+		try {
+			System.out.println(Files.isHidden(Paths.get("/walrus.txt")));
+		} catch (IOException e) {
+			// Handle file I/O exception...
+		}
+		
+	-----------------------------------------
+	
+	isReadable(): és isExecutable():
+		
+		A file kiterjesztése nem határozza meg közvetlenül h az végrehajtható-e.
+		
+	-----------------------------------------
+	
+	size():
+
+		Visszaadja byte-ban
+		IOException ha nem létezik
+		Mappára rendszer függo h hívható-e
+			Mappa méretét megtudni: ha bejárjuk és summoljuk a fileok méretét.
+		Egy file mérete nem mindig esik egybe a foglalt terület nagyságával.
+		
+	-----------------------------------------	
+	
+	getLastModifiedTime(); setLastModifiedTime():
+
+		FileTime object-et ad vissza, IOE ha nem létezik. 
+		Nem kell ahhoz megváltoztatni a file tartalmát hogy megváltoztassuk az utolsó módosítás idejét.
+
+		try {
+			final Path path = Paths.get("/rabbit/food.jpg");
+
+			System.out.println(Files.getLastModifiedTime(path).toMillis());
+
+			Files.setLastModifiedTime(path, FileTime.fromMillis(System.currentTimeMillis()));
+
+			System.out.println(Files.getLastModifiedTime(path).toMillis());
+
+		} catch (IOException e) {
+			// Handle file I/O exception...
+		}
+
+		-----------------------------------------
+		
+	getOwner(): és setOwner():
+
+		Elõször el kell kérni egy azonosító objektumot:
+			UserPrincipal owner = FileSystems.getDefault().getUserPrincipalLookupService().lookupPrincipalByName("jane");
+
+		majd azt átadni:
+			Files.setOwner(path, owner);
+
+		Ha nem férünk hozzá, vagy nem módosíthatjuk, akkor: IOException
+	
+-----------------------------------------
+
+Views:
+	
+	NIO.2 views meatadata metódusok elõnyei a java.nio.Files metadata metódusokkal szemben:
+		Kevesebbszer kell a filerendszerhez forulni, egyszerre visszakapjuk az összeset (teljesítmény, átláthatóság).
+		Filerendszer függõ attribútumokat is megmutat.
+
+	Alapból mindakettõ használható mappára, file-ra, szimlinkre.
+	
+	Két fajtája van:
+		Files.readAttributes(): csak olvasható
+		Files.getFileAttributeView(): írható is már.
+	
+	A BasicFileAttribute-ok közösek, ennek gyerekei a:
+		DosFileAttributes(Windows)
+		PosixFileAttributes(Unix, Linux, Mac)
+		
+		
+	BasicFileAttributes myBFA = Files.readAttributes(Paths.get("/movie.txt"), ___________);
+		a ___________ helyére mind beírhatjuk:
+			BasicFileAttributes.class
+			DosFileAttributes.class
+			PosixFileAttributes.class
+			//Mert a közös õs helyére a Liskov szerint a gyerekkel is referálhatunk, legfeljebb futás idõben majd elszáll.
+
+	Létrehozás:		
+		BasicFileAttributes data = Files.readAttributes(path, BasicFileAttributes.class);
+	
+	System.out.println("Is path a directory? "+data.isDirectory());
+	System.out.println("Is path a regular file? "+data.isRegularFile());
+	System.out.println("Is path a symbolic link? "+data.isSymbolicLink());
+	System.out.println("Path not a file, directory, nor symbolic link? " + data.isOther());	//Néhány filerendszeren: resource/device
+
+	Modifying Attributes:
+	
+	1. Lépés: csinálunk egy módosítható view-t:
+		BasicFileAttributeView view = Files.getFileAttributeView(path,BasicFileAttributeView.class);
+		
+	2. Lépés: csinálunk egy BasicFileAttributes -t a view-ból.
+		BasicFileAttributes data = view.readAttributes();
+		
+	3. Lépés: Készítünk egy megnövelt FileTimeot az attribute alapján:	
+		FileTime lastModifiedTime = FileTime.fromMillis(data.lastModifiedTime().toMillis()+10_000);
+		
+	4. Lépés: a módosítható view-on keresztül besetteljük a megnövelt FileTime-ot:
+		view.setTimes(lastModifiedTime,null,null); //def: setTimes(FileTime lastModifiedTime, FileTime lastAccessTime, FileTime createTime)
+			null-t teszünk annak a helyére amit nem szeretnénk változtatni.
+			
+-----------------------------------------
+
+New Stream methods:
+
+	Két nagy stratégia:
+			Mélyre eloször - depth first (vertikális, limit megadható)	//A Stream API ezt használja, a limit Integer.MAX_Value, elonye a kevesebb memória, 0-az adott mappa maga, nem pedig annak tartalmazottai.
+				Ez az alapértelmezett a walk és a find esetén is.
+			Oldalra eloször - breadth first (horizontális) //Elonye ha a keresendo minél kisebb lvl-en helyezkedik el (minél közelebb van a root-hoz)
+	
+		//A bejárás más néven traversing
+		
+	Stream<Path> walk():
+				
+		Adott pontból kiindúlva bejárja a fát.
+		Alapból nem támogatja szimlinkeket azért hogy el lehessen kerülni a körkörös hivatkozásokat. (Egy alsóbb rétegbol visszamutatok a felsobbe)
+			De van rá mód h meghívhassuk azokat: FOLLOW_LINKS
+			FileSystemLoopException dobódik ha kör észlelodik.
+			
+		Path path = Paths.get("/bigcats");
+		try {
+			Files.walk(path)
+				.filter(p -> p.toString().endsWith(".java"))
+				.forEach(System.out::println);
+		} catch (IOException e) {
+			// Handle file I/O exception...
+		}
+			/bigcats/version1/backup/Lion.java
+			/bigcats/version1/Lion.java
+			/bigcats/version1/Tiger.java
+			/bigcats/Lion.java
+			
+	-----------------------------------------
+	
+	Stream<Path> find():
+	
+		Fejletteb mint a walk(): mert könnyebben tudunk feltételrendszereket megadni a BasicFileAttribute-on keresztül.
+		The Files.find() method requires a starting Path value, an int maximum depth, and a BiPredicate<Path,BasicFileAttributes> matcher instance. 
+		
+		Path path = Paths.get("/bigcats");
+		long dateFilter = 1420070400000l;	//epoc time in milis
+		
+		try {
+			Stream<Path> stream = Files.find(path, 10, 		//10 a mélység a path-tól számítva
+			(p,a) -> p.toString().endsWith(".java")			//az "a" az attribute
+				&& a.lastModifiedTime().toMillis()>dateFilter);
+			stream.forEach(System.out::println);
+		} catch (Exception e) {
+			// Handle file I/O exception...
+		}
+		
+	-----------------------------------------
+	
+	Stream<Path> list():
+	
+		Hasonló mint a sima IO listFiles()-a, ugyanazt tudja, csak itt streamesített (1 mélységig megy csak le):
+		A Files.walk()-kal ellentétben nem megy bele az almappákba.
+		
+		try {
+			Path path = Paths.get("ducks");
+			Files.list(path)
+				.filter(p -> !Files.isDirectory(p))
+				.map(p -> p.toAbsolutePath())
+				.forEach(System.out::println);
+		} catch (IOException e) {
+			// Handle file I/O exception...
+		}
+		
+-----------------------------------------
+
+Printing File content:
+
+	List<String> readAllLines VS. Stream<String> Files.lines
+	
+	mind a ketton muködik a forEach()
+
+	A Files.readAllLines egész tartalmat a memóriába beolvassa:
+		Files.readAllLines(Paths.get("birds.txt")).forEach(System.out::println);
+		
+	A Files.lines csak lazily(ami épp kell) azt olvassa be	
+		Files.lines(Paths.get("birds.txt")).forEach(System.out::println);
+		
+	Collection-ön nem lehet közvetlenül filter muveletet hívni, ahhoz stream()-esíteni kellene:
+		Files.readAllLines(path).filter(s -> s.length()>2).forEach(System.out::println);	//Compilation Error
+		
+		Ez viszont helyes:
+			Files.lines(path).filter(s -> s.length()>2).forEach(System.out::println);		
+	
+	Nem a gyorsaság az elonye a Files.lines()-nak hanem h kevesebb memória esetén is tudjunk könnyen dolgozni a stream-ek nyújtotta metódus láncolással. 
+		
+-----------------------------------------
+
+Nem dobnak Exception-t ha a file nem létezik, helyette false:
+
+	isDirectory(), 
+	isRegularFile(), 
+	isSymbolicLink(), 
+	isReadable(),
+	isExecutable() 
+	
+-----------------------------------------
+
+path.equals() nem normalizál, szóval két ugyanazon file Path Symbols(".","..") reprezentált elérési útja false lesz.
+
+	Path path1 = Paths.get("/lizard/./").resolve(Paths.get("walking.txt"));
+	Path path2 = new File("/lizard/././actions/../walking.txt").toPath();
+
+	System.out.print(Files.isSameFile(path1,path2));						//true Azért mert elso lépsében nem egyeznek (equals) de utána megnézi h filerendszer szinten ugyanoda mutatnak-e, és igen, tényleg valójában ez ugyanaz a file.
+	System.out.print(" "+path1.equals(path2));								//false
+	System.out.print(" "+path1.normalize().equals(path2.normalize()));		//true
+	
+	
+	Másik példa:
+		Path lessTravelled = Paths.get("/highway/street/house/../.");
+        lessTravelled = lessTravelled.resolve("spot.txt");
+        System.out.println("lessTravelled = " + lessTravelled);
+
+        Path v1 = Paths.get("/.desert/./").resolve(Paths.get("sand.doc"));
+        Path v2 = new File("/.desert/./cactus/../sand.doc").toPath();
+        try {
+            System.out.println(Files.isSameFile(v1,v2));					//true -tényleg elmegy a filerendszeren és megkeresi, de csak akkor ha elõtte nem volt equals.
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        System.out.println(v1.equals(v2));									//false
+        System.out.println(v1.normalize().equals(v2.normalize()));			//true
+    }
+		
+-----------------------------------------	
+
+
+
+
+

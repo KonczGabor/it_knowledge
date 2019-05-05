@@ -1,0 +1,5 @@
+Más nyelvekkel ellentétben a Java nem konvertálja az integereket autómatikusan boolean értékekké,
+tehát az if(1) nem lesz true, hanem fordítási hiba.
+
+Az if, else if, else ág mindegyike állhat {}-ek nélkül, nem lesz fordítási hiba. 
+Természetesen csak egy utasítás fér beléjük.

@@ -1,0 +1,102 @@
+import java.util.Optional;
+
+Akkor használjuk ha null helyett valós(Empty) logikai értéket szeretnénk visszaadni.
+If -ben és ternáris operátorral használjuk:
+
+	if (opt.isPresent())
+		System.out.println(opt.get()); // 95.0
+
+	Optional o = (value== null) ? Optional.empty(): Optional.of(value);
+	
+-----------------------
+
+public static Optional<Double> average(int… scores) {
+	if (scores.length == 0) return Optional.empty();
+	int sum = 0;
+	for (int score: scores) sum += score;
+	return Optional.of((double) sum / scores.length);
+}
+
+System.out.println(average()); // Optional.empty
+
+Optional<Double> opt = average(90, 100);
+if (opt.isPresent())
+	System.out.println(opt.get()); // 95.0
+
+-----------------------
+
+isPresent() vs ifPresent():
+	
+	  if(value.isPresent()){
+            System.out.println("value = " + value.get());
+        }
+		//Ha isPresent nélkül használjuk, akkor az helytelen:
+			System.out.println(opt.get()); // bad -java.util.NoSuchElementException: No value present
+		
+		value.ifPresent(System.out::println);
+			//value.ifPresent(System.out.println(value)); azért nem muködik mert egy consumert vár, nem pedig egy funtion-t.
+
+-----------------------
+
+Egyedi metódusok:
+
+	Az a közös bennük h mindegyik csak akkor hívódik meg, ha a visszatértük Optional.empty
+
+	orElse(T other):
+		Egy konkér adott elemet vár.
+		System.out.println(opt.orElse(Double.NaN));
+		
+	orElseGet(Supplier s):
+		Egy supplier ül bele.
+		System.out.println("o = " + o.orElseGet(()->1));
+		
+	orElseThrow(Supplier s):
+		Exc-nel térünk vissza:
+		System.out.println(opt.orElseThrow(()-> new IllegalStateException()));
+			
+
+-----------------------
+
+Magán az Optional-ön is lehet map()-et és flatMap()-et, filtert(), ... hívni:
+
+	void isLongerThan3(Optional<Integer> myOpt) {
+        myOpt.map(n -> "" + n).filter(s -> s.length() >= 3).ifPresent(System.out::println);
+    }
+	
+-----------------------
+
+Egysoros elegáns megoldás a becsomagolásra:
+	Optional o = Optional.ofNullable(value);
+	
+----------------
+
+Optional-be lehet tenni null-t így Optional.empty-t kapunk vissza az Optional.ofNullabe(T t) segítségével:
+	String name = null;
+    Optional<String> opt = Optional.ofNullable(name);
+    assertEquals("Optional.empty", opt.toString());
+	
+----------------
+
+A forEach() és az isNotNull nincs deklarálva az Optional-ön. Tehát ez nem helyes:
+	private static void shorter(Optional opt){
+		opt.map(x->"run " + x).forEach(System.out::println);		//forEach nem definiált
+	}
+
+	Helyette:
+		
+----------------
+
+
+Method 					When Optional Is Empty 						When Optional Contains a Value
+
+get() 					Throws an exception 						Returns value
+
+ifPresent(Consumer c) 	Does nothing 								Calls Consumer c with value
+
+isPresent() 			Returns false 								Returns true
+
+orElse(T other) 		Returns other parameter 					Returns value
+
+orElseGet(Supplier s) 	Returns result of calling Supplier 			Returns value
+
+orElseThrow(Supplier s) Throws exception createdby calling Supplier	Returns value

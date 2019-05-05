@@ -1,0 +1,7 @@
+Magas szintü modulok nem függjenek alacsony szintû moduloktól, mind a kettõjüknek asbztrakcióktól kellene függeniük.
+
+Hozzunk létre interfészeket amin keresztül kommunikáljanak. 
+
+Használjunk absztrakciót a két réteg között.
+
+

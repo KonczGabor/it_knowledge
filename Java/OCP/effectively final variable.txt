@@ -1,0 +1,7 @@
+Java 8-tól.
+Nincs kitéve a változó elé h final és egyszer kötelezõen kapnia kell értéket, az se baj h if által, de akkor lennie kell else ágnak is.
+Késõbb más már nem módosítja.
+
+Belsõ osztályok mûködése során lehet hasznos, azért hogy kihivatkozhassanak az õket tartalmazó metódus lokális változóira.
+
+Ha a belsõ osztály deklarációja után az osztályt tartalmazó metódusban késõbb más értéket kapn a változó akkor az nem effectively final variable.

@@ -1,0 +1,219 @@
+Ahhoz nyújtanak segítséget h típustól független kódot tudjunk írni.
+Elsõdleges célja hogy megakadályozza a futás idejû hibákat úgy hogy CTE -t csinál belõlük (Típusbiztonság)
+Futás idejû típusbiztonságot tudunk vele kieszközölni.
+
+1.5 -ben került bevezetésere.
+
+Elõtte Objektummá generalizáltunk, majd abból vissza specializáltunk.
+
+Primitives are not allowed as generics.
+
+<ezt a szart úgy hívjuk h típus paraméter> //List<String> myList = new ArrayList<>();
+
+-----------------
+
+Type Erasure:
+	A folyamatot mely során a generikus szintaxis a kódból elátvolításra kerül type erasure-nek hívjuk.
+	A háttérben valójában minden típus object-re cserélõdik a fordított kódban.
+		Kivéve  pl.: <? extends Number> ==> a felsõ korlátok mindig a korlátra cserélõdnek.
+		A <? super Number> ==> Objectre cserélõdik.
+	Ezért tehát nincs sok értelme és nem is lehet instanceof-ot hívni rajtuk, hisz úgyis object-re cseréldõnek ki a típus paraméterek.
+
+-----------------
+	
+Nem lehetnek a Genercis-ek primitív típusúak, ezért futás idõben object-té kasztolódnak, ami teljesítmény csökkenést jelent.
+
+-----------------
+
+Legacy:
+	Nyers listába akadály nélkül belepakolhatunk bármilyen típust. 
+	Kivenni viszont még az sem tudjuk ami pont olyan típusú, mint aminek értékül szeretnénk adni. Nem fordul le, mivel a háttérben az egy Object típusú collection.
+		public class LegacyAutoboxing {
+			public static void main(String[] args) {
+				java.util.List numbers = new java.util.ArrayList();		//nyers típus Object.
+				numbers.add(5);											//List<Object> be bármit bele lehet tenni. Közben lefut egy autobox Integerré
+				int result = numbers.get(0); 							//Az unbox-szal bajok vannak. Object to Integer => DOES NOT COMPILE
+			}
+		}
+		
+-----------------
+
+Generikus Osztályok:
+
+	public class Crate<T>{
+		
+		pivate T content;
+		
+		public T EmptyCrate(){
+			return content;
+		}
+		
+		public goToCrate(<T> param){
+			content = param;
+		}
+	}
+	
+	Ez a T elérhetõ mindenhonnan az osztályon belül. 
+	Mikor példányosítani akarjuk az osztályt meg kell modnani h milyen típusú legyen T.
+		Ezek az elenevezési konvenciók a következõk:
+			T az általános
+			K Key
+			V Value
+			E Element
+			N Number
+			S, U, V a tartalék
+			
+		Több paramétere is lehet egy osztálynak:
+		
+			public SizeLimitedCrate<T, U>{
+				private T content;
+				private U limit;
+				
+				public SizeLimitedCrate(T content, U limit){
+					this.content = content;
+					this.limit = limit;
+				}
+			}
+		
+			Elephant elephant = new Elephant();
+			Integer numPounds = 15_000;
+			SizeLimitedCrate<Elephant, Integer> c1 = new SizeLimitedCrate<>(elephant, numPounds);
+			
+	Generikus osztályok formális típus paranétere nem lehet bound, viszont nem muszáj h egy karakterbol álljon.
+		class MyClass<Object>{} //Ez fordul, de ellenjavallt, mert kitakarja a változó az Object osztályt.
+		
+			
+-----------------
+		
+Generikus Interfészek:
+	A generikus osztályokhoz hasonlóan õk is bírhatnak formális típus paraméterrel.
+		public interface Shippable<T>{
+			void ship(T param);
+		}
+
+	Három féle képen lehet õket implementálni:
+		Konkrét paraméterrel:
+			class ShippableRobot implements Shippable<Robot>{
+				public void ship(Robot param){};
+			}
+		
+		Generikusan hozva létre magát az osztályt:
+			class ShippableAbstractCrate<T> implements Shippable<T>{
+				public void ship (T param){};
+			}
+
+		Nyersen, generics használata nélkül. Ilyenkor Compile Warningot kapunk:
+			class ShippableCrate implements Shippable{
+				public void ship(Object param){};
+			}
+			
+-----------------
+			
+Generikus metódusok: 
+
+	Erre akkor van szükség ha maga az osztály/interész nem generikus, de mi azt szeretnénk használni a metódusunkban.
+	
+	static <T> Crate<T> createCrate(T parameter){ 	//static <ezt a szart úgy hívjuk h formal type parameter> Ez a jelzõ h márpedig ehhez a metódushoz típusparaméterek kellenek.
+		return new Crate<T>();
+	}
+	
+	//Nem lesz CE ha feleslegesen megadunk típus paramétereket:
+		public <T> void useless(){}
+
+	class IttNemKellFormalTypeParamter<T>{			//Az osztályét használjuk.
+		 Crate<T> createCrate(T param){
+			return new Crate<T>(); //return new Crate<>() is megteszi
+		 }
+	}
+	
+	Fontos hogy a típus paraméter közvetlenül a visszatérési érték elõtt helyezkedjen el! 	//"?"-et csak referencia esetén tudunk megadni, deklarálásnál nem.
+		public static <T> void sink(T t){};
+		public static <T> T sink(T t){return t};
+		public static T noGood(T t){return t};	//Kell h olyan osztályban legyen, mely bír T típus paraméterrel.
+		
+-----------------
+		
+Generikus korlátok:
+
+	Wildcard:Megszorítás a generics típusát illetõen. Segítségével kifejezhetjük a különbözõ paraméterek köti altípusosságot.
+	Fontos felismerni h itt nem az az öröklõdési kapcsolat él, amit elvárnánk a pl. a Number-List között.
+	Wild card nem állhat értékadásban, azaz az egyenlõség jel jobb oldalán.
+		List<?> list = new ArrayList<?>(); //Syntax error.
+		
+
+	ArrayList<Number> list = new ArrayList<Integer>(); // DOES NOT COMPILE
+	Instead, we need to use a wildcard:
+	List<? extends Number> list = new ArrayList<Integer>();
+	Arra lehet vele rámutatni ami önmaga, meg ami belõle származik.
+
+
+	Unbounded wildcard:
+		?
+			List<?> l = new ArrayList<String>();
+
+
+	Wildcard with an upper bound:
+		<? extends type>	
+			List<? extends Exception> l = new ArrayList<RuntimeException>();
+		---	
+		public static long total(List<? extends Number> param){
+			long sum = 0;
+			for(Number num : param)
+				sum+=number.getLongValue();
+			return sum;
+		}
+		---
+		Most jön a trükkös rész(!):
+		class Bird{}
+		class Sparrow extends Bird{}
+		
+		public static void main(args[] String){
+			Lis<? extends Bird> = new ArrayList<Bird>();
+			birds.add(new Sparrow());		//DOES NOT COMPILE
+			birds.add(new Birds());			//DOES NOT COMPILE
+		} 
+		
+		Azért nem tudunk beletenni upper bound-dal SEMMIT, mert a fordító nem tudja h mire is mutatunk rá VALÓJÁBAN a háttérben.
+		Ugyanúgy lehet Bird, Sparrow, vagy bármi más lejjebb lévõ osztály, így hát a kollektív büntetés elvét alkalmazva nem enged beletenni semmit.
+		Feljebb lévõket pedig végkép nem tehetünk bele.
+
+	Wildcard with a lower bound
+		<? super type>		
+			List<? super Exception> l = new ArrayList<Object>();
+		
+		Alsó határ, önmagára tud mutatni, és arra, ami fölötte van
+		
+		List<? super String> lowerBoundArray = new ArrayList<String>();
+		lowerBoundArray.add("valami");
+		
+		Azért tudjuk beletenni, mert a String az jó, ha meg String fölöttire akarunk ramutatni, a Liskov helyettesítési elv szerint nem teljes értékû Stringként, de õse helyett helyt állhat a String. 
+
+		Rámutatni wild-cardokkal és hozzáadni két teljesen más dolog.
+		
+		List<? super IOException> exceptions = new ArrayList<Exception>();		//A pointer képes rámutatni már meglévõ Exception listára.
+		exceptions.add(new Exception());	//DOES NOT COMPILE mert lehet h az "exceptions" a valóságban specifikusabb, mondjuk IOException.
+		exceptions.add(new IOException()); 	//Õ ugye mindenki szerepét át tudja venni.
+		exceptions.add(new FileNotFoundException)	//Õ meg már túl is teljesíti az elvártakat.	
+		
+	super: data in
+
+	extends: data out
+	
+//Sajnos a backward compatibility miatt a generikusok által nyújtott fordítás idejû típusbiztonságról le kell mondani a tömbök esetén:
+
+Innteger[] intArray = {new Integer(42)};
+Object[] objectArray = intArray;
+objectArray[0] = "fourtyTwo"		//=> ArrayStoreException
+
+-----------------
+
+Típusparaméterek elhagyhatósága:
+	
+	class Wash<T>{}
+	
+	Wash wash = new Wash();					//Fordul
+	Wash wash = new Wash<String>(); 		//Fordul
+	Wash<String> wash = new Wash<String>;	//Fordul
+
+
+

@@ -1,0 +1,166 @@
+Project Management tool
+
+Részben a dependenciák menedzselésére szolgál
+Távoli repsotiry-k kezelése: honnan töltjük le ezeket a függoségeket, mi amit elkészítünk hova töltjük fel
+
+Project Object Mode (POM)
+
+Cross-Cutting Logic.: logolás, ami behálózza az egész projektünket. A project buildelése is ilyen lehet -pro
+
+Egy interfészem keresztül tudjuk command line-bül vezérelni a különbözo muveleteket
+
+Hogyan muködik a maven?
+	A tevékenységeit plugineken keresztül végzi el
+	Az alap disztribúcióban nagyon kevés plugin van, miden mást kívülrol tölt le, 
+		ilyen pl a compiler plugin, ami a forráskódok fordításához a jdk-t hívja segítségül és a javac megfelelo paraméterezésével lefordítja a forrásfieleokat.
+		További core pluginok:
+			Deploy, amivel deployolni tudunk valamilyen repositoryba
+			Surefire plugin a tesztelésben segít
+			
+Amelyik projectnek van egy pom-xml-je az egy maven projekt, amiben csak azt kell konfigurálni amiben el akarunk térni a konvencióktól
+			Konfiguráció öröklés mentén létre tudunk hozni olyan struktúrákat, melyben a specifikusabb szinteken egyéni attribútumokat vezethetünk be.
+Install:
+	//Az Eclipse STS-es verziójában van egy beépített Maven plugin (csak az IDE-n belül használható), de az nem ugyanaz mint amit a hivalos oldalról letültünk.
+
+	Windows:
+		Download:
+			https://maven.apache.org/download.cgi
+				zip
+		
+		Extract  to Program Files
+		
+		Környezeti változók:
+			Rendszer változók:
+				Java(Új):		
+					JAVA_HOME
+					C:\Java\JDK\			#a \ is kellhet a végére
+					
+				Maven(Path szerkesztése):
+					C:\Program Files\apache-maven-3.5.0\bin
+		
+		Újraindítani a konzolt:
+		
+		maven -v
+			
+-----------------------------						
+				
+Convention over Configuration:
+
+	1, src/main mappa
+	2, test mappa for test cases
+	3, target mappa amibe a jar készül el
+	4, pom.xml
+	
+POM részei:
+		Project description
+		coordinates
+		Project attributes
+		Project's licence
+		Project's version
+		authors and contributors
+		dependencies
+		
+		a groupId, artifactId, version azért végzõdik *-ra mert egyedinek kell lennie
+
+-----------------------------		
+Lifecycle(A nagy egész-csak egyszer iterálunk rajta végig) kitöntetett fázisai():
+	1, Generate a project
+	2, Execute Maven
+	3, Install Maven artifactId
+	4, Run the app
+	
+	Phase-1*n->Plugin-1*n->Goal(A plugin rész task-ja)
+	
+	Paheses (With plugins):		//A plugineken belül található alfolyamatok: goal-ok
+		Validate: is a project correct? -formailag megfelel-e?
+		Compile: Forrrás filok fordítása
+		Test: teszt eroforrások eloállítása, tesztek futtatása
+		Package: rész eredmények összecsomagolása
+		Integration test: Az összecsomagolt package-ek ellenében tudunk integrációs teszteket futtanti. deployolja a package-et egy olyan környezetbe ahol futtathatók integration tesztek.
+		Verify: is a package valid, megfelel-e a követelményeknek?
+		Install: beteszi a package-et a local repóba
+		Deploy: a végleges package-et kitesz egy remote repóba
+
+Local repo:
+	user/.m2/reository/package/package/Application/Version/jar,pom.xml
+-----------------------------	
+
+Használatbavételi esetek (dependenciák scope-jai):
+	compile: default
+	provided: amikor a jdk megköveteli 
+	runtime: tesztelés és végrehajtás esetén 
+	system:?
+	test: csak tesztelés közben lesz ott, egyébként nem
+	
+-----------------------------	
+Relationship:
+	Külsõ kapcsolatok:
+		Log4J, JUnit
+	Belsõ kapcsolatok:
+		A-projekt és B-projekt között
+	
+	Ezeket a kapcsolatok a Maven coordinates-re épülnek.
+		Maven coordinates:
+			groupId
+			artifactId
+			version 
+			
+POM-ok közti kapcsolat:
+	Aggregáció(Multi-module): a komponensek közt nincs kapcsolat
+		Almodulok csoportja:
+			A parent POM-ban kell deifiniálni:
+				<modules>
+					<module>helloWorld</module>
+					<module>getName</module>
+				</modules>
+	Öröklõdés: közös függõségek kiszervezése
+		az artifactId-ban meg kell adni a szülõét
+	
+Core plugins:
+	Archetype: Arra való h mavenes projekteket hozzon létre, templatek szerint (Van az ala maven-arhetype-quickstart: default).
+	JAR (java archive) elkészíti a .jar-target
+	Compiler: lefordítja a forrás file-t binárisra
+	Surefire: unit teszteket hajt végre és kiértéklést végez azokból.
+	Create custom plugins
+	..
+
+	archetype: egy skeleton templatet csinál
+	
+-----------------------------	
+Help(leírás vmirõl):
+	mvn help:describe -Dplugin=archetype	//Segítség a az archetype pliginhez
+	
+-----------------------------	
+	
+Projekt készítése:
+	mvn archetype:generate								//Interaktív projekt setup indítása adni kell értékeket néha különben nem fog lefutni, fttasd le az archetype modul generate goal-ját
+	-DgroupId=com.epam.training							//-D : agrumentum
+	-DartifactId=first-project
+	-DarchetypeArtifactId=maven-archetype-quickstart
+	
+-----------------------------
+A projekt egyedi azonosítója:
+	GroupId-ArtifactId-Version
+
+-----------------------------
+A <packaging>jar</packaging> azt mondja meg h ebbol a projektbol egy jar fog születni
+	ha pom-ot adunk meg akkor az más projektek számára fog nyújtani aggregációs funkciókat (p.:Konfigurációs célok esetén) és közvetlenül belole nem fordítunk jar-t.
+	Lehet még csinálni belole zip-et, war-t(webes viágban), vagy ear.-t ha enterprise application akarunk összecsomagolni
+-----------------------------
+<name> szimbolikus neve
+-----------------------------	
+
+Effective pom:
+	mvn help:effective-pom
+	
+IJ-ben a pom.xml-ben CTRL+klikk a <parent> <artifactId> -ra és odaugrik.
+
+
+	
+	
+ 
+	
+
+
+
+		

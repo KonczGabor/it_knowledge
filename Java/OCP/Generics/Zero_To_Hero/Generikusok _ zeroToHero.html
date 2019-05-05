@@ -1,0 +1,1083 @@
+<!DOCTYPE html>
+<!-- saved from url=(0037)http://www.zerotohero.hu/generikusok/ -->
+<html xmlns="http://www.w3.org/1999/xhtml" prefix="" lang="hu-HU" xmlns:og="http://opengraphprotocol.org/schema/" xmlns:fb="http://www.facebook.com/2008/fbml" style="" class="js flexbox flexboxlegacy canvas canvastext webgl no-touch geolocation postmessage websqldatabase indexeddb hashchange history draganddrop websockets rgba hsla multiplebgs backgroundsize borderimage borderradius boxshadow textshadow opacity cssanimations csscolumns cssgradients cssreflections csstransforms csstransforms3d csstransitions fontface generatedcontent video audio localstorage sessionstorage webworkers no-applicationcache svg inlinesvg smil svgclippaths page-trans-loaded gr__zerotohero_hu"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8"><script async="" src="./Generikusok _ zeroToHero_files/share"></script>
+
+<!-- Meta Tags -->
+
+
+
+	<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=0">
+
+	
+
+<!--Shortcut icon-->
+	<link rel="shortcut icon" href="http://www.zerotohero.hu/wp-content/uploads/2014/07/favicon.jpg">
+
+
+<title> Generikusok |  zeroToHero</title>
+
+
+<!-- BEGIN Metadata added by the Add-Meta-Tags WordPress plugin -->
+<meta name="description" content="Sziasztok! Ebben a cikkben a Java generikus nyelvi konstrukcióiról lesz szó. Célom, hogy részletesen megismertessem és megszerettessem ezeket veletek.">
+<meta name="keywords" content="zerotohero, ingyenes, oktatás, képzés, informatika, it, adatvezérelt, alkalmazások, programozás, szoftverfejlesztés, java, nem kategorizált">
+<meta property="og:site_name" content="zeroToHero">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Generikusok">
+<meta property="og:url" content="http://www.zerotohero.hu/generikusok/">
+<meta property="og:description" content="Sziasztok! Ebben a cikkben a Java generikus nyelvi konstrukcióiról lesz szó. Célom, hogy részletesen megismertessem és megszerettessem ezeket veletek.">
+<meta property="og:locale" content="hu_HU">
+<meta property="og:updated_time" content="2016-03-23T15:23:14+00:00">
+<meta property="og:image" content="http://www.zerotohero.hu/wp-content/uploads/2014/08/logo_fekvo_90px.png">
+<meta property="og:image:type" content="image/png">
+<meta property="article:published_time" content="2016-03-18T09:40:37+00:00">
+<meta property="article:modified_time" content="2016-03-23T15:23:14+00:00">
+<meta property="article:author" content="http://www.zerotohero.hu/author/zoltan-mihalyi/">
+<meta property="article:publisher" content="http://www.zerotohero.hu/">
+<meta property="article:section" content="JAVA">
+<meta property="article:section" content="Nem kategorizált">
+<meta property="article:tag" content="zerotohero">
+<meta property="article:tag" content="ingyenes">
+<meta property="article:tag" content="oktatás">
+<meta property="article:tag" content="képzés">
+<meta property="article:tag" content="informatika">
+<meta property="article:tag" content="it">
+<meta property="article:tag" content="adatvezérelt">
+<meta property="article:tag" content="alkalmazások">
+<meta property="article:tag" content="programozás">
+<meta property="article:tag" content="szoftverfejlesztés">
+<meta property="article:tag" content="java">
+<meta property="article:tag" content="nem kategorizált">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Generikusok">
+<meta name="twitter:description" content="Sziasztok! Ebben a cikkben a Java generikus nyelvi konstrukcióiról lesz szó. Célom, hogy részletesen megismertessem és megszerettessem ezeket veletek.">
+<meta name="twitter:image" content="http://www.zerotohero.hu/wp-content/uploads/2014/08/logo_fekvo_90px.png">
+<meta name="dcterms:title" content="Generikusok">
+<meta name="dcterms:identifier" content="http://www.zerotohero.hu/generikusok/">
+<meta name="dcterms:creator" content="Mihályi Zoltán">
+<meta name="dcterms:created" content="2016-03-18T09:40:37+00:00">
+<meta name="dcterms:available" content="2016-03-18T09:40:37+00:00">
+<meta name="dcterms:modified" content="2016-03-23T15:23:14+00:00">
+<meta name="dcterms:description" content="Sziasztok! Ebben a cikkben a Java generikus nyelvi konstrukcióiról lesz szó. Célom, hogy részletesen megismertessem és megszerettessem ezeket veletek.">
+<meta name="dcterms:subject" content="zerotohero">
+<meta name="dcterms:subject" content="ingyenes">
+<meta name="dcterms:subject" content="oktatás">
+<meta name="dcterms:subject" content="képzés">
+<meta name="dcterms:subject" content="informatika">
+<meta name="dcterms:subject" content="it">
+<meta name="dcterms:subject" content="adatvezérelt">
+<meta name="dcterms:subject" content="alkalmazások">
+<meta name="dcterms:subject" content="programozás">
+<meta name="dcterms:subject" content="szoftverfejlesztés">
+<meta name="dcterms:subject" content="java">
+<meta name="dcterms:subject" content="nem kategorizált">
+<meta name="dcterms:language" content="hu-HU">
+<meta name="dcterms:publisher" content="http://www.zerotohero.hu/">
+<meta name="dcterms:rights" content="http://www.zerotohero.hu/">
+<meta name="dcterms:coverage" content="World">
+<meta name="dcterms:type" content="Text">
+<meta name="dcterms:format" content="text/html">
+<link rel="publisher" type="text/html" title="zeroToHero" href="http://www.zerotohero.hu/">
+<link rel="author" type="text/html" title="Mihályi Zoltán" href="http://www.zerotohero.hu/author/zoltan-mihalyi/">
+<!-- END Metadata added by the Add-Meta-Tags WordPress plugin -->
+
+<link rel="alternate" type="application/rss+xml" title="zeroToHero » hírcsatorna" href="http://www.zerotohero.hu/feed/">
+<link rel="alternate" type="application/rss+xml" title="zeroToHero » hozzászólás hírcsatorna" href="http://www.zerotohero.hu/comments/feed/">
+<link rel="alternate" type="application/rss+xml" title="zeroToHero » Generikusok hozzászólás hírcsatorna" href="http://www.zerotohero.hu/generikusok/feed/">
+<meta property="og:site_name" content="zeroToHero"><meta property="og:url" content="http://www.zerotohero.hu/generikusok/"><meta property="og:title" content="Generikusok"><meta property="og:type" content="article">		<script id="facebook-jssdk" src="./Generikusok _ zeroToHero_files/sdk.js.letöltés"></script><script async="" src="./Generikusok _ zeroToHero_files/analytics.js.letöltés"></script><script type="text/javascript">
+			window._wpemojiSettings = {"baseUrl":"https:\/\/s.w.org\/images\/core\/emoji\/72x72\/","ext":".png","source":{"concatemoji":"http:\/\/www.zerotohero.hu\/wp-includes\/js\/wp-emoji-release.min.js?ver=4.5.15"}};
+			!function(a,b,c){function d(a){var c,d,e,f=b.createElement("canvas"),g=f.getContext&&f.getContext("2d"),h=String.fromCharCode;if(!g||!g.fillText)return!1;switch(g.textBaseline="top",g.font="600 32px Arial",a){case"flag":return g.fillText(h(55356,56806,55356,56826),0,0),f.toDataURL().length>3e3;case"diversity":return g.fillText(h(55356,57221),0,0),c=g.getImageData(16,16,1,1).data,d=c[0]+","+c[1]+","+c[2]+","+c[3],g.fillText(h(55356,57221,55356,57343),0,0),c=g.getImageData(16,16,1,1).data,e=c[0]+","+c[1]+","+c[2]+","+c[3],d!==e;case"simple":return g.fillText(h(55357,56835),0,0),0!==g.getImageData(16,16,1,1).data[0];case"unicode8":return g.fillText(h(55356,57135),0,0),0!==g.getImageData(16,16,1,1).data[0]}return!1}function e(a){var c=b.createElement("script");c.src=a,c.type="text/javascript",b.getElementsByTagName("head")[0].appendChild(c)}var f,g,h,i;for(i=Array("simple","flag","unicode8","diversity"),c.supports={everything:!0,everythingExceptFlag:!0},h=0;h<i.length;h++)c.supports[i[h]]=d(i[h]),c.supports.everything=c.supports.everything&&c.supports[i[h]],"flag"!==i[h]&&(c.supports.everythingExceptFlag=c.supports.everythingExceptFlag&&c.supports[i[h]]);c.supports.everythingExceptFlag=c.supports.everythingExceptFlag&&!c.supports.flag,c.DOMReady=!1,c.readyCallback=function(){c.DOMReady=!0},c.supports.everything||(g=function(){c.readyCallback()},b.addEventListener?(b.addEventListener("DOMContentLoaded",g,!1),a.addEventListener("load",g,!1)):(a.attachEvent("onload",g),b.attachEvent("onreadystatechange",function(){"complete"===b.readyState&&c.readyCallback()})),f=c.source||{},f.concatemoji?e(f.concatemoji):f.wpemoji&&f.twemoji&&(e(f.twemoji),e(f.wpemoji)))}(window,document,window._wpemojiSettings);
+		</script><script src="./Generikusok _ zeroToHero_files/wp-emoji-release.min.js.letöltés" type="text/javascript"></script>
+		<style type="text/css">
+img.wp-smiley,
+img.emoji {
+	display: inline !important;
+	border: none !important;
+	box-shadow: none !important;
+	height: 1em !important;
+	width: 1em !important;
+	margin: 0 .07em !important;
+	vertical-align: -0.1em !important;
+	background: none !important;
+	padding: 0 !important;
+}
+</style>
+<link rel="stylesheet" id="contact-form-7-css" href="./Generikusok _ zeroToHero_files/styles.css" type="text/css" media="all">
+<link rel="stylesheet" id="image-caption-hover-css-css" href="./Generikusok _ zeroToHero_files/style.css" type="text/css" media="all">
+<link rel="stylesheet" id="social-widget-css" href="./Generikusok _ zeroToHero_files/social_widget.css" type="text/css" media="all">
+<link rel="stylesheet" id="math-captcha-frontend-css" href="./Generikusok _ zeroToHero_files/frontend.css" type="text/css" media="all">
+<link rel="stylesheet" id="mediaelement-css" href="./Generikusok _ zeroToHero_files/mediaelementplayer.min.css" type="text/css" media="all">
+<link rel="stylesheet" id="wp-mediaelement-css" href="./Generikusok _ zeroToHero_files/wp-mediaelement.min.css" type="text/css" media="all">
+<link rel="stylesheet" id="rgs-css" href="./Generikusok _ zeroToHero_files/rgs.css" type="text/css" media="all">
+<link rel="stylesheet" id="font-awesome-css" href="./Generikusok _ zeroToHero_files/font-awesome.min.css" type="text/css" media="all">
+<link rel="stylesheet" id="main-styles-css" href="./Generikusok _ zeroToHero_files/style(1).css" type="text/css" media="all">
+<link rel="stylesheet" id="pretty_photo-css" href="./Generikusok _ zeroToHero_files/prettyPhoto.css" type="text/css" media="all">
+<!--[if lt IE 9]>
+<link rel='stylesheet' id='nectar-ie8-css'  href='http://www.zerotohero.hu/wp-content/themes/salient/css/ie8.css?ver=4.5.15' type='text/css' media='all' />
+<![endif]-->
+<link rel="stylesheet" id="responsive-css" href="./Generikusok _ zeroToHero_files/responsive.css" type="text/css" media="all">
+<link rel="stylesheet" id="options_typography_OpenSans_ext-css" href="./Generikusok _ zeroToHero_files/css" type="text/css" media="all">
+<link rel="stylesheet" id="skin-ascend-css" href="./Generikusok _ zeroToHero_files/ascend.css" type="text/css" media="all">
+<link rel="stylesheet" id="redux-google-fonts-salient_redux-css" href="./Generikusok _ zeroToHero_files/css(1)" type="text/css" media="all">
+<script type="text/javascript" src="./Generikusok _ zeroToHero_files/jquery.js.letöltés"></script>
+<script type="text/javascript" src="./Generikusok _ zeroToHero_files/jquery-migrate.min.js.letöltés"></script>
+<script type="text/javascript" src="./Generikusok _ zeroToHero_files/script.js.letöltés"></script>
+<script type="text/javascript" src="./Generikusok _ zeroToHero_files/modernizr.js.letöltés"></script>
+<script type="text/javascript" src="./Generikusok _ zeroToHero_files/ProgressCircle.min.js.letöltés"></script>
+<script type="text/javascript" src="./Generikusok _ zeroToHero_files/jquery.vc_chart.min.js.letöltés"></script>
+<script type="text/javascript" src="./Generikusok _ zeroToHero_files/jquery.easing.1.3.js.letöltés"></script>
+<link rel="https://api.w.org/" href="http://www.zerotohero.hu/wp-json/">
+<link rel="EditURI" type="application/rsd+xml" title="RSD" href="http://www.zerotohero.hu/xmlrpc.php?rsd">
+<link rel="wlwmanifest" type="application/wlwmanifest+xml" href="http://www.zerotohero.hu/wp-includes/wlwmanifest.xml"> 
+<link rel="prev" title="Ilyen a munkahelyem – két adatbázis-konzultáns szemszögéből" href="http://www.zerotohero.hu/ilyen-a-munkahelyem-ket-adatbazis-konzultans-szemszogebol/">
+<link rel="next" title="Informatikus állásinterjún – a zeroToHero HR-esének szempontjából" href="http://www.zerotohero.hu/informatikus-allasinterjun-a-zerotohero-hr-esenek-szempontjabol/">
+<meta name="generator" content="WordPress 4.5.15">
+<link rel="canonical" href="http://www.zerotohero.hu/generikusok/">
+<link rel="shortlink" href="http://www.zerotohero.hu/?p=2153">
+<link rel="alternate" type="application/json+oembed" href="http://www.zerotohero.hu/wp-json/oembed/1.0/embed?url=http%3A%2F%2Fwww.zerotohero.hu%2Fgenerikusok%2F">
+<link rel="alternate" type="text/xml+oembed" href="http://www.zerotohero.hu/wp-json/oembed/1.0/embed?url=http%3A%2F%2Fwww.zerotohero.hu%2Fgenerikusok%2F&amp;format=xml">
+<meta property="og:site_name" content="zeroToHero">
+<meta property="og:title" content="Generikusok">
+<meta property="og:url" content="http://www.zerotohero.hu/generikusok/">
+<meta property="og:type" content="article">
+<style type="text/css">body a{color:#00a9c4;}#header-outer:not([data-lhe="animated_underline"]) header#top nav > ul > li > a:hover,#header-outer:not([data-lhe="animated_underline"]) header#top nav .sf-menu > li.sfHover > a,header#top nav > ul > li.button_bordered > a:hover,#header-outer:not([data-lhe="animated_underline"]) header#top nav .sf-menu li.current-menu-item > a,header#top nav .sf-menu li.current_page_item > a .sf-sub-indicator i,header#top nav .sf-menu li.current_page_ancestor > a .sf-sub-indicator i,#header-outer:not([data-lhe="animated_underline"]) header#top nav .sf-menu li.current_page_ancestor > a,#header-outer:not([data-lhe="animated_underline"]) header#top nav .sf-menu li.current-menu-ancestor > a,#header-outer:not([data-lhe="animated_underline"]) header#top nav .sf-menu li.current_page_item > a,body header#top nav .sf-menu li.current_page_item > a .sf-sub-indicator [class^="icon-"],header#top nav .sf-menu li.current_page_ancestor > a .sf-sub-indicator [class^="icon-"],.sf-menu li ul li.sfHover > a .sf-sub-indicator [class^="icon-"],ul.sf-menu > li > a:hover > .sf-sub-indicator i,ul.sf-menu > li > a:active > .sf-sub-indicator i,ul.sf-menu > li.sfHover > a > .sf-sub-indicator i,.sf-menu ul li.current_page_item > a,.sf-menu ul li.current-menu-ancestor > a,.sf-menu ul li.current_page_ancestor > a,.sf-menu ul a:focus,.sf-menu ul a:hover,.sf-menu ul a:active,.sf-menu ul li:hover > a,.sf-menu ul li.sfHover > a,.sf-menu li ul li a:hover,.sf-menu li ul li.sfHover > a,#footer-outer a:hover,.recent-posts .post-header a:hover,article.post .post-header a:hover,article.result a:hover,article.post .post-header h2 a,.single article.post .post-meta a:hover,.comment-list .comment-meta a:hover,label span,.wpcf7-form p span,.icon-3x[class^="icon-"],.icon-3x[class*=" icon-"],.icon-tiny[class^="icon-"],body .circle-border,article.result .title a,.home .blog-recent .col .post-header a:hover,.home .blog-recent .col .post-header h3 a,#single-below-header a:hover,header#top #logo:hover,.sf-menu > li.current_page_ancestor > a > .sf-sub-indicator [class^="icon-"],.sf-menu > li.current-menu-ancestor > a > .sf-sub-indicator [class^="icon-"],body #mobile-menu li.open > a [class^="icon-"],.pricing-column h3,.pricing-table[data-style="flat-alternative"] .pricing-column.accent-color h4,.pricing-table[data-style="flat-alternative"] .pricing-column.accent-color .interval,.comment-author a:hover,.project-attrs li i,#footer-outer #copyright li a i:hover,.col:hover > [class^="icon-"].icon-3x.accent-color.alt-style.hovered,.col:hover > [class*=" icon-"].icon-3x.accent-color.alt-style.hovered,#header-outer .widget_shopping_cart .cart_list a,.woocommerce .star-rating,.woocommerce-page table.cart a.remove,.woocommerce form .form-row .required,.woocommerce-page form .form-row .required,body #header-secondary-outer #social a:hover i,.woocommerce ul.products li.product .price,.woocommerce-page ul.products li.product .price,.nectar-milestone .number.accent-color,header#top nav > ul > li.megamenu > ul > li > a:hover,header#top nav > ul > li.megamenu > ul > li.sfHover > a,body #portfolio-nav a:hover i,span.accent-color,.nectar-love:hover i,.nectar-love.loved i,.portfolio-items .nectar-love:hover i,.portfolio-items .nectar-love.loved i,body .hovered .nectar-love i,header#top nav ul #search-btn a:hover span,header#top nav ul .slide-out-widget-area-toggle a:hover span,#search-outer #search #close a span:hover,.carousel-wrap[data-full-width="true"] .carousel-heading a:hover i,#search-outer .ui-widget-content li:hover a .title,#search-outer .ui-widget-content .ui-state-hover .title,#search-outer .ui-widget-content .ui-state-focus .title,.portfolio-filters-inline .container ul li a.active,body [class^="icon-"].icon-default-style,.svg-icon-holder[data-color="accent-color"],.team-member a.accent-color:hover,.ascend .comment-list .reply a,.wpcf7-form .wpcf7-not-valid-tip,.text_on_hover.product .add_to_cart_button,.blog-recent[data-style="minimal"] .col > span,.blog-recent[data-style="title_only"] .col:hover .post-header .title,.woocommerce-checkout-review-order-table .product-info .amount,.tabbed[data-style="minimal"] > ul li a.active-tab,.masonry.classic_enhanced article.post .post-meta a:hover i,.masonry.classic_enhanced article.post .post-meta .icon-salient-heart-2.loved,.single #single-meta ul li:not(.meta-share-count):hover i,.single #single-meta ul li:not(.meta-share-count):hover a,.single #single-meta ul li:not(.meta-share-count):hover span,.single #single-meta ul li.meta-share-count .nectar-social a:hover i,#project-meta #single-meta ul li > a,#project-meta ul li.meta-share-count .nectar-social a:hover i,#project-meta ul li:not(.meta-share-count):hover i,#project-meta ul li:not(.meta-share-count):hover span{color:#00a9c4!important;}.col:not(#post-area):not(.span_12):not(#sidebar):hover [class^="icon-"].icon-3x.accent-color.alt-style.hovered,body .col:not(#post-area):not(.span_12):not(#sidebar):hover a [class*=" icon-"].icon-3x.accent-color.alt-style.hovered,.ascend #header-outer:not(.transparent) .cart-outer:hover .cart-menu-wrap:not(.has_products) .icon-salient-cart{color:#00a9c4!important;}.orbit-wrapper div.slider-nav span.right,.orbit-wrapper div.slider-nav span.left,.flex-direction-nav a,.jp-play-bar,.jp-volume-bar-value,.jcarousel-prev:hover,.jcarousel-next:hover,.portfolio-items .col[data-default-color="true"] .work-item:not(.style-3) .work-info-bg,.portfolio-items .col[data-default-color="true"] .bottom-meta,.portfolio-filters a,.portfolio-filters #sort-portfolio,.project-attrs li span,.progress li span,.nectar-progress-bar span,#footer-outer #footer-widgets .col .tagcloud a:hover,#sidebar .widget .tagcloud a:hover,article.post .more-link span:hover,article.post.quote .post-content .quote-inner,article.post.link .post-content .link-inner,#pagination .next a:hover,#pagination .prev a:hover,.comment-list .reply a:hover,input[type=submit]:hover,input[type="button"]:hover,#footer-outer #copyright li a.vimeo:hover,#footer-outer #copyright li a.behance:hover,.toggle.open h3 a,.tabbed > ul li a.active-tab,[class*=" icon-"],.icon-normal,.bar_graph li span,.nectar-button[data-color-override="false"].regular-button,.nectar-button.tilt.accent-color,body .swiper-slide .button.transparent_2 a.primary-color:hover,#footer-outer #footer-widgets .col input[type="submit"],.carousel-prev:hover,.carousel-next:hover,.blog-recent .more-link span:hover,.post-tags a:hover,.pricing-column.highlight h3,.pricing-table[data-style="flat-alternative"] .pricing-column.highlight h3 .highlight-reason,.pricing-table[data-style="flat-alternative"] .pricing-column.accent-color:before,#to-top:hover,#to-top.dark:hover,body[data-button-style="rounded"] #to-top:after,#pagination a.page-numbers:hover,#pagination span.page-numbers.current,.single-portfolio .facebook-share a:hover,.single-portfolio .twitter-share a:hover,.single-portfolio .pinterest-share a:hover,.single-post .facebook-share a:hover,.single-post .twitter-share a:hover,.single-post .pinterest-share a:hover,.mejs-controls .mejs-time-rail .mejs-time-current,.mejs-controls .mejs-volume-button .mejs-volume-slider .mejs-volume-current,.mejs-controls .mejs-horizontal-volume-slider .mejs-horizontal-volume-current,article.post.quote .post-content .quote-inner,article.post.link .post-content .link-inner,article.format-status .post-content .status-inner,article.post.format-aside .aside-inner,body #header-secondary-outer #social li a.behance:hover,body #header-secondary-outer #social li a.vimeo:hover,#sidebar .widget:hover [class^="icon-"].icon-3x,.woocommerce-page div[data-project-style="text_on_hover"] .single_add_to_cart_button,article.post.quote .content-inner .quote-inner .whole-link,.masonry.classic_enhanced article.post.quote.wide_tall .post-content a:hover .quote-inner,.masonry.classic_enhanced article.post.link.wide_tall .post-content a:hover .link-inner,.iosSlider .prev_slide:hover,.iosSlider .next_slide:hover,body [class^="icon-"].icon-3x.alt-style.accent-color,body [class*=" icon-"].icon-3x.alt-style.accent-color,#slide-out-widget-area,#slide-out-widget-area-bg.fullscreen,#header-outer .widget_shopping_cart a.button,#header-outer a.cart-contents .cart-wrap span,.swiper-slide .button.solid_color a,.swiper-slide .button.solid_color_2 a,.portfolio-filters,button[type=submit]:hover,#buddypress button:hover,#buddypress a.button:hover,#buddypress ul.button-nav li.current a,header#top nav ul .slide-out-widget-area-toggle a:hover i.lines,header#top nav ul .slide-out-widget-area-toggle a:hover i.lines:after,header#top nav ul .slide-out-widget-area-toggle a:hover i.lines:before,#buddypress a.button:focus,.text_on_hover.product a.added_to_cart,.woocommerce div.product .woocommerce-tabs .full-width-content ul.tabs li a:after,.woocommerce div[data-project-style="text_on_hover"] .cart .quantity input.minus,.woocommerce div[data-project-style="text_on_hover"] .cart .quantity input.plus,.woocommerce .span_4 input[type="submit"].checkout-button,.portfolio-filters-inline[data-color-scheme="accent-color"],body[data-fancy-form-rcs="1"] [type="radio"]:checked + label:after,.select2-container .select2-choice:hover,.select2-dropdown-open .select2-choice,header#top nav > ul > li.button_solid_color > a:before,#header-outer.transparent header#top nav > ul > li.button_solid_color > a:before,.tabbed[data-style="minimal"] > ul li a:after,.twentytwenty-handle,.twentytwenty-horizontal .twentytwenty-handle:before,.twentytwenty-horizontal .twentytwenty-handle:after,.twentytwenty-vertical .twentytwenty-handle:before,.twentytwenty-vertical .twentytwenty-handle:after,.masonry.classic_enhanced .posts-container article .meta-category a:hover,.masonry.classic_enhanced .posts-container article .video-play-button,.bottom_controls #portfolio-nav .controls li a i:after,.bottom_controls #portfolio-nav ul:first-child li#all-items a:hover i,.nectar_video_lightbox.nectar-button[data-color="default-accent-color"],.nectar_video_lightbox.nectar-button[data-color="transparent-accent-color"]:hover,.testimonial_slider[data-style="multiple_visible"][data-color*="accent-color"] .flickity-page-dots .dot.is-selected:before,.testimonial_slider[data-style="multiple_visible"][data-color*="accent-color"] blockquote.is-selected p,.nectar-recent-posts-slider .container .strong span:before,#page-header-bg[data-post-hs="default_minimal"] .inner-wrap > a:hover,.single .heading-title[data-header-style="default_minimal"] .meta-category a:hover,body.single-post .sharing-default-minimal .nectar-love.loved,.nectar-fancy-box:after{background-color:#00a9c4!important;}.col:hover > [class^="icon-"].icon-3x:not(.alt-style).accent-color.hovered,.col:hover > [class*=" icon-"].icon-3x:not(.alt-style).accent-color.hovered,body .nectar-button.see-through-2[data-hover-color-override="false"]:hover,.col:not(#post-area):not(.span_12):not(#sidebar):hover [class^="icon-"].icon-3x:not(.alt-style).accent-color.hovered,.col:not(#post-area):not(.span_12):not(#sidebar):hover a [class*=" icon-"].icon-3x:not(.alt-style).accent-color.hovered{background-color:#00a9c4!important;}.bottom_controls #portfolio-nav ul:first-child li#all-items a:hover i{box-shadow:-.6em 0 #00a9c4,-.6em .6em #00a9c4,.6em 0 #00a9c4,.6em -.6em #00a9c4,0 -.6em #00a9c4,-.6em -.6em #00a9c4,0 .6em #00a9c4,.6em .6em #00a9c4;}.tabbed > ul li a.active-tab,body[data-form-style="minimal"] label:after,body .recent_projects_widget a:hover img,.recent_projects_widget a:hover img,#sidebar #flickr a:hover img,body .nectar-button.see-through-2[data-hover-color-override="false"]:hover,#footer-outer #flickr a:hover img,#featured article .post-title a:hover,#header-outer[data-lhe="animated_underline"] header#top nav > ul > li > a:after,body #featured article .post-title a:hover,div.wpcf7-validation-errors,body[data-fancy-form-rcs="1"] [type="radio"]:checked + label:before,body[data-fancy-form-rcs="1"] [type="radio"]:checked + label:after,body[data-fancy-form-rcs="1"] input[type="checkbox"]:checked + label > span,.select2-container .select2-choice:hover,.select2-dropdown-open .select2-choice,#header-outer:not(.transparent) header#top nav > ul > li.button_bordered > a:hover:before,.single #single-meta ul li:not(.meta-share-count):hover a,.single #project-meta ul li:not(.meta-share-count):hover a{border-color:#00a9c4!important;}.default-loading-icon:before{border-top-color:#00a9c4!important;}#header-outer a.cart-contents span:before{border-color:transparent #00a9c4!important;}body .col:not(#post-area):not(.span_12):not(#sidebar):hover .hovered .circle-border,body #sidebar .widget:hover .circle-border,body .testimonial_slider[data-style="multiple_visible"][data-color*="accent-color"] blockquote .bottom-arrow:after,body .dark .testimonial_slider[data-style="multiple_visible"][data-color*="accent-color"] blockquote .bottom-arrow:after,.portfolio-items[data-ps="6"] .bg-overlay,.portfolio-items[data-ps="6"].no-masonry .bg-overlay{border-color:#00a9c4;}.gallery a:hover img{border-color:#00a9c4!important;}@media only screen and (min-width :1px) and (max-width :1000px){body #featured article .post-title > a{background-color:#00a9c4;}body #featured article .post-title > a{border-color:#00a9c4;}}.nectar-button.regular-button.extra-color-1,.nectar-button.tilt.extra-color-1{background-color:#ffb800!important;}.icon-3x[class^="icon-"].extra-color-1:not(.alt-style),.icon-tiny[class^="icon-"].extra-color-1,.icon-3x[class*=" icon-"].extra-color-1:not(.alt-style),body .icon-3x[class*=" icon-"].extra-color-1:not(.alt-style) .circle-border,.woocommerce-page table.cart a.remove,#header-outer .widget_shopping_cart .cart_list li a.remove,#header-outer .woocommerce.widget_shopping_cart .cart_list li a.remove,.nectar-milestone .number.extra-color-1,span.extra-color-1,.team-member ul.social.extra-color-1 li a,.stock.out-of-stock,body [class^="icon-"].icon-default-style.extra-color-1,.team-member a.extra-color-1:hover,.pricing-table[data-style="flat-alternative"] .pricing-column.highlight.extra-color-1 h3,.pricing-table[data-style="flat-alternative"] .pricing-column.extra-color-1 h4,.pricing-table[data-style="flat-alternative"] .pricing-column.extra-color-1 .interval,.svg-icon-holder[data-color="extra-color-1"]{color:#ffb800!important;}.col:hover > [class^="icon-"].icon-3x.extra-color-1:not(.alt-style),.col:hover > [class*=" icon-"].icon-3x.extra-color-1:not(.alt-style).hovered,body .swiper-slide .button.transparent_2 a.extra-color-1:hover,body .col:not(#post-area):not(.span_12):not(#sidebar):hover [class^="icon-"].icon-3x.extra-color-1:not(.alt-style).hovered,body .col:not(#post-area):not(#sidebar):not(.span_12):hover a [class*=" icon-"].icon-3x.extra-color-1:not(.alt-style).hovered,#sidebar .widget:hover [class^="icon-"].icon-3x.extra-color-1:not(.alt-style),.portfolio-filters-inline[data-color-scheme="extra-color-1"],.pricing-table[data-style="flat-alternative"] .pricing-column.extra-color-1:before,.pricing-table[data-style="flat-alternative"] .pricing-column.highlight.extra-color-1 h3 .highlight-reason,.nectar-button.nectar_video_lightbox[data-color="default-extra-color-1"],.nectar_video_lightbox.nectar-button[data-color="transparent-extra-color-1"]:hover,.testimonial_slider[data-style="multiple_visible"][data-color*="extra-color-1"] .flickity-page-dots .dot.is-selected:before,.testimonial_slider[data-style="multiple_visible"][data-color*="extra-color-1"] blockquote.is-selected p,.nectar-fancy-box[data-color="extra-color-1"]:after{background-color:#ffb800!important;}body [class^="icon-"].icon-3x.alt-style.extra-color-1,body [class*=" icon-"].icon-3x.alt-style.extra-color-1,[class*=" icon-"].extra-color-1.icon-normal,.extra-color-1.icon-normal,.bar_graph li span.extra-color-1,.nectar-progress-bar span.extra-color-1,#header-outer .widget_shopping_cart a.button,.woocommerce ul.products li.product .onsale,.woocommerce-page ul.products li.product .onsale,.woocommerce span.onsale,.woocommerce-page span.onsale,.woocommerce-page table.cart a.remove:hover,.swiper-slide .button.solid_color a.extra-color-1,.swiper-slide .button.solid_color_2 a.extra-color-1,.toggle.open.extra-color-1 h3 a{background-color:#ffb800!important;}.col:hover > [class^="icon-"].icon-3x.extra-color-1.alt-style.hovered,.col:hover > [class*=" icon-"].icon-3x.extra-color-1.alt-style.hovered,.no-highlight.extra-color-1 h3,.col:not(#post-area):not(.span_12):not(#sidebar):hover [class^="icon-"].icon-3x.extra-color-1.alt-style.hovered,body .col:not(#post-area):not(.span_12):not(#sidebar):hover a [class*=" icon-"].icon-3x.extra-color-1.alt-style.hovered{color:#ffb800!important;}body .col:not(#post-area):not(.span_12):not(#sidebar):hover .extra-color-1.hovered .circle-border,.woocommerce-page table.cart a.remove,#header-outer .woocommerce.widget_shopping_cart .cart_list li a.remove,#header-outer .woocommerce.widget_shopping_cart .cart_list li a.remove,body #sidebar .widget:hover .extra-color-1 .circle-border,.woocommerce-page table.cart a.remove,body .testimonial_slider[data-style="multiple_visible"][data-color*="extra-color-1"] blockquote .bottom-arrow:after,body .dark .testimonial_slider[data-style="multiple_visible"][data-color*="extra-color-1"] blockquote .bottom-arrow:after{border-color:#ffb800;}.pricing-column.highlight.extra-color-1 h3{background-color:#ffb800!important;}.nectar-button.regular-button.extra-color-2,.nectar-button.tilt.extra-color-2{background-color:#04b9b0!important;}.icon-3x[class^="icon-"].extra-color-2:not(.alt-style),.icon-3x[class*=" icon-"].extra-color-2:not(.alt-style),.icon-tiny[class^="icon-"].extra-color-2,body .icon-3x[class*=" icon-"].extra-color-2 .circle-border,.nectar-milestone .number.extra-color-2,span.extra-color-2,.team-member ul.social.extra-color-2 li a,body [class^="icon-"].icon-default-style.extra-color-2,.team-member a.extra-color-2:hover,.pricing-table[data-style="flat-alternative"] .pricing-column.highlight.extra-color-2 h3,.pricing-table[data-style="flat-alternative"] .pricing-column.extra-color-2 h4,.pricing-table[data-style="flat-alternative"] .pricing-column.extra-color-2 .interval,.svg-icon-holder[data-color="extra-color-2"]{color:#04b9b0!important;}.col:hover > [class^="icon-"].icon-3x.extra-color-2:not(.alt-style).hovered,.col:hover > [class*=" icon-"].icon-3x.extra-color-2:not(.alt-style).hovered,body .swiper-slide .button.transparent_2 a.extra-color-2:hover,.col:not(#post-area):not(.span_12):not(#sidebar):hover [class^="icon-"].icon-3x.extra-color-2:not(.alt-style).hovered,.col:not(#post-area):not(.span_12):not(#sidebar):hover a [class*=" icon-"].icon-3x.extra-color-2:not(.alt-style).hovered,#sidebar .widget:hover [class^="icon-"].icon-3x.extra-color-2:not(.alt-style),.pricing-table[data-style="flat-alternative"] .pricing-column.highlight.extra-color-2 h3 .highlight-reason,.nectar-button.nectar_video_lightbox[data-color="default-extra-color-2"],.nectar_video_lightbox.nectar-button[data-color="transparent-extra-color-2"]:hover,.testimonial_slider[data-style="multiple_visible"][data-color*="extra-color-2"] .flickity-page-dots .dot.is-selected:before,.testimonial_slider[data-style="multiple_visible"][data-color*="extra-color-2"] blockquote.is-selected p,.nectar-fancy-box[data-color="extra-color-2"]:after{background-color:#04b9b0!important;}body [class^="icon-"].icon-3x.alt-style.extra-color-2,body [class*=" icon-"].icon-3x.alt-style.extra-color-2,[class*=" icon-"].extra-color-2.icon-normal,.extra-color-2.icon-normal,.bar_graph li span.extra-color-2,.nectar-progress-bar span.extra-color-2,.woocommerce .product-wrap .add_to_cart_button.added,.woocommerce-message,.woocommerce-error,.woocommerce-info,.woocommerce .widget_price_filter .ui-slider .ui-slider-range,.woocommerce-page .widget_price_filter .ui-slider .ui-slider-range,.swiper-slide .button.solid_color a.extra-color-2,.swiper-slide .button.solid_color_2 a.extra-color-2,.toggle.open.extra-color-2 h3 a,.portfolio-filters-inline[data-color-scheme="extra-color-2"],.pricing-table[data-style="flat-alternative"] .pricing-column.extra-color-2:before{background-color:#04b9b0!important;}.col:hover > [class^="icon-"].icon-3x.extra-color-2.alt-style.hovered,.col:hover > [class*=" icon-"].icon-3x.extra-color-2.alt-style.hovered,.no-highlight.extra-color-2 h3,.col:not(#post-area):not(.span_12):not(#sidebar):hover [class^="icon-"].icon-3x.extra-color-2.alt-style.hovered,body .col:not(#post-area):not(.span_12):not(#sidebar):hover a [class*=" icon-"].icon-3x.extra-color-2.alt-style.hovered{color:#04b9b0!important;}body .col:not(#post-area):not(.span_12):not(#sidebar):hover .extra-color-2.hovered .circle-border,body #sidebar .widget:hover .extra-color-2 .circle-border,body .testimonial_slider[data-style="multiple_visible"][data-color*="extra-color-2"] blockquote .bottom-arrow:after,body .dark .testimonial_slider[data-style="multiple_visible"][data-color*="extra-color-2"] blockquote .bottom-arrow:after{border-color:#04b9b0;}.pricing-column.highlight.extra-color-2 h3{background-color:#04b9b0!important;}.nectar-button.regular-button.extra-color-3,.nectar-button.tilt.extra-color-3{background-color:#333333!important;}.icon-3x[class^="icon-"].extra-color-3:not(.alt-style),.icon-3x[class*=" icon-"].extra-color-3:not(.alt-style),.icon-tiny[class^="icon-"].extra-color-3,body .icon-3x[class*=" icon-"].extra-color-3 .circle-border,.nectar-milestone .number.extra-color-3,span.extra-color-3,.team-member ul.social.extra-color-3 li a,body [class^="icon-"].icon-default-style.extra-color-3,.team-member a.extra-color-3:hover,.pricing-table[data-style="flat-alternative"] .pricing-column.highlight.extra-color-3 h3,.pricing-table[data-style="flat-alternative"] .pricing-column.extra-color-3 h4,.pricing-table[data-style="flat-alternative"] .pricing-column.extra-color-3 .interval,.svg-icon-holder[data-color="extra-color-3"]{color:#333333!important;}.col:hover > [class^="icon-"].icon-3x.extra-color-3:not(.alt-style).hovered,.col:hover > [class*=" icon-"].icon-3x.extra-color-3:not(.alt-style).hovered,body .swiper-slide .button.transparent_2 a.extra-color-3:hover,.col:not(#post-area):not(.span_12):not(#sidebar):hover [class^="icon-"].icon-3x.extra-color-3:not(.alt-style).hovered,.col:not(#post-area):not(.span_12):not(#sidebar):hover a [class*=" icon-"].icon-3x.extra-color-3:not(.alt-style).hovered,#sidebar .widget:hover [class^="icon-"].icon-3x.extra-color-3:not(.alt-style),.portfolio-filters-inline[data-color-scheme="extra-color-3"],.pricing-table[data-style="flat-alternative"] .pricing-column.extra-color-3:before,.pricing-table[data-style="flat-alternative"] .pricing-column.highlight.extra-color-3 h3 .highlight-reason,.nectar-button.nectar_video_lightbox[data-color="default-extra-color-3"],.nectar_video_lightbox.nectar-button[data-color="transparent-extra-color-3"]:hover,.testimonial_slider[data-style="multiple_visible"][data-color*="extra-color-3"] .flickity-page-dots .dot.is-selected:before,.testimonial_slider[data-style="multiple_visible"][data-color*="extra-color-3"] blockquote.is-selected p,.nectar-fancy-box[data-color="extra-color-3"]:after{background-color:#333333!important;}body [class^="icon-"].icon-3x.alt-style.extra-color-3,body [class*=" icon-"].icon-3x.alt-style.extra-color-3,.extra-color-3.icon-normal,[class*=" icon-"].extra-color-3.icon-normal,.bar_graph li span.extra-color-3,.nectar-progress-bar span.extra-color-3,.swiper-slide .button.solid_color a.extra-color-3,.swiper-slide .button.solid_color_2 a.extra-color-3,.toggle.open.extra-color-3 h3 a{background-color:#333333!important;}.col:hover > [class^="icon-"].icon-3x.extra-color-3.alt-style.hovered,.col:hover > [class*=" icon-"].icon-3x.extra-color-3.alt-style.hovered,.no-highlight.extra-color-3 h3,.col:not(#post-area):not(.span_12):not(#sidebar):hover [class^="icon-"].icon-3x.extra-color-3.alt-style.hovered,body .col:not(#post-area):not(.span_12):not(#sidebar):hover a [class*=" icon-"].icon-3x.extra-color-3.alt-style.hovered{color:#333333!important;}body .col:not(#post-area):not(.span_12):not(#sidebar):hover .extra-color-3.hovered .circle-border,body #sidebar .widget:hover .extra-color-3 .circle-border,body .testimonial_slider[data-style="multiple_visible"][data-color*="extra-color-3"] blockquote .bottom-arrow:after,body .dark .testimonial_slider[data-style="multiple_visible"][data-color*="extra-color-3"] blockquote .bottom-arrow:after{border-color:#333333;}.pricing-column.highlight.extra-color-3 h3{background-color:#333333!important;}#call-to-action{background-color:#ffb800!important;}#call-to-action span{color:#000000!important;}body #slide-out-widget-area-bg{background-color:rgba(0,0,0,0.8);}</style><style type="text/css"> #header-outer{padding-top:12px;}#header-outer #logo img{height:90px;}header#top nav > ul > li > a{padding-bottom:47px;padding-top:35px;}#header-outer .cart-menu{padding-bottom:47px;padding-top:47px;}header#top nav > ul li#search-btn,header#top nav > ul li.slide-out-widget-area-toggle{padding-bottom:34px;padding-top:35px;}header#top .sf-menu > li.sfHover > ul{top:20px;}.sf-sub-indicator{height:20px;}#header-space{height:114px;}body[data-smooth-scrolling="1"] #full_width_portfolio .project-title.parallax-effect{top:114px;}body.single-product div.product .product_title{padding-right:0;}@media only screen and (min-width:1000px){body:not(.ascend)[data-slide-out-widget-area="true"] #header-outer[data-has-menu="false"][data-permanent-transparent="false"] header#top,body.ascend[data-slide-out-widget-area="true"] #header-outer[data-has-menu="false"][data-permanent-transparent="false"][data-full-width="false"] header#top{padding-bottom:12px;}}@media only screen and (max-width:1000px){body header#top #logo img,#header-outer[data-permanent-transparent="false"] #logo .dark-version{height:24px!important;}header#top .col.span_9{min-height:48px;line-height:28px;}}body #header-outer,body[data-header-color="dark"] #header-outer{background-color:rgba(255,255,255,100);}.nectar-slider-loading .loading-icon,.portfolio-loading,#ajax-loading-screen .loading-icon,.loading-icon,.pp_loaderIcon{background-image:url("");}@media only screen and (min-width:1000px) and (max-width:1300px){.nectar-slider-wrap[data-full-width="true"] .swiper-slide .content h2,.nectar-slider-wrap[data-full-width="boxed-full-width"] .swiper-slide .content h2,.full-width-content .vc_span12 .swiper-slide .content h2{font-size:45px!important;line-height:51px!important;}.nectar-slider-wrap[data-full-width="true"] .swiper-slide .content p,.nectar-slider-wrap[data-full-width="boxed-full-width"] .swiper-slide .content p,.full-width-content .vc_span12 .swiper-slide .content p{font-size:18px!important;line-height:31.2px!important;}}@media only screen and (min-width :690px) and (max-width :1000px){.nectar-slider-wrap[data-full-width="true"] .swiper-slide .content h2,.nectar-slider-wrap[data-full-width="boxed-full-width"] .swiper-slide .content h2,.full-width-content .vc_span12 .swiper-slide .content h2{font-size:33px!important;line-height:39px!important;}.nectar-slider-wrap[data-full-width="true"] .swiper-slide .content p,.nectar-slider-wrap[data-full-width="boxed-full-width"] .swiper-slide .content p,.full-width-content .vc_span12 .swiper-slide .content p{font-size:13.2px!important;line-height:24px!important;}}@media only screen and (max-width :690px){.nectar-slider-wrap[data-full-width="true"][data-fullscreen="false"] .swiper-slide .content h2,.nectar-slider-wrap[data-full-width="boxed-full-width"][data-fullscreen="false"] .swiper-slide .content h2,.full-width-content .vc_span12 .nectar-slider-wrap[data-fullscreen="false"] .swiper-slide .content h2{font-size:15px!important;line-height:21px!important;}.nectar-slider-wrap[data-full-width="true"][data-fullscreen="false"] .swiper-slide .content p,.nectar-slider-wrap[data-full-width="boxed-full-width"][data-fullscreen="false"] .swiper-slide .content p,.full-width-content .vc_span12 .nectar-slider-wrap[data-fullscreen="false"] .swiper-slide .content p{font-size:10px!important;line-height:17.52px!important;}}#header-space{background-color:#ffffff}@media only screen and (min-width:1000px){.container,.woocommerce-tabs .full-width-content .tab-container,.nectar-recent-posts-slider .flickity-page-dots{max-width:1425px;width:100%;margin:0 auto;padding:0 90px;}body .container .page-submenu.stuck .container:not(.tab-container),.nectar-recent-posts-slider .flickity-page-dots{padding:0 90px!important;}.swiper-slide .content{padding:0 90px;}body .container .container:not(.tab-container):not(.recent-post-container){width:100%!important;padding:0!important;}body .carousel-heading .container{padding:0 10px!important;}body .carousel-heading .container .carousel-next{right:10px;}body .carousel-heading .container .carousel-prev{right:35px;}.carousel-wrap[data-full-width="true"] .carousel-heading a.portfolio-page-link{left:90px;}.carousel-wrap[data-full-width="true"] .carousel-heading{margin-left:-20px;margin-right:-20px;}.carousel-wrap[data-full-width="true"] .carousel-next{right:90px!important;}.carousel-wrap[data-full-width="true"] .carousel-prev{right:115px!important;}.carousel-wrap[data-full-width="true"]{padding:0!important;}.carousel-wrap[data-full-width="true"] .caroufredsel_wrapper{padding:20px!important;}#search-outer #search #close a{right:90px;}#boxed,#boxed #header-outer,#boxed #header-secondary-outer,#boxed #slide-out-widget-area-bg.fullscreen,#boxed #page-header-bg[data-parallax="1"],#boxed #featured,body[data-footer-reveal="1"] #boxed #footer-outer,#boxed .orbit > div,#boxed #featured article,.ascend #boxed #search-outer{max-width:1400px!important;width:90%!important;min-width:980px;}body[data-hhun="1"] #boxed #header-outer:not(.detached),body[data-hhun="1"] #boxed #header-secondary-outer{width:100%!important;}#boxed #search-outer #search #close a{right:0!important;}#boxed .container{width:92%;padding:0;}#boxed #footer-outer #footer-widgets,#boxed #footer-outer #copyright{padding-left:0;padding-right:0;}#boxed .carousel-wrap[data-full-width="true"] .carousel-heading a.portfolio-page-link{left:35px;}#boxed .carousel-wrap[data-full-width="true"] .carousel-next{right:35px!important;}#boxed .carousel-wrap[data-full-width="true"] .carousel-prev{right:60px!important;}}.pagination-navigation{-webkit-filter:url("http://www.zerotohero.hu/generikusok/#goo");filter:url("http://www.zerotohero.hu/generikusok/#goo");}.zero2hero_vid{margin-top:40px;}.mmform-container div.submitcontainer a.submitbutton,.mmform-container button.mmform-event-button{height:auto !important;}div.fieldcontainer input[type='text'],div.fieldcontainer input[type='email'],div.fieldcontainer input[type='url'],div.fieldcontainer input[type='number'],div.fieldcontainer input[type='tel'],div.fieldcontainer input[type='password'],div.fieldcontainer select,div.fieldcontainer textarea{width:428px !important;}</style><style type="text/css"> body,.toggle h3 a,body .ui-widget,table,.bar_graph li span strong,#slide-out-widget-area .tagcloud a,#search-results .result .title span,.woocommerce ul.products li.product h3,.woocommerce-page ul.products li.product h3,.row .col.section-title .nectar-love span,body .nectar-love span,body .nectar-social .nectar-love .nectar-love-count,body .carousel-heading h2,.sharing-default-minimal .nectar-social .social-text,body .sharing-default-minimal .nectar-love{font-family:Open Sans;font-size:16px;line-height:28.8px;}.bold,strong,b{font-family:Open Sans;font-weight:600;}.nectar-fancy-ul ul li .icon-default-style[class^="icon-"]{line-height:28.8px!important;}header#top nav > ul > li > a{font-family:Open Sans Condensed;text-transform:uppercase;font-size:20px;line-height:28px;font-weight:700;}#header-outer[data-lhe="animated_underline"] header#top nav > ul > li > a,header#top nav > ul > li.button_solid_color > a,body #header-outer.transparent header#top nav > ul > li.button_solid_color > a,#header-outer[data-lhe="animated_underline"] header#top nav > ul > li.button_solid_color > a{margin-left:13px!important;margin-right:13px!important;}#header-outer[data-lhe="default"] header#top nav > ul > li > a{padding-left:13px;padding-right:13px;}header#top nav > ul > li.button_solid_color > a,body #header-outer.transparent header#top nav > ul > li.button_solid_color > a,#header-outer[data-lhe="animated_underline"] header#top nav > ul > li.button_solid_color > a{padding-left:23px!important;padding-right:23px!important;}header#top nav > ul > li.button_solid_color > a:before,#header-outer.transparent header#top nav > ul > li.button_solid_color > a:before{height:33px;}header#top nav > ul > li.button_bordered > a:before,#header-outer.transparent header#top nav > ul > li.button_bordered > a:before{height:43px;}header#top .sf-menu li ul li a,#header-secondary-outer nav > ul > li > a,#header-secondary-outer ul ul li a,#header-outer .widget_shopping_cart .cart_list a{font-family:Open Sans Condensed;}@media only screen and (min-width :1px) and (max-width :1000px){header#top .sf-menu a{font-family:Open Sans Condensed!important;font-size:14px!important;}}#page-header-bg h1,body h1,body .row .col.section-title h1,.full-width-content .recent-post-container .inner-wrap h2{font-family:Open Sans Condensed;text-transform:uppercase;font-size:36px;line-height:36px;font-weight:700;}@media only screen and (max-width:1300px) and (min-width:1000px){body .row .col.section-title h1,body h1,.full-width-content .recent-post-container .inner-wrap h2{font-size:25.2px;line-height:25.2px;}}@media only screen and (max-width:1000px) and (min-width:690px){body .row .col.section-title h1,body h1{font-size:23.4px;line-height:23.4px;}.full-width-content .recent-post-container .inner-wrap h2{font-size:21.6px;line-height:21.6px;}}@media only screen and (max-width:690px){body .row .col.section-title h1,body h1{font-size:21.6px;line-height:21.6px;}.full-width-content .recent-post-container .inner-wrap h2{font-size:16.2px;line-height:16.2px;}}#page-header-bg h2,body h2,article.post .post-header h2,article.post.quote .post-content h2,article.post.link .post-content h2,article.post.format-status .post-content h2,#call-to-action span,.woocommerce .full-width-tabs #reviews h3,.row .col.section-title h2{font-family:Open Sans Condensed;font-size:26px;line-height:26px;}@media only screen and (max-width:1300px) and (min-width:1000px){body h2{font-size:22.1px;line-height:22.1px;}.row .span_2 h2,.row .span_3 h2,.row .span_4 h2,.row .vc_col-sm-2 h2,.row .vc_col-sm-3 h2,.row .vc_col-sm-4 h2{font-size:18.2px;line-height:18.2px;}}@media only screen and (max-width:690px){.col h2{font-size:15.6px;line-height:15.6px;}}body h3,.row .col h3,.toggle h3 a,.ascend #respond h3,.ascend h3#comments,.woocommerce ul.products li.product.text_on_hover h3,.masonry.classic_enhanced .masonry-blog-item h3.title{font-family:Open Sans Condensed;letter-spacing:.5px;font-size:22px;line-height:22px;}@media only screen and (min-width:1000px){.ascend .comments-section .comment-wrap.full-width-section > h3,.blog_next_prev_buttons[data-post-header-style="default_minimal"] .col h3{font-size:37.4px!important;line-height:45.4px!important;}.masonry.classic_enhanced .masonry-blog-item.large_featured h3.title{font-size:33px!important;line-height:33px!important;}}@media only screen and (min-width:1300px) and (max-width:1500px){body .portfolio-items.constrain-max-cols.masonry-items .col.elastic-portfolio-item h3{font-size:18.7px!important;line-height:18.7px;}}@media only screen and (max-width:1300px) and (min-width:1000px),(max-width:690px){.row .span_2 h3,.row .span_3 h3,.row .span_4 h3,.row .vc_col-sm-2 h3,.row .vc_col-sm-3 h3,.row .vc_col-sm-4 h3{font-size:15.4px;line-height:15.4px;}}body h4,.row .col h4,.portfolio-items .work-meta h4,.portfolio-items .col.span_3 .work-meta h4,#respond h3,h3#comments,.portfolio-items[data-ps="6"] .work-meta h4{font-family:Open Sans Condensed;font-size:18px;line-height:18px;font-weight:700;}@media only screen and (min-width:690px){.portfolio-items[data-ps="6"] .wide_tall .work-meta h4{font-size:30.6px!important;line-height:38.6px!important;}}body h5,.row .col h5,.portfolio-items .work-item.style-3-alt p{font-family:Open Sans Condensed;font-size:16px;line-height:16px;}body .wpb_column > .wpb_wrapper > .morphing-outline .inner > h5{font-size:22px!important;}body h6,.row .col h6{}body i,body em,.masonry.meta_overlaid article.post .post-header .meta-author > span,#post-area.masonry.meta_overlaid article.post .post-meta .date,#post-area.masonry.meta_overlaid article.post.quote .quote-inner .author,#post-area.masonry.meta_overlaid article.post.link .post-content .destination{}form label,.woocommerce-checkout-review-order-table .product-info .amount,.woocommerce-checkout-review-order-table .product-info .product-quantity,.nectar-progress-bar p,.nectar-progress-bar span strong i,.nectar-progress-bar span strong,.testimonial_slider blockquote span{}.nectar-dropcap{}body #page-header-bg h1,html body .row .col.section-title h1,.nectar-box-roll .overlaid-content h1{}@media only screen and (min-width:690px) and (max-width:1000px){#page-header-bg .span_6 h1,.overlaid-content h1{font-size:;line-height:;}}@media only screen and (min-width:1000px) and (max-width:1300px){#page-header-bg .span_6 h1,.nectar-box-roll .overlaid-content h1{font-size:;line-height:;}}@media only screen and (min-width:1300px) and (max-width:1500px){#page-header-bg .span_6 h1,.nectar-box-roll .overlaid-content h1{font-size:;line-height:;}}@media only screen and (max-width:690px){#page-header-bg.fullscreen-header .span_6 h1,.overlaid-content h1{font-size:;line-height:;}}body #page-header-bg .span_6 span.subheader,body .row .col.section-title > span,.nectar-box-roll .overlaid-content .subheader{}@media only screen and (min-width:1000px) and (max-width:1300px){body #page-header-bg:not(.fullscreen-header) .span_6 span.subheader,body .row .col.section-title > span{font-size:;line-height:;}}@media only screen and (min-width:690px) and (max-width:1000px){body #page-header-bg.fullscreen-header .span_6 span.subheader,.overlaid-content .subheader{font-size:;line-height:;}}@media only screen and (max-width:690px){body #page-header-bg.fullscreen-header .span_6 span.subheader,.overlaid-content .subheader{font-size:;line-height:;}}body #slide-out-widget-area .inner .off-canvas-menu-container li a,body #slide-out-widget-area.fullscreen .inner .off-canvas-menu-container li a{}@media only screen and (min-width:690px) and (max-width:1000px){body #slide-out-widget-area.fullscreen .inner .off-canvas-menu-container li a{font-size:;line-height:;}}@media only screen and (max-width:690px){body #slide-out-widget-area.fullscreen .inner .off-canvas-menu-container li a{font-size:;line-height:;}}#slide-out-widget-area .menuwrapper li small{}@media only screen and (min-width:690px) and (max-width:1000px){#slide-out-widget-area .menuwrapper li small{font-size:;line-height:;}}@media only screen and (max-width:690px){#slide-out-widget-area .menuwrapper li small{font-size:;line-height:;}}.swiper-slide .content h2{font-family:Open Sans Condensed;}@media only screen and (min-width:1000px) and (max-width:1300px){body .nectar-slider-wrap[data-full-width="true"] .swiper-slide .content h2,body .nectar-slider-wrap[data-full-width="boxed-full-width"] .swiper-slide .content h2,body .full-width-content .vc_span12 .swiper-slide .content h2{font-size:;line-height:;}}@media only screen and (min-width:690px) and (max-width:1000px){body .nectar-slider-wrap[data-full-width="true"] .swiper-slide .content h2,body .nectar-slider-wrap[data-full-width="boxed-full-width"] .swiper-slide .content h2,body .full-width-content .vc_span12 .swiper-slide .content h2{font-size:;line-height:;}}@media only screen and (max-width:690px){body .nectar-slider-wrap[data-full-width="true"] .swiper-slide .content h2,body .nectar-slider-wrap[data-full-width="boxed-full-width"] .swiper-slide .content h2,body .full-width-content .vc_span12 .swiper-slide .content h2{font-size:;line-height:;}}#featured article .post-title h2 span,.swiper-slide .content p,#portfolio-filters-inline #current-category,body .vc_text_separator div{font-family:Open Sans Condensed;}#portfolio-filters-inline ul{line-height:;}.swiper-slide .content p.transparent-bg span{}@media only screen and (min-width:1000px) and (max-width:1300px){.nectar-slider-wrap[data-full-width="true"] .swiper-slide .content p,.nectar-slider-wrap[data-full-width="boxed-full-width"] .swiper-slide .content p,.full-width-content .vc_span12 .swiper-slide .content p{font-size:;line-height:;}}@media only screen and (min-width:690px) and (max-width:1000px){.nectar-slider-wrap[data-full-width="true"] .swiper-slide .content p,.nectar-slider-wrap[data-full-width="boxed-full-width"] .swiper-slide .content p,.full-width-content .vc_span12 .swiper-slide .content p{font-size:;line-height:;}}@media only screen and (max-width:690px){body .nectar-slider-wrap[data-full-width="true"] .swiper-slide .content p,body .nectar-slider-wrap[data-full-width="boxed-full-width"] .swiper-slide .content p,body .full-width-content .vc_span12 .swiper-slide .content p{font-size:;line-height:;}}.testimonial_slider blockquote,.testimonial_slider blockquote span,blockquote{}#footer-outer .widget h4,#sidebar h4,#call-to-action .container a,.uppercase,.nectar-button,body .widget_calendar table th,body #footer-outer #footer-widgets .col .widget_calendar table th,.swiper-slide .button a,header#top nav > ul > li.megamenu > ul > li > a,.carousel-heading h2,body .gform_wrapper .top_label .gfield_label,body .vc_pie_chart .wpb_pie_chart_heading,#infscr-loading div,#page-header-bg .author-section a,.ascend input[type="submit"],.ascend button[type="submit"],.widget h4,.text-on-hover-wrap .categories a,.text_on_hover.product .add_to_cart_button,.woocommerce-page div[data-project-style="text_on_hover"] .single_add_to_cart_button,.woocommerce div[data-project-style="text_on_hover"] .cart .quantity input.qty,.woocommerce-page #respond input#submit,.meta_overlaid article.post .post-header h2,.meta_overlaid article.post.quote .post-content h2,.meta_overlaid article.post.link .post-content h2,.meta_overlaid article.post.format-status .post-content h2,.meta_overlaid article .meta-author a,.pricing-column.highlight h3 .highlight-reason,.blog-recent[data-style="minimal"] .col > span,.masonry.classic_enhanced .posts-container article .meta-category a,.nectar-recent-posts-slider .container .strong,#page-header-bg[data-post-hs="default_minimal"] .inner-wrap > a,.single .heading-title[data-header-style="default_minimal"] .meta-category a,.nectar-fancy-box .link-text{font-family:Open Sans Condensed;font-weight:normal;}.team-member h4,.row .col.section-title p,.row .col.section-title span,#page-header-bg .subheader,.nectar-milestone .subject,.testimonial_slider blockquote span{font-family:Open Sans Condensed;}article.post .post-meta .month{line-height:-6px!important;}</style><meta name="generator" content="Powered by Visual Composer - drag and drop page builder for WordPress.">
+<!--[if lte IE 9]><link rel="stylesheet" type="text/css" href="http://www.zerotohero.hu/wp-content/plugins/js_composer_salient/assets/css/vc_lte_ie9.min.css" media="screen"><![endif]--><!--[if IE  8]><link rel="stylesheet" type="text/css" href="http://www.zerotohero.hu/wp-content/plugins/js_composer_salient/assets/css/vc-ie8.min.css" media="screen"><![endif]-->
+<!-- BEGIN GADWP v4.9.3.2 Universal Tracking - https://deconf.com/google-analytics-dashboard-wordpress/ -->
+<script>
+  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+  (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+  m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+  })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+  ga('create', 'UA-53700768-1', 'auto');
+  ga('send', 'pageview');
+</script>
+
+<!-- END GADWP Universal Tracking -->
+
+<noscript><style type="text/css"> .wpb_animate_when_almost_visible { opacity: 1; }</style></noscript>
+<style type="text/css"></style><style type="text/css">.fb_hidden{position:absolute;top:-10000px;z-index:10001}.fb_reposition{overflow:hidden;position:relative}.fb_invisible{display:none}.fb_reset{background:none;border:0;border-spacing:0;color:#000;cursor:auto;direction:ltr;font-family:"lucida grande", tahoma, verdana, arial, sans-serif;font-size:11px;font-style:normal;font-variant:normal;font-weight:normal;letter-spacing:normal;line-height:1;margin:0;overflow:visible;padding:0;text-align:left;text-decoration:none;text-indent:0;text-shadow:none;text-transform:none;visibility:visible;white-space:normal;word-spacing:normal}.fb_reset>div{overflow:hidden}@keyframes fb_transform{from{opacity:0;transform:scale(.95)}to{opacity:1;transform:scale(1)}}.fb_animate{animation:fb_transform .3s forwards}
+.fb_dialog{background:rgba(82, 82, 82, .7);position:absolute;top:-10000px;z-index:10001}.fb_dialog_advanced{border-radius:8px;padding:10px}.fb_dialog_content{background:#fff;color:#373737}.fb_dialog_close_icon{background:url(https://static.xx.fbcdn.net/rsrc.php/v3/yq/r/IE9JII6Z1Ys.png) no-repeat scroll 0 0 transparent;cursor:pointer;display:block;height:15px;position:absolute;right:18px;top:17px;width:15px}.fb_dialog_mobile .fb_dialog_close_icon{left:5px;right:auto;top:5px}.fb_dialog_padding{background-color:transparent;position:absolute;width:1px;z-index:-1}.fb_dialog_close_icon:hover{background:url(https://static.xx.fbcdn.net/rsrc.php/v3/yq/r/IE9JII6Z1Ys.png) no-repeat scroll 0 -15px transparent}.fb_dialog_close_icon:active{background:url(https://static.xx.fbcdn.net/rsrc.php/v3/yq/r/IE9JII6Z1Ys.png) no-repeat scroll 0 -30px transparent}.fb_dialog_iframe{line-height:0}.fb_dialog_content .dialog_title{background:#6d84b4;border:1px solid #365899;color:#fff;font-size:14px;font-weight:bold;margin:0}.fb_dialog_content .dialog_title>span{background:url(https://static.xx.fbcdn.net/rsrc.php/v3/yd/r/Cou7n-nqK52.gif) no-repeat 5px 50%;float:left;padding:5px 0 7px 26px}body.fb_hidden{height:100%;left:0;margin:0;overflow:visible;position:absolute;top:-10000px;transform:none;width:100%}.fb_dialog.fb_dialog_mobile.loading{background:url(https://static.xx.fbcdn.net/rsrc.php/v3/ya/r/3rhSv5V8j3o.gif) white no-repeat 50% 50%;min-height:100%;min-width:100%;overflow:hidden;position:absolute;top:0;z-index:10001}.fb_dialog.fb_dialog_mobile.loading.centered{background:none;height:auto;min-height:initial;min-width:initial;width:auto}.fb_dialog.fb_dialog_mobile.loading.centered #fb_dialog_loader_spinner{width:100%}.fb_dialog.fb_dialog_mobile.loading.centered .fb_dialog_content{background:none}.loading.centered #fb_dialog_loader_close{clear:both;color:#fff;display:block;font-size:18px;padding-top:20px}#fb-root #fb_dialog_ipad_overlay{background:rgba(0, 0, 0, .4);bottom:0;left:0;min-height:100%;position:absolute;right:0;top:0;width:100%;z-index:10000}#fb-root #fb_dialog_ipad_overlay.hidden{display:none}.fb_dialog.fb_dialog_mobile.loading iframe{visibility:hidden}.fb_dialog_mobile .fb_dialog_iframe{position:sticky;top:0}.fb_dialog_content .dialog_header{background:linear-gradient(from(#738aba), to(#2c4987));border-bottom:1px solid;border-color:#1d3c78;box-shadow:white 0 1px 1px -1px inset;color:#fff;font:bold 14px Helvetica, sans-serif;text-overflow:ellipsis;text-shadow:rgba(0, 30, 84, .296875) 0 -1px 0;vertical-align:middle;white-space:nowrap}.fb_dialog_content .dialog_header table{height:43px;width:100%}.fb_dialog_content .dialog_header td.header_left{font-size:12px;padding-left:5px;vertical-align:middle;width:60px}.fb_dialog_content .dialog_header td.header_right{font-size:12px;padding-right:5px;vertical-align:middle;width:60px}.fb_dialog_content .touchable_button{background:linear-gradient(from(#4267B2), to(#2a4887));background-clip:padding-box;border:1px solid #29487d;border-radius:3px;display:inline-block;line-height:18px;margin-top:3px;max-width:85px;padding:4px 12px;position:relative}.fb_dialog_content .dialog_header .touchable_button input{background:none;border:none;color:#fff;font:bold 12px Helvetica, sans-serif;margin:2px -12px;padding:2px 6px 3px 6px;text-shadow:rgba(0, 30, 84, .296875) 0 -1px 0}.fb_dialog_content .dialog_header .header_center{color:#fff;font-size:16px;font-weight:bold;line-height:18px;text-align:center;vertical-align:middle}.fb_dialog_content .dialog_content{background:url(https://static.xx.fbcdn.net/rsrc.php/v3/y9/r/jKEcVPZFk-2.gif) no-repeat 50% 50%;border:1px solid #4a4a4a;border-bottom:0;border-top:0;height:150px}.fb_dialog_content .dialog_footer{background:#f5f6f7;border:1px solid #4a4a4a;border-top-color:#ccc;height:40px}#fb_dialog_loader_close{float:left}.fb_dialog.fb_dialog_mobile .fb_dialog_close_button{text-shadow:rgba(0, 30, 84, .296875) 0 -1px 0}.fb_dialog.fb_dialog_mobile .fb_dialog_close_icon{visibility:hidden}#fb_dialog_loader_spinner{animation:rotateSpinner 1.2s linear infinite;background-color:transparent;background-image:url(https://static.xx.fbcdn.net/rsrc.php/v3/yD/r/t-wz8gw1xG1.png);background-position:50% 50%;background-repeat:no-repeat;height:24px;width:24px}@keyframes rotateSpinner{0%{transform:rotate(0deg)}100%{transform:rotate(360deg)}}
+.fb_iframe_widget{display:inline-block;position:relative}.fb_iframe_widget span{display:inline-block;position:relative;text-align:justify}.fb_iframe_widget iframe{position:absolute}.fb_iframe_widget_fluid_desktop,.fb_iframe_widget_fluid_desktop span,.fb_iframe_widget_fluid_desktop iframe{max-width:100%}.fb_iframe_widget_fluid_desktop iframe{min-width:220px;position:relative}.fb_iframe_widget_lift{z-index:1}.fb_iframe_widget_fluid{display:inline}.fb_iframe_widget_fluid span{width:100%}
+.fb_customer_chat_bounce_in_v2{animation-duration:300ms;animation-name:fb_bounce_in_v2;transition-timing-function:ease-in}.fb_customer_chat_bounce_out_v2{animation-duration:300ms;animation-name:fb_bounce_out_v2;transition-timing-function:ease-in}.fb_customer_chat_bounce_in_v2_mobile_chat_started{animation-duration:300ms;animation-name:fb_bounce_in_v2_mobile_chat_started;transition-timing-function:ease-in}.fb_customer_chat_bounce_out_v2_mobile_chat_started{animation-duration:300ms;animation-name:fb_bounce_out_v2_mobile_chat_started;transition-timing-function:ease-in}.fb_customer_chat_bubble_pop_in{animation-duration:250ms;animation-name:fb_customer_chat_bubble_bounce_in_animation}.fb_customer_chat_bubble_animated_no_badge{box-shadow:0 3px 12px rgba(0, 0, 0, .15);transition:box-shadow 150ms linear}.fb_customer_chat_bubble_animated_no_badge:hover{box-shadow:0 5px 24px rgba(0, 0, 0, .3)}.fb_customer_chat_bubble_animated_with_badge{box-shadow:-5px 4px 14px rgba(0, 0, 0, .15);transition:box-shadow 150ms linear}.fb_customer_chat_bubble_animated_with_badge:hover{box-shadow:-5px 8px 24px rgba(0, 0, 0, .2)}.fb_invisible_flow{display:inherit;height:0;overflow-x:hidden;width:0}.fb_mobile_overlay_active{background-color:#fff;height:100%;overflow:hidden;position:fixed;visibility:hidden;width:100%}@keyframes fb_bounce_in_v2{0%{opacity:0;transform:scale(0, 0);transform-origin:bottom right}50%{transform:scale(1.03, 1.03);transform-origin:bottom right}100%{opacity:1;transform:scale(1, 1);transform-origin:bottom right}}@keyframes fb_bounce_in_v2_mobile_chat_started{0%{opacity:0;top:20px}100%{opacity:1;top:0}}@keyframes fb_bounce_out_v2{0%{opacity:1;transform:scale(1, 1);transform-origin:bottom right}100%{opacity:0;transform:scale(0, 0);transform-origin:bottom right}}@keyframes fb_bounce_out_v2_mobile_chat_started{0%{opacity:1;top:0}100%{opacity:0;top:20px}}@keyframes fb_customer_chat_bubble_bounce_in_animation{0%{bottom:6pt;opacity:0;transform:scale(0, 0);transform-origin:center}70%{bottom:18pt;opacity:1;transform:scale(1.2, 1.2)}100%{transform:scale(1, 1)}}</style></head>
+
+
+<body class="single single-post postid-2153 single-format-standard ascend wpb-js-composer js-comp-ver-4.11.2 vc_responsive" data-footer-reveal="false" data-footer-reveal-shadow="none" data-cae="linear" data-cad="650" data-aie="none" data-ls="pretty_photo" data-apte="standard" data-hhun="0" data-fancy-form-rcs="default" data-form-style="default" data-is="minimal" data-button-style="default" data-header-inherit-rc="false" data-header-search="true" data-animated-anchors="true" data-ajax-transitions="true" data-full-width-header="false" data-slide-out-widget-area="true" data-loading-animation="none" data-bg-header="false" data-ext-responsive="true" data-header-resize="1" data-header-color="light" data-smooth-scrolling="0" data-permanent-transparent="false" data-responsive="1" data-gr-c-s-loaded="true">
+
+ 
+
+
+ <div id="header-space" data-header-mobile-fixed="1" style="height: 113.667px;"></div> 
+
+<div id="header-outer" data-has-menu="true" data-mobile-fixed="1" data-ptnm="false" data-lhe="default" data-user-set-bg="#ffffff" data-format="default" data-permanent-transparent="false" data-cart="false" data-transparency-option="" data-shrink-num="6" data-full-width="false" data-using-secondary="0" data-using-logo="1" data-logo-height="90" data-m-logo-height="24" data-padding="12" data-header-resize="1" style="padding-top: 7px;" class="small-nav">
+	
+		
+	<header id="top">
+		
+		<div class="container" style="visibility: visible;">
+			
+			<div class="row">
+				  
+				<div class="col span_3">
+					
+					<a id="logo" href="http://www.zerotohero.hu/">
+						
+						<img class="stnd default-logo" alt="zeroToHero" src="./Generikusok _ zeroToHero_files/logo_fekvo_90px.png" style="height: 84px;"><img class="retina-logo " alt="zeroToHero" src="./Generikusok _ zeroToHero_files/logo_fekvo_180px.png" style="height: 84px; display: inline-block;"> 
+					</a>
+
+				</div><!--/span_3-->
+				
+				<div class="col span_9 col_last">
+					
+										
+											<div class="slide-out-widget-area-toggle">
+							<div> <a href="http://www.zerotohero.hu/generikusok/#sidewidgetarea" class="closed"> <i class="icon-reorder"></i> </a> </div> 
+       					</div>
+										
+					<nav>
+						<ul class="buttons" data-user-set-ocm="off">
+							<li id="search-btn" style="padding-bottom: 30px; padding-top: 30px;"><div><a href="http://www.zerotohero.hu/generikusok/#searchbox"><span class="icon-salient-search" aria-hidden="true"></span></a></div> </li>
+						
+															<li class="slide-out-widget-area-toggle" style="padding-bottom: 30px; padding-top: 30px;">
+									<div> <a href="http://www.zerotohero.hu/generikusok/#sidewidgetarea" class="closed"> <span> <i class="lines-button x2"> <i class="lines"></i> </i> </span> </a> </div> 
+       							</li>
+													</ul>
+						<ul class="sf-menu sf-js-enabled sf-arrows">	
+							<li id="menu-item-5670" class="menu-item menu-item-type-post_type menu-item-object-page menu-item-5670"><a href="http://www.zerotohero.hu/java-oktatas/" style="padding-bottom: 34px; padding-top: 28px;">Haladó Java Oktatás</a></li>
+<li id="menu-item-4640" class="menu-item menu-item-type-post_type menu-item-object-page menu-item-4640"><a href="http://www.zerotohero.hu/" style="padding-bottom: 34px; padding-top: 28px;">Java online tréning</a></li>
+<li id="menu-item-5559" class="menu-item menu-item-type-post_type menu-item-object-page menu-item-5559"><a href="http://www.zerotohero.hu/big-data-4-hetes-trening/" style="padding-bottom: 34px; padding-top: 28px;">Big data online tréning</a></li>
+<li id="menu-item-3987" class="menu-item menu-item-type-post_type menu-item-object-page menu-item-3987"><a href="http://www.zerotohero.hu/rolunk/" style="padding-bottom: 34px; padding-top: 28px;">Rólunk</a></li>
+<li id="menu-item-3883" class="menu-item menu-item-type-post_type menu-item-object-page menu-item-has-children menu-item-3883"><a href="http://www.zerotohero.hu/kapcsolat/" class="sf-with-ul" style="padding-bottom: 34px; padding-top: 28px;">Kapcsolat</a>
+<ul class="sub-menu" style="display: none; top: 90px;">
+	<li id="menu-item-3874" class="menu-item menu-item-type-custom menu-item-object-custom menu-item-3874"><a href="http://pcf.hu/">PCF</a></li>
+	<li id="menu-item-3875" class="menu-item menu-item-type-post_type menu-item-object-page menu-item-3875"><a href="http://www.zerotohero.hu/blog/">Blog</a></li>
+</ul>
+</li>
+						</ul>
+						
+					</nav>
+					
+				</div><!--/span_9-->
+			
+			</div><!--/row-->
+			
+		</div><!--/container-->
+		
+	</header>
+	
+	
+			
+	
+
+</div><!--/header-outer-->
+
+
+<div id="search-outer" class="nectar" style="top: 97px;">
+		
+	<div id="search">
+	  	 
+		<div class="container" style="height: 97px;">
+		  	 	
+		     <div id="search-box" style="top: 347.5px;">
+		     	
+		     	<div class="col span_12">
+			      	<form action="http://www.zerotohero.hu/" method="GET">
+			      		<input type="text" name="s" id="s" value="Start Typing..." data-placeholder="Start Typing...">
+			      	</form>
+			      			        </div><!--/span_12-->
+			      
+		     </div><!--/search-box-->
+		     
+		     <div id="close"><a href="http://www.zerotohero.hu/generikusok/#"><span class="icon-salient-x" aria-hidden="true"></span></a></div>
+		     
+		 </div><!--/container-->
+	    
+	</div><!--/search-->
+	  
+</div><!--/search-outer--> 
+
+<div id="mobile-menu" data-mobile-fixed="1" style="display: none;">
+	
+	<div class="container">
+		<ul>
+			<li><a href="http://www.zerotohero.hu/generikusok/">No menu assigned!</a></li>		
+		</ul>
+	</div>
+	
+</div>
+
+<div id="ajax-loading-screen" data-disable-fade-on-click="1" data-effect="standard" data-method="standard" style="opacity: 0; display: none;">
+	
+			<span class="loading-icon none" style="opacity: 0;"> 
+			<span class="default-loading-icon spin"></span> 
+		</span>
+	</div>
+
+<div id="ajax-content-wrap" class="at-content">
+
+
+
+
+
+
+
+
+
+<div class="container-wrap" style="opacity: 1;">
+
+	<div class="container main-content">
+		
+					
+			
+					<div class="row heading-title" data-header-style="default">
+						<div class="col span_12 section-title blog-title">
+														<h1 class="entry-title">Generikusok</h1>
+							
+							<div id="single-below-header">
+								<span class="meta-author vcard author"><span class="fn">By <a href="http://www.zerotohero.hu/author/zoltan-mihalyi/" title="Mihályi Zoltán bejegyzése" rel="author">Mihályi Zoltán</a></span></span><!--
+  								--><span class="meta-date date updated">2016.03.18</span><!--
+								--><span class="meta-category"><a href="http://www.zerotohero.hu/category/programozasi_nyelvek/java/">JAVA</a>, <a href="http://www.zerotohero.hu/category/nemkategorizalt/">Nem kategorizált</a></span> 							<!--project-additional-->
+							</div><!--/single-below-header-->
+							
+															<div id="single-meta" data-sharing="1">
+									<ul>
+										
+										<li class="meta-comment-count">
+											<a href="http://www.zerotohero.hu/generikusok/#respond"><i class="icon-default-style steadysets-icon-chat"></i> No Comments</a>
+										</li>
+										
+									 	<li>
+									   		<span class="n-shortcode"><a href="http://www.zerotohero.hu/generikusok/#" class="nectar-love" id="nectar-love-2153" title="Love this"> <div class="heart-wrap"><i class="icon-salient-heart-2"></i> <i class="icon-salient-heart loved"></i></div><span class="nectar-love-count">8</span></a></span>									   	</li>
+
+										<li class="meta-share-count"><a href="http://www.zerotohero.hu/generikusok/#"><i class="icon-default-style steadysets-icon-share"></i><span class="share-count-total">0</span></a> <div class="nectar-social animated-in in-sight" style=""><a class="facebook-share nectar-sharing" href="http://www.zerotohero.hu/generikusok/#" title="Share this"> <i class="icon-facebook"></i> <span class="count" style="display: none; width: auto;">0</span></a><a class="twitter-share nectar-sharing" href="http://www.zerotohero.hu/generikusok/#" title="Tweet this"> <i class="icon-twitter"></i> <span class="count" style="display: none; width: auto;">0</span></a><a class="linkedin-share nectar-sharing" href="http://www.zerotohero.hu/generikusok/#" title="Share this"> <i class="icon-linkedin"></i> <span class="count" style="display: none; width: auto;"> </span></a></div></li>
+										
+			
+									</ul>
+									
+									
+								</div><!--/single-meta-->
+
+														</div><!--/section-title-->
+					</div><!--/row-->
+				
+						
+					
+		<div class="row">
+			
+			<div id="post-area" class="col span_9">
+<article id="post-2153" class="regular post-2153 post type-post status-publish format-standard hentry category-java category-nemkategorizalt">
+
+	<div class="inner-wrap animated">
+
+		<div class="post-content">
+			
+						
+			
+			<div class="content-inner">
+				
+								
+								
+			   
+				
+<!-- BEGIN Schema.org microdata added by the Add-Meta-Tags WordPress plugin -->
+<!-- Scope BEGIN: Article -->
+<div itemscope="" itemtype="http://schema.org/Article">
+<!-- Scope BEGIN: Organization -->
+<span itemprop="publisher" itemscope="" itemtype="http://schema.org/Organization">
+<meta itemprop="name" content="zeroToHero">
+<meta itemprop="description" content="Adatvezérelt fejlesztési módszertanok a gyakorlatban">
+<!-- Scope BEGIN: ImageObject -->
+<span itemprop="logo" itemscope="" itemtype="http://schema.org/ImageObject">
+<meta itemprop="name" content="zeroToHero logo">
+<meta itemprop="text" content="zeroToHero logo">
+<meta itemprop="url" content="http://www.zerotohero.hu/wp-content/uploads/2014/08/logo_fekvo_90px.png">
+<meta itemprop="contentUrl" content="http://www.zerotohero.hu/wp-content/uploads/2014/08/logo_fekvo_90px.png">
+<meta itemprop="encodingFormat" content="image/png">
+</span> <!-- Scope END: ImageObject -->
+<meta itemprop="url" content="http://www.zerotohero.hu/">
+</span> <!-- Scope END: Organization -->
+<!-- Scope BEGIN: Person -->
+<span itemprop="author" itemscope="" itemtype="http://schema.org/Person">
+<meta itemprop="name" content="Mihályi Zoltán">
+<!-- Scope BEGIN: ImageObject -->
+<span itemprop="image" itemscope="" itemtype="http://schema.org/ImageObject">
+<meta itemprop="url" content="http://0.gravatar.com/avatar/90cf0d79015e0f45fb22070a7b211026?s=128&amp;d=mm&amp;r=g">
+<meta itemprop="contentUrl" content="http://0.gravatar.com/avatar/90cf0d79015e0f45fb22070a7b211026?s=128&amp;d=mm&amp;r=g">
+<meta itemprop="width" content="128">
+<meta itemprop="height" content="128">
+</span> <!-- Scope END: ImageObject -->
+<meta itemprop="url" content="http://www.zerotohero.hu/author/zoltan-mihalyi/">
+</span> <!-- Scope END: Person -->
+<meta itemprop="url" content="http://www.zerotohero.hu/generikusok/">
+<meta itemprop="mainEntityOfPage" content="http://www.zerotohero.hu/generikusok/">
+<meta itemprop="datePublished" content="2016-03-18T09:40:37+00:00">
+<meta itemprop="dateModified" content="2016-03-23T15:23:14+00:00">
+<meta itemprop="copyrightYear" content="2016">
+<meta itemprop="inLanguage" content="hu_HU">
+<meta itemprop="name" content="Generikusok">
+<meta itemprop="headline" content="Generikusok">
+<meta itemprop="description" content="Sziasztok! Ebben a cikkben a Java generikus nyelvi konstrukcióiról lesz szó. Célom, hogy részletesen megismertessem és megszerettessem ezeket veletek.">
+<meta itemprop="articleSection" content="JAVA">
+<meta itemprop="articleSection" content="Nem kategorizált">
+<meta itemprop="keywords" content="zerotohero, ingyenes, oktatás, képzés, informatika, it, adatvezérelt, alkalmazások, programozás, szoftverfejlesztés, java, nem kategorizált">
+<!-- Scope BEGIN: ImageObject -->
+<span itemprop="image" itemscope="" itemtype="http://schema.org/ImageObject">
+<meta itemprop="url" content="http://www.zerotohero.hu/wp-content/uploads/2014/08/logo_fekvo_90px.png">
+<meta itemprop="contentUrl" content="http://www.zerotohero.hu/wp-content/uploads/2014/08/logo_fekvo_90px.png">
+<meta itemprop="encodingFormat" content="image/png">
+</span> <!-- Scope END: ImageObject -->
+<div itemprop="articleBody">
+
+<!-- Facebook Like Button v1.9.6 BEGIN [http://blog.bottomlessinc.com] -->
+<iframe src="./Generikusok _ zeroToHero_files/like.html" scrolling="no" frameborder="0" allowtransparency="true" style="border: none; overflow: hidden; width: 450px; height: 30px; margin: 2px 0px; opacity: 1; visibility: visible;"></iframe>
+<!-- Facebook Like Button END -->
+<p>Sziasztok!</p>
+<p style="text-align: justify;">Ebben a cikkben a Java generikus nyelvi konstrukcióiról lesz szó. Célom, hogy részletesen megismertessem és megszerettessem ezeket veletek. Valószínűleg még kell egy kis gyakorlás, mire magabiztosan fogjátok használni, de az alapvető fogalmakkal tisztában lesztek, és a Java lelki világa is közelebb fog állni hozzátok.</p>
+<h1>Mi a generikusok célja?</h1>
+<p style="text-align: justify;">Egy kulcsszó: <strong>általánosítás</strong>. Az általánosítás segítségével elkerülhető, hogy majdnem ugyanazt a kódot írjuk kétszer csak azért, mert más típuson szeretnénk dolgozni.</p>
+<p style="text-align: justify;">Logikusnak tűnik, hogy ilyenkor egy ősosztályon dolgozzunk (pl. <em>Object</em>), de a generikusok segítségével ennél sokkal erősebb fordításidejű típusellenőrzést kapunk. Ez a típusellenőrzés olyan sok hibát képes már fordítási időben felderíteni, és olyan sokat segít a kód fejlesztése, karbantartása közben, hogy bőven megtérül a megértésére fordított idő :)</p>
+<h1>Generikus osztályok</h1>
+<p style="text-align: justify;">Ez a fejezet a generikus osztályok legalapvetőbb használatáról szól. Ha már használtál generikusokat, valószínűleg ez a fejezet nem sok újat fog jelenteni számodra, nyugodtan ugorj a következőre :)</p>
+<p style="text-align: justify;">A legtipikusabb generikus példa valamilyen kollekció (pl. lista) használata. Ha nem használnánk generikusokat, tetszőleges <em>Object</em> példányokat helyezhetnénk bele, és a kivett elemről sem tudnánk többet, mint hogy <em>Object</em>. Ha bevezetnénk olyan fogalmat, mint <em>Stringek listája</em> (a lista generikus paramétere <em>String</em>), akkor fordítási időben garantálhatnánk, hogy a listába kerülő és az abból kivett elem is <em>String</em> lesz. Ezzel nagyobb biztonságot és sok <em>castolás</em> elkerülését nyerjük.</p>
+<table style="border: none;">
+<thead>
+<tr>
+<th style="text-align: left;">Egy saját lista oszály generics nélkül</th>
+<th style="text-align: left;">Lista generikusok használatával</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align: left;">
+<pre><span style="font-weight: bold; color: #000080;">public class </span>List {
+    <span style="font-weight: bold; color: #000080;">public void </span>add(Object object) { ... }
+    <span style="font-weight: bold; color: #000080;">public </span>Object get(<span style="font-weight: bold; color: #000080;">int </span>index) { ... }
+}</pre>
+</td>
+<td style="text-align: left;">
+<pre><span style="font-weight: bold; color: #000080;">public class </span>List&lt;<span style="color: #20999d;">T</span>&gt; {
+    <span style="font-weight: bold; color: #000080;">public void </span>add(<span style="color: #20999d;">T </span>object) {...}
+    <span style="font-weight: bold; color: #000080;">public </span><span style="color: #20999d;">T </span>get(<span style="font-weight: bold; color: #000080;">int </span>index) {...}
+}</pre>
+</td>
+</tr>
+</tbody>
+</table>
+<p style="text-align: justify;">A kódokból látszik, hogy az osztály kapott egy <em>T</em> generikus paramétert, és az <em>Object</em> nevet lecseréltük <em>T</em>-re minden olyan helyen, ahol ezt a paramétert használhatjuk.</p>
+<p style="text-align: justify;">Az így létrehozott generikus osztályt a következőképp használjatjuk:</p>
+<table>
+<thead>
+<tr>
+<th></th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align: left;">
+<pre>List&lt;String&gt; list = <span style="font-weight: bold; color: #000080;">new </span>List&lt;String&gt;();
+list.add(<span style="font-weight: bold; color: #008000;">"Hello"</span>);
+String s = list.get(<span style="color: #0000ff;">0</span>);</pre>
+</td>
+</tr>
+</tbody>
+</table>
+<p style="text-align: justify;">Mint látjuk, a <em>List</em> osztály használatakor meg kell adnunk annak típusparaméterét hasonlóan, mint a tömbök esetén. Egy fontos különbség a tömbökhöz képest, hogy generikus paraméter nem lehet primitív típus. Primitív típusok helyett a megfelelő csomagoló osztályt célszerű használni (pl. <em>int</em> helyett <em>Integer</em>).</p>
+<p>Amennyiben egy generikus osztályt öröklünk, ezt a következőképpen tudjuk megtenni:</p>
+<table style="border: none;">
+<thead>
+<tr>
+<th style="text-align: left;">A típusparaméter delegálásával</th>
+<th style="text-align: left;">Fix típusparaméterrel</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align: left; width: 50%;">
+<pre><span style="font-weight: bold; color: #000080;">public class </span>MyList&lt;<span style="color: #20999d;">T</span>&gt; <span style="font-weight: bold; color: #000080;">extends </span>List&lt;<span style="color: #20999d;">T</span>&gt;{
+    ...
+}</pre>
+</td>
+<td style="text-align: left;">
+<pre><span style="font-weight: bold; color: #000080;">public class </span>StringList <span style="font-weight: bold; color: #000080;">extends </span>List&lt;String&gt;{
+    ...
+}</pre>
+</td>
+</tr>
+</tbody>
+</table>
+<p style="text-align: justify;">Ilyenkor a <em>MyList</em> a <em>List</em> altípusa lesz, de az altípusosságról még lesz szó részletesebben.</p>
+<p style="text-align: justify;">Gyakran több típusparaméterre van szükségünk, ilyenkor vesszővel elválasztva soroljuk fel a formális és az aktuális típusparamétereket egyaránt:</p>
+<table style="height: 27px;" width="12">
+<thead>
+<tr>
+<th></th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align: left;">
+<pre><span style="font-weight: bold; color: #000080;">public class </span>Pair&lt;<span style="color: #20999d;">F</span>, <span style="color: #20999d;">S</span>&gt; {
+    <span style="font-weight: bold; color: #000080;">private </span><span style="color: #20999d;">F </span><span style="font-weight: bold; color: #660e7a;">first</span>;
+    <span style="font-weight: bold; color: #000080;">private </span><span style="color: #20999d;">S </span><span style="font-weight: bold; color: #660e7a;">second</span>;
+
+    <span style="font-weight: bold; color: #000080;">public </span>Pair(<span style="color: #20999d;">F </span>first, <span style="color: #20999d;">S </span>second) {
+        <span style="font-weight: bold; color: #000080;">this</span>.<span style="font-weight: bold; color: #660e7a;">first </span>= first;
+        <span style="font-weight: bold; color: #000080;">this</span>.<span style="font-weight: bold; color: #660e7a;">second </span>= second;
+    }
+
+    <span style="font-weight: bold; color: #000080;">public </span><span style="color: #20999d;">F </span>getFirst() {
+        <span style="font-weight: bold; color: #000080;">return </span><span style="font-weight: bold; color: #660e7a;">first</span>;
+    }
+
+    <span style="font-weight: bold; color: #000080;">public </span><span style="color: #20999d;">S </span>getSecond() {
+        <span style="font-weight: bold; color: #000080;">return </span><span style="font-weight: bold; color: #660e7a;">second</span>;
+    }
+}</pre>
+<pre>Pair&lt;String, Integer&gt; pair = <span style="font-weight: bold; color: #000080;">new </span>Pair&lt;String, Integer&gt;(<span style="font-weight: bold; color: #008000;">"test"</span>, <span style="color: #0000ff;">123</span>);
+String first = pair.getFirst();
+Integer second = pair.getSecond();</pre>
+</td>
+</tr>
+</tbody>
+</table>
+<p style="text-align: justify;">Gyakran a típusparaméterek teljesen redundánsak, hiszen változó deklarálásakor a változó és a konstruktor típusparaméterei általában azonosak. Java 7-ben megjelent a diamond operátor (<em>&lt;&gt;</em>), amellyel elkerülhető a típusrendszer által kikövetkeztethető típusparaméterek kiírása. Fontos, hogy ez nem azonos a nyers típus használatával, amelyről a következő fejezetben lesz szó. Példa a diamond operátor használatára:</p>
+<table>
+<thead>
+<tr>
+<th></th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align: left;">
+<pre>Pair&lt;String, Integer&gt; pair = <span style="font-weight: bold; color: #000080;">new </span>Pair&lt;&gt;(<span style="font-weight: bold; color: #008000;">"test"</span>, <span style="color: #0000ff;">123</span>);</pre>
+</td>
+</tr>
+</tbody>
+</table>
+<h1 style="text-align: justify;">Nyers típusok</h1>
+<p style="text-align: justify;">A nyers típusok a generikus osztályok típusparaméterek nélküli változatai. A generikusok megjelenésekor kompatibilitási okok miatt maradt a nyelvben, hogy a Java library változatlanul használható legyen.</p>
+<p style="text-align: justify;">Egy nyers típussal rendelkező változónak értékül adható tetszőleges típusparaméterrel rendelkező – az alaptípusnak megfelelő – objektum:</p>
+<table>
+<thead>
+<tr>
+<th></th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align: left;">
+<pre>ArrayList list = <span style="font-weight: bold; color: #000080;">new </span>ArrayList&lt;String&gt;();</pre>
+</td>
+</tr>
+</tbody>
+</table>
+<p style="text-align: justify;">Fordítva azonban “unchecked” figyelmeztetést kapunk:</p>
+<table>
+<thead>
+<tr>
+<th></th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align: left;">
+<pre>ArrayList&lt;String&gt; list = <span style="font-weight: bold; color: #000080;">new </span>ArrayList(); <span style="font-style: italic; color: #808080;">//"unchecked" warning</span></pre>
+</td>
+</tr>
+</tbody>
+</table>
+<p style="text-align: justify;">A&nbsp;nyers típusú objektum generikus metódusait használva ugyanilyen figyelmeztetést kapunk:</p>
+<table>
+<thead>
+<tr>
+<th></th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align: left;">
+<pre>List list = <span style="font-weight: bold; color: #000080;">new </span>ArrayList();</pre>
+<pre style="color: #000000;">list.add(<span style="font-weight: bold; color: #008000;">"test"</span>); //warning</pre>
+</td>
+</tr>
+</tbody>
+</table>
+<h1>Zárt típusparaméterek</h1>
+<p style="text-align: justify;">Amikor generikus osztályt készítünk, lehetőségünk van a típusparaméter korlátozására, például&nbsp;szeretnénk egy olyan listát készíteni, amely képes összeadni a benne található számokat, ezért csak a <em>Number</em> osztály leszármazottait (<em>Number</em>, <em>Integer</em>, <em>Double</em>, <em>BigDecimal</em>…) fogadja el típusparaméterként. A továbbiakban egy típus leszármazottai és ősei alatt az aktuális típust is beleértjük.</p>
+<table>
+<thead>
+<tr>
+<th></th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align: left;">
+<pre>&nbsp;<span style="font-weight: bold; color: #000080;">public class </span>NumberList&lt;<span style="color: #20999d;">T </span><span style="font-weight: bold; color: #000080;">extends </span>Number&gt; <span style="font-weight: bold; color: #000080;">extends </span>ArrayList&lt;<span style="color: #20999d;">T</span>&gt; {</pre>
+<pre>    <span style="font-weight: bold; color: #000080;">public double </span>sum() {
+        <span style="font-weight: bold; color: #000080;">double </span>sum = <span style="color: #0000ff;">0.0</span>;
+        <span style="font-weight: bold; color: #000080;">for </span>(Number n : <span style="font-weight: bold; color: #000080;">this</span>) {
+            sum += n.doubleValue();
+        }
+        <span style="font-weight: bold; color: #000080;">return </span>sum;
+    }
+}</pre>
+</td>
+</tr>
+</tbody>
+</table>
+<p style="text-align: justify;">Amint a kódból is látszik, a korlátozott típusparaméter garantálja, hogy a listában levő elemek a Number leszármazottai, ezért rendelkeznek doubleValue() metódussal. Megadhatunk több felső korlátot is, a következő módon:</p>
+<table>
+<thead>
+<tr>
+<th></th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align: left;">
+<pre><span style="font-weight: bold; color: #000080;">public interface </span>B {
+}
+<span style="font-weight: bold; color: #000080;">public interface </span>C {
+}
+<span style="font-weight: bold; color: #000080;">public interface </span>D {
+}
+
+<span style="font-weight: bold; color: #000080;">public class </span>A&lt;<span style="color: #20999d;">T </span><span style="font-weight: bold; color: #000080;">extends </span>B &amp; C &amp; D&gt; {
+}</pre>
+</td>
+</tr>
+</tbody>
+</table>
+<h1 style="text-align: justify;">Altípusosság</h1>
+<p style="text-align: justify;">A leggyakoribb hiba a generikusok használata során, hogy ha két generikus típus nyers típusa megegyezik, és típusparamétereik leszármazási viszonyban vannak (pl. <em>List&lt;String&gt;</em> és <em>List&lt;Object&gt;</em>), akkor ezeket a generikus típusokat egymás leszármazottainak gondoljuk, de ez nincs így. Lássuk, mi ennek az oka!</p>
+<p style="text-align: justify;">A Java követi a <em>Liskov féle helyettesítési elv</em>et: ha egy típus altípusa egy másiknak, akkor bárhol, ahol a típus egy példányát használjuk, a leszármazott példányát is használhatjuk. Igaz ez a <em>List&lt;Object&gt;</em> és a <em>List&lt;String&gt;</em> esetében? Elsőre úgy tűnik, hogy igen. Ha valahol a <em>List&lt;Object&gt;</em> egy elemével kell dolgoznunk, használhatjuk a <em>List&lt;String&gt;</em> egy elemét, hiszen az elemek típusa leszármazotti viszonyban áll egymással. Mi történik, ha a listába egy elemet szeretnénk helyezni? A <em>List&lt;Object&gt;</em> lehetővé teszi, hogy tetszőleges típusú elemet helyezzünk bele (pl. számokat), ez azonban nem igaz a <em>List&lt;String&gt;</em> típusra, hiszen ez már csak <em>String</em>eket fogad el, vagyis szigorítása, nem pedig bővítése a <em>List&lt;Object&gt;</em>-nek!</p>
+<p style="text-align: justify;">Tömböknél ugyanez a probléma merül fel, ott azonban a az <em>Object[]</em> őse a <em>String[]</em>-nek, viszont a tömbbe hibás elem helyezésekor futásidőben kapunk hibát:</p>
+<table>
+<thead>
+<tr>
+<th></th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align: left;">
+<pre style="color: #000000;">Object[] objects = new String[<span style="color: #0000ff;">1</span>];</pre>
+<pre style="color: #000000;">objects[<span style="color: #0000ff;">0</span>] = new Object(); <span style="font-style: italic; color: #808080;">//runtime error: ArrayStoreException</span></pre>
+</td>
+</tr>
+</tbody>
+</table>
+<p style="text-align: justify;">Mivel futásidőben már nem áll rendelkezésre generikus típus információ, az ilyenfajta hibák felfedezetlenül maradnának (lásd: type erasure), ezért a fordításidejű ellenőrzésnek kell szigorúbbnak lennie. Amint majd látjuk, a generikus típusok használata egy meglehetősen kifejező, erős fordításidejű típusellenőrzést ad a kezünkbe.</p>
+<h1 style="text-align: justify;">Wildcardok</h1>
+<p style="text-align: justify;">Hogyan implementálnánk egy olyan metódust, ami egy tetszőleges objektumokat tartalmazó lista elemeit kiírja? Az első próbálkozásunk valahogy így nézne ki:</p>
+<table>
+<thead>
+<tr>
+<th></th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align: left;"><span style="font-weight: bold; color: #000080;">private void </span>printObjects(List&lt;Object&gt; list) {<p></p>
+<pre>    <span style="font-weight: bold; color: #000080;">for </span>(Object o : list) {
+        System.<span style="font-weight: bold; font-style: italic; color: #660e7a;">out</span>.println(o);
+    }
+}</pre>
+</td>
+</tr>
+</tbody>
+</table>
+<p style="text-align: justify;">Az előzőekben láttuk, hogy egy ilyen metódusnak nem adhatunk át egy <em>List&lt;String&gt;</em> típusú objektumot, mivel fordítási hibát kapunk (ha átadhatnánk, a metódus képes lenne egy <em>new Object()</em>-et a listába helyezni), ezért más megoldáshoz kell folyamodnunk. A&nbsp;paraméterként kapott objektum nem kell, hogy egy tetszőleges objektumokat tartalmazó lista(<em>List&lt;Object&gt;</em> legyen, elég ha egy olyan <em>T</em> típusú listát kapunk, ahol a <em>T</em> ismeretlen (fontos különbség!).</p>
+<p style="text-align: justify;">Javaban az ismeretlen típusparamétert <em>?</em>-el jelöljük, ezt hívjuk <em>wildcard</em>nak. Ez nem használható generikus osztály példányosításához, örökléséhez, vagy generikus metódus meghívásához, de bárhol máshol igen. A megoldás tehát a következő:</p>
+<table>
+<thead>
+<tr>
+<th></th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align: left;"><span style="font-weight: bold; color: #000080;">private void </span>printObjects(List&lt;?&gt; list) {<p></p>
+<pre>    <span style="font-weight: bold; color: #000080;">for </span>(Object o : list) {
+        System.<span style="font-weight: bold; font-style: italic; color: #660e7a;">out</span>.println(o);
+    }
+}</pre>
+</td>
+</tr>
+</tbody>
+</table>
+<p style="text-align: justify;">Ugyan nem ismerjük a lista típusát, de az biztos, hogy az&nbsp;<em>Object </em>leszármazottja, ezért <em>Object</em>ként&nbsp;használhatjuk.</p>
+<p style="text-align: justify;">Mi lenne, ha <em>list.add()</em>-ot akarnánk meghívni? Fordítási hiba: nem tudunk olyan objektumot átadni, amely biztos, hogy megfelel annak az ismeretlen T-nek. Egyetlen kivétel létezik: a <em>null</em> érték, amely bármilyen típusnak megfelel.</p>
+<h1 style="text-align: justify;">Wildcard upper bound</h1>
+<p style="text-align: justify;">Amennyiben nem elég egy ismeretlen típusú lista, hanem további megkötéseket szeretnénk rá adni (pl. valamilyen szám típusú legyen, mert össze szeretnénk adni az elemeit), akkor az <em>extends</em> szócskával adhatunk felső korlátot (wildcardnál maximum&nbsp;egyet) a generikus osztály típusparaméterének. Az alábbi kódban a metódus egy olyan&nbsp;listát vár paraméterül, amelynek ugyan nem tudjuk a típusparaméterét, de az biztos, hogy a <em>Number</em> osztály leszármazottja.</p>
+<table>
+<thead>
+<tr>
+<th></th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align: left;"><span style="font-weight: bold; color: #000080;">public static double </span>sum(List&lt;? <span style="font-weight: bold; color: #000080;">extends </span>Number&gt; list) {<p></p>
+<pre>    <span style="font-weight: bold; color: #000080;">double </span>sum = <span style="color: #0000ff;">0.0</span>;
+    <span style="font-weight: bold; color: #000080;">for </span>(Number n : list)
+        sum += n.doubleValue();
+    <span style="font-weight: bold; color: #000080;">return </span>sum;
+}</pre>
+</td>
+</tr>
+</tbody>
+</table>
+<p style="text-align: justify;">Érdemes megjegyeznünk, hogy a<em> &lt;? extends Object&gt;</em>&nbsp;egyenértékű a <em>&lt;?&gt;</em>-el.</p>
+<h1 style="text-align: justify;">Wildcard lower bound</h1>
+<p style="text-align: justify;">Tegyük fel, hogy a feladatunk egy listába egész számok pakolása. Első megoldásként&nbsp;paraméterül egy&nbsp;<em>List&lt;Integer&gt;</em>&nbsp;típusú objektumot várnánk, azonban miért ne lehetne egy<em> List&lt;Number&gt;</em> vagy egy <em>List&lt;Object&gt;</em>&nbsp;típusú objektumba egész számokat pakolni? Jó lenne, ha ki lehetne fejezni, hogy egy olyan listát várunk, amely ugyan tetszőleges típusparaméterrel rendelkezik, de az az Integer, vagy annak valamely őse.</p>
+<p style="text-align: justify;">Pontosan erre szolgál a <em>wildcard</em>oknál a <em>lower bound</em> (alsó korlát), amely az <em>upper bound</em>hoz hasonlóan néz ki, csak a <em>super</em> kulcsszóval adhatjuk meg.</p>
+<table>
+<thead>
+<tr>
+<th></th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align: left;"><span style="font-weight: bold; color: #000080;">public static void </span>addNumbers(List&lt;? <span style="font-weight: bold; color: #000080;">super </span>Integer&gt; list) {<p></p>
+<pre>    <span style="font-weight: bold; color: #000080;">for </span>(<span style="font-weight: bold; color: #000080;">int </span>i = <span style="color: #0000ff;">1</span>; i &lt;= <span style="color: #0000ff;">10</span>; i++) {
+        list.add(i);
+    }
+}</pre>
+</td>
+</tr>
+</tbody>
+</table>
+<p style="text-align: justify;">Érdemes megjegyeznünk hogy egy wildcard nem rendelkezhet egyszerre upper és lower bounddal.</p>
+<h1>Wildcard altípusosság</h1>
+<p style="text-align: justify;">Eddig ugyan nem mondtuk ki, de a wildcardok abban segítenek, hogy a különböző típusparaméterű típusok között altípusosságot fejezhessünk ki (pl. List&lt;? extends Number&gt;-nek értékül adható List&lt;Integer&gt;). Tekintsük át, hogy mely generikus típusok között áll fenn altípusosság!</p>
+<figure><img class="aligncenter" src="./Generikusok _ zeroToHero_files/generics-wildcardSubtyping.gif" alt=""><p></p>
+<figcaption style="text-align: center;">Wildcard altípusosság (forrás: <a href="https://docs.oracle.com/javase/tutorial/java/generics/subtyping.html" target="_blank">docs.oracle.com</a>)</figcaption>
+</figure>
+<p style="text-align: justify;">Mint az ábrán is látszik, a List&lt;?&gt; azaz az ismeretlen típusparaméterű lista áll a hierarchia csúcsán, hiszen bármilyen típusparaméterű lista lehet ismeretlen típusparaméterű.A bal oldalon láthatjuk, hogy a List&lt;? extends Number&gt; (olyan lista, amelynek nem ismerjük a típusparaméterét, de az a Number osztály leszármazottja) őse a List&lt;? extends Integer&gt;-nek, azaz az olyan listának, amelynek a típusparamétere az Integer leszármazottja. Ez a kapcsolat nyilvánvaló, hiszen ha tudjuk, hogy a típusparaméter őse az Integer, akkor biztosak lehetünk benne, hogy a Number is őse. Az is egyértelmű, hogy a List&lt;? extends Integer&gt; őse a List-nek, hiszen ha tudjuk, hogy a típusparaméter Integer, akkor a típusparaméter biztosan az Integer leszármazottja. A jobb oldalon a List&lt;? super Integer&gt; (olyan lista, amelynek a típusparamétere az Integer őse) őse a List&lt;? super Number&gt;-nek (olyan lista, amelynek típusparamétere a Number őse). Ha tudjuk, hogy a típusparaméter a Number őse, akkor az nyilvánvalóan az Integer őse is lesz. Jobb oldalt, legalul láthatjuk, hogy a List&lt;? super Number&gt; őse a List-nek, hiszen a Number őse a Number-nek. Az ábrán két keresztirányú nyíl is látszik: ezek magyarázata szintén az, egy típus mindig önmaga leszármazottja, illetve őse.</p>
+<h1>Type erasure</h1>
+<p style="text-align: justify;">A Java Generikusainak egyik legfontosabb, és kezdők számára legfurcsább jellemzője a <strong>type erasure</strong>. A generikus paraméterek ellenőrzése fordításidőben zajlik, futásidőben a generikusok nem okoznak többlet számításigényt, és a különböző generikus paraméterű objektumok ugyanazon osztály leszármazottjai lesznek (nem jön létre több osztály, mint más nyelvekben).</p>
+<p style="text-align: justify;">A type erasure során a generikus paraméterek eltűnnek, és azok az elemek, amelyek típusa ilyen paraméter volt, a generikus paraméter <em>bound</em>jára változnak. A generikusok tehát csupán egy fordításidejű hókusz-pókusz, a lefordított osztály pontosan olyan lesz, mintha nem is használtunk volna generikusokat! Pl:</p>
+<table style="border: none;">
+<thead>
+<tr>
+<th style="text-align: left;">Generikusan megírt osztály</th>
+<th style="text-align: left;">Lefordított osztály</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align: left; width: 50%;">
+<pre><span style="font-weight: bold; color: #000080;">public class </span>Holder&lt;<span style="color: #20999d;">T </span><span style="font-weight: bold; color: #000080;">extends </span>Number&gt; {</pre>
+<pre>    <span style="font-weight: bold; color: #000080;">private </span><span style="color: #20999d;">T </span><span style="font-weight: bold; color: #660e7a;">number</span>;
+
+    <span style="font-weight: bold; color: #000080;">public </span>Holder(<span style="color: #20999d;">T </span>number) {
+        <span style="font-weight: bold; color: #000080;">this</span>.<span style="font-weight: bold; color: #660e7a;">number </span>= number;
+    }
+
+    <span style="font-weight: bold; color: #000080;">public </span><span style="color: #20999d;">T </span>get() {
+        <span style="font-weight: bold; color: #000080;">return </span><span style="font-weight: bold; color: #660e7a;">number</span>;
+    }
+}</pre>
+</td>
+<td style="text-align: left;">
+<pre><span style="font-weight: bold; color: #000080;">public class </span>Holder {</pre>
+<pre>    <span style="font-weight: bold; color: #000080;">private </span>Number <span style="font-weight: bold; color: #660e7a;">number</span>;
+
+    <span style="font-weight: bold; color: #000080;">public </span>Holder(Number number) {
+        <span style="font-weight: bold; color: #000080;">this</span>.<span style="font-weight: bold; color: #660e7a;">number </span>= number;
+    }
+
+    <span style="font-weight: bold; color: #000080;">public </span>Number get() {
+        <span style="font-weight: bold; color: #000080;">return </span><span style="font-weight: bold; color: #660e7a;">number</span>;
+    }
+}</pre>
+</td>
+</tr>
+</tbody>
+</table>
+<p style="text-align: justify;">Ha a Holder típusparamétere nem lenne zárt&nbsp;(<em>extends Number</em>), a lefordított osztályban mindenhol <em>Object</em> típusok szerepelnének.</p>
+<p style="text-align: justify;">A type erasure miatt sem az instanceof operátor, sem pedig a castolás <strong>nem</strong> használható generikus típusokra, pl <em>obj instanceof List&lt;String&gt;</em>, vagy <em>list = (List&lt;String&gt;) obj</em>.</p>
+<p style="text-align: justify;">Az sem megengedett, hogy egy osztályban két&nbsp;olyan metódus legyen, amelynek szignatúrája csak a generikus paraméterben különbözik, pl. <em>add (List&lt;String&gt; list)</em>&nbsp;és&nbsp;<em>add (List&lt;Integer&gt; list)</em>.</p>
+<p style="text-align: justify;">A generikus típus&nbsp;nem példányosítható, és tömb sem hozható létre vele, hiszen futásidőben nem ismert ez a típus (<em>new T()</em> vagy <em>new T[0]</em>)</p>
+<p style="text-align: justify;">A type erasure az oka annak is, hogy tömb <strong>nem</strong> lehet generikus típusú, pl. <em>List&lt;String&gt;[]</em>. Ha megengednénk, a következő történhetne:</p>
+<table style="border: none;">
+<thead>
+<tr>
+<th style="text-align: left;">Hibás osztály!</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align: left;">
+<pre>Object[] lists = <span style="font-weight: bold; color: #000080;">new </span>List&lt;String&gt;[<span style="color: #0000ff;">1</span>]; <span style="font-style: italic; color: #808080;">//Ha ez nem lenne fordítási hiba...</span></pre>
+<pre>lists[<span style="color: #0000ff;">1</span>] = <span style="font-weight: bold; color: #000080;">new </span>ArrayList&lt;Integer&gt;(); <span style="font-style: italic; color: #808080;">//...Akkor ez sem fordítási, sem futásidőben nem szállna el!</span></pre>
+</td>
+</tr>
+</tbody>
+</table>
+<h1>Generikus metódusok</h1>
+<p style="text-align: justify;">A generikus metódusok olyan metódusok, amelyek saját típusparaméterrel rendelkeznek, hasonlóan a generikus osztályokhoz. Képzeljünk el egy függvényt, amely a paraméterül kapott listába egy paraméterül kapott elemet helyez. Amennyiben nem használunk generikus paramétert, nem tudnánk ezt a függvényt megvalósítani, hiszen nem tudnánk a két paraméter típusa közti összefüggést jelezni. Hasonló a helyzet akkor is, ha egy olyan metódust készítenénk, amely a paraméterül kapott objektumot becsomagolja egy Holder objektumba, és ezzel tér vissza. Itt is ugyanaz a probléma áll fenn: nem tudjuk a visszatérési érték és a paraméter típusa közötti összefüggést jelezni. Lássuk tehát, hogyan lehet ezeket a feladatokat generikus metódusokkal megvalósítani!</p>
+<table style="border: none;">
+<thead>
+<tr>
+<th></th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align: left;">
+<pre><span style="font-weight: bold; color: #000080;">public static </span>&lt;<span style="color: #20999d;">T</span>&gt; <span style="font-weight: bold; color: #000080;">void </span>addToList(List&lt;<span style="color: #20999d;">T</span>&gt; list, <span style="color: #20999d;">T </span>element) {</pre>
+<pre style="color: #000000;">    list.add(element);
+}
+
+<span style="font-weight: bold; color: #000080;">public static </span>&lt;<span style="color: #20999d;">T </span><span style="font-weight: bold; color: #000080;">extends </span>Number&gt; Holder&lt;<span style="color: #20999d;">T</span>&gt; wrap(<span style="color: #20999d;">T </span>t) {
+    <span style="font-weight: bold; color: #000080;">return new </span>Holder&lt;&gt;(t);
+}</pre>
+</td>
+</tr>
+</tbody>
+</table>
+<p style="text-align: justify;">Amint látható, a metódus generikus paraméterét (paramétereit) a visszatérési érték típusa elé kell írnunk, és lehetőségünk van <em>upper bound</em>ot megadni.</p>
+<h1>Összefoglalás</h1>
+<p style="text-align: justify;">A bejegyzésből kiderült, hogy a Java generikusaival milyen sok feladat oldható meg típusbiztosan, és ehhez a nyelv milyen lehetőségeket biztosít. A generikusoknak van néhány buktatója (altípusosság, type erasure), de ha megértjük ezeket, egy remek eszközzé válik.</p>
+<hr>
+<h1>A szerző</h1>
+<div id="attachment_2607" style="width: 160px" class="wp-caption alignleft"><img class="wp-image-2607 size-thumbnail" src="./Generikusok _ zeroToHero_files/Mihályi-Zoli_kicsi-150x150.jpg" alt="Mihályi Zoltán" width="150" height="150" srcset="http://www.zerotohero.hu/wp-content/uploads/2016/03/Mihályi-Zoli_kicsi-150x150.jpg 150w, http://www.zerotohero.hu/wp-content/uploads/2016/03/Mihályi-Zoli_kicsi-50x50.jpg 50w, http://www.zerotohero.hu/wp-content/uploads/2016/03/Mihályi-Zoli_kicsi-100x100.jpg 100w" sizes="(max-width: 150px) 100vw, 150px"><p class="wp-caption-text">Mihályi Zoltán</p></div>
+<p><span style="color: #333333;">Sziasztok! Mihályi Zoltán vagyok, négy éve dolgozok Java és JavaScript programozóként.</span></p>
+<p><span style="color: #333333;">Elsősorban a programozási nyelvek érdekelnek részletesen, mert&nbsp;ezek sokkal ritkábban változnak, mint a rájuk épülő technológiák, keretrendszerek.&nbsp;Ezen kívül érdekelnek a tervezési minták, a clean code, a játékprogramozás, és a Node.js platform.</span></p>
+
+<!-- Facebook Like Button v1.9.6 BEGIN [http://blog.bottomlessinc.com] -->
+<iframe src="./Generikusok _ zeroToHero_files/like(1).html" scrolling="no" frameborder="0" allowtransparency="true" style="border: none; overflow: hidden; width: 450px; height: 30px; margin: 2px 0px; opacity: 1; visibility: visible;"></iframe>
+<!-- Facebook Like Button END -->
+
+</div> <!-- Itemprop END: articleBody -->
+</div> <!-- Scope END: Article -->
+<!-- END Schema.org microdata added by the Add-Meta-Tags WordPress plugin -->
+				
+									
+			</div><!--/content-inner-->
+			
+		</div><!--/post-content-->
+
+	</div><!--/inner-wrap-->
+		
+</article><!--/article-->
+				
+
+			</div><!--/span_9-->
+			
+							
+				<div id="sidebar" class="col span_3 col_last">
+					    
+				</div><!--/sidebar-->
+				
+
+						
+			
+		</div><!--/row-->
+
+		
+
+		<!--ascend only author/comment positioning-->
+		<div class="row">
+
+			
+			
+
+			  
+			 	 <div class="comments-section" data-author-bio="false">
+					   
+<!-- You can start editing here. -->
+<div class="comment-wrap full-width-section custom-skip first-section" style="margin-left: -331px; padding-left: 331px; padding-right: 331px; visibility: visible; margin-top: -70px;">
+
+
+			<!-- If comments are open, but there are no comments. -->
+
+	 
+
+				<div id="respond" class="comment-respond">
+			<h3 id="reply-title" class="comment-reply-title">Leave a Reply <small><a rel="nofollow" id="cancel-comment-reply-link" href="http://www.zerotohero.hu/generikusok/#respond" style="display:none;">Cancel Reply</a></small></h3>				<form action="http://www.zerotohero.hu/wp-comments-post.php" method="post" id="commentform" class="comment-form">
+					<div class="row"><div class="col span_12"><textarea id="comment" name="comment" cols="45" rows="8" aria-required="true"></textarea></div></div><div class="row"> <div class="col span_4"><label for="author">Name <span class="required">*</span></label> <input id="author" name="author" type="text" value="" size="30"></div>
+<div class="col span_4"><label for="email">Email <span class="required">*</span></label><input id="email" name="email" type="text" value="" size="30"></div>
+<div class="col span_4 col_last"><label for="url">Website</label><input id="url" name="url" type="text" value="" size="30"></div></div>
+
+		<p class="math-captcha-form">
+			<label>Math Captcha<br></label>
+			<span>70 − <input type="text" size="2" length="2" id="mc-input" class="mc-input" name="mc-value" value="" aria-required="true"> = 68</span>
+		</p><p class="form-submit"><input name="submit" type="submit" id="submit" class="submit" value="Submit Comment"> <input type="hidden" name="comment_post_ID" value="2153" id="comment_post_ID">
+<input type="hidden" name="comment_parent" id="comment_parent" value="0">
+</p>				</form>
+					</div><!-- #respond -->
+		
+</div>				 </div>   
+
+			 
+		</div>
+
+
+	   		
+	</div><!--/container-->
+
+</div><!--/container-wrap-->
+	
+
+<div id="footer-outer" data-midnight="light" data-using-widget-area="true">
+	
+	
+			
+	<div id="footer-widgets">
+		
+		<div class="container">
+			
+			<div class="row">
+				
+								
+				<div class="col span_4">
+				      <!-- Footer widget area 1 -->
+		              <div id="text-6" class="widget widget_text"><h4>Kapcsolat</h4>			<div class="textwidget"><p>1095 Budapest </p>
+<p> Soroksári út 32-34. E lépcsőház 6. em. </p>
+<p>Haller Gardens Irodaház</p>
+</div>
+		</div>				</div><!--/span_3-->
+				
+				<div class="col span_4">
+					 <!-- Footer widget area 2 -->
+		             <div id="social-widget-3" class="widget Social_Widget"><div class="socialmedia-buttons smw_left"><a href="http://facebook.com/pages/Zero-To-Hero/683991171682809" rel="nofollow" target="_blank"><img width="32" height="32" src="./Generikusok _ zeroToHero_files/facebook.png" alt="Follow Us on Facebook" title="Facebook" style="opacity: 0.8; -moz-opacity: 0.8;" class="fade"></a><a href="https://www.youtube.com/channel/UCvaJHsihOz98A7DZoH7apDA" rel="nofollow" target="_blank"><img width="32" height="32" src="./Generikusok _ zeroToHero_files/youtube.png" alt="Follow Us on YouTube" title="Follow Us on YouTube" style="opacity: 0.8; -moz-opacity: 0.8;" class="fade"></a><a href="https://github.com/zth-training" rel="nofollow" target="_blank"><img width="32" height="32" src="./Generikusok _ zeroToHero_files/github.png" alt="Follow Us on Github" title="GitHub" style="opacity: 0.8; -moz-opacity: 0.8;" class="fade"></a></div></div><div id="text-3" class="widget widget_text"><h4>Adatkezelés</h4>			<div class="textwidget"><a href="http://www.zerotohero.hu/wp-content/uploads/2018/05/PCF-Adatkezel%C3%A9si-Tajekoztato.pdf">Adatvédelmi és adatkezelési szabályzat </a></div><a href="http://www.zerotohero.hu/wp-content/uploads/2018/05/PCF-Adatkezel%C3%A9si-Tajekoztato.pdf">
+		</a></div><a href="http://www.zerotohero.hu/wp-content/uploads/2018/05/PCF-Adatkezel%C3%A9si-Tajekoztato.pdf">				     
+				</a></div><!--/span_3--><a href="http://www.zerotohero.hu/wp-content/uploads/2018/05/PCF-Adatkezel%C3%A9si-Tajekoztato.pdf">
+				
+									<div class="col span_4">
+						 <!-- Footer widget area 3 -->
+			              <div id="weblizar_facebook_likebox-2" class="widget widget_weblizar_facebook_likebox"><h4>Zero To Hero</h4>		<style>
+		@media (max-width:767px) {
+			.fb_iframe_widget {
+				width: 100%;
+			}
+			.fb_iframe_widget span {
+				width: 100% !important;
+			}
+			.fb_iframe_widget iframe {
+				width: 100% !important;
+			}
+			._8r {
+				margin-right: 5px;
+				margin-top: -4px !important;
+			}
+		}
+		</style>
+        <div style="display:block;width:100%;float:left;overflow:hidden;margin-bottom:20px">
+			<div id="fb-root" class=" fb_reset"><div style="position: absolute; top: -10000px; height: 0px; width: 0px;"><div><iframe name="fb_xdm_frame_https" frameborder="0" allowtransparency="true" allowfullscreen="true" scrolling="no" allow="encrypted-media" id="fb_xdm_frame_https" aria-hidden="true" title="Facebook Cross Domain Communication Frame" tabindex="-1" src="./Generikusok _ zeroToHero_files/afATJJjxKE6.html" style="border: none; opacity: 1;"></iframe></div></div><div style="position: absolute; top: -10000px; height: 0px; width: 0px;"><div></div></div></div>
+			<script>(function(d, s, id) {
+			  var js, fjs = d.getElementsByTagName(s)[0];
+			  if (d.getElementById(id)) return;
+			  js = d.createElement(s); js.id = id;
+			  js.src = "//connect.facebook.net/en_GB/sdk.js#xfbml=1&version=v2.4";
+			  fjs.parentNode.insertBefore(js, fjs);
+			}(document, 'script', 'facebook-jssdk'));</script>
+			<div class="fb-like-box fb_iframe_widget" style="background-color: auto;" data-small-header="true" data-height="220" data-href="https://www.facebook.com/ZeroToHero.Program/" data-show-border="true" data-show-faces="true" data-stream="false" data-width="800" data-force-wall="false" fb-xfbml-state="rendered" fb-iframe-plugin-query="app_id=&amp;container_width=398&amp;force_wall=false&amp;height=220&amp;href=https%3A%2F%2Fwww.facebook.com%2FZeroToHero.Program%2F&amp;locale=en_GB&amp;sdk=joey&amp;show_border=true&amp;show_faces=true&amp;stream=false&amp;width=800"><span style="vertical-align: bottom; width: 398px; height: 214px;"><iframe name="feb5765134c33" width="800px" height="220px" frameborder="0" allowtransparency="true" allowfullscreen="true" scrolling="no" allow="encrypted-media" title="fb:like_box Facebook Social Plugin" src="./Generikusok _ zeroToHero_files/like_box.html" style="border: none; visibility: visible; opacity: 1; width: 398px; height: 214px;" class=""></iframe></span></div>
+			<div style="display:none;">Facebook By Weblizar Powered By Weblizar</div>
+		</div>
+        </div>					     
+					</div><!--/span_3-->
+								
+								
+			</a></div><!--/row--><a href="http://www.zerotohero.hu/wp-content/uploads/2018/05/PCF-Adatkezel%C3%A9si-Tajekoztato.pdf">
+			
+		</a></div><!--/container--><a href="http://www.zerotohero.hu/wp-content/uploads/2018/05/PCF-Adatkezel%C3%A9si-Tajekoztato.pdf">
+	
+	</a></div><!--/footer-widgets--><a href="http://www.zerotohero.hu/wp-content/uploads/2018/05/PCF-Adatkezel%C3%A9si-Tajekoztato.pdf">
+	
+	
+	
+		<div class="row" id="copyright">
+			
+			<div class="container">
+				
+				<div class="col span_5">
+					
+											<p>© 2018 zeroToHero.  </p>
+										
+				</div><!--/span_5-->
+				
+				<div class="col span_7 col_last">
+					<ul id="social">
+																																																																																																																							</ul>
+				</div><!--/span_7-->
+			
+			</div><!--/container-->
+			
+		</div><!--/row-->
+		
+		
+</a></div><!--/footer-outer--><a href="http://www.zerotohero.hu/wp-content/uploads/2018/05/PCF-Adatkezel%C3%A9si-Tajekoztato.pdf">
+
+
+
+	<div id="slide-out-widget-area-bg" class="slide-out-from-right dark"></div>
+	</a><div id="slide-out-widget-area" class="slide-out-from-right" data-back-txt="Back"><a href="http://www.zerotohero.hu/wp-content/uploads/2018/05/PCF-Adatkezel%C3%A9si-Tajekoztato.pdf">
+
+		
+		</a><div class="inner"><a href="http://www.zerotohero.hu/wp-content/uploads/2018/05/PCF-Adatkezel%C3%A9si-Tajekoztato.pdf">
+
+		  </a><a class="slide_out_area_close" href="http://www.zerotohero.hu/generikusok/#"><span class="icon-salient-x icon-default-style"></span></a>
+
+
+		   			   <div class="off-canvas-menu-container mobile-only">
+			  		<div class="menu-wrap menuwrapper"><ul class="menu menuopen">
+					   <li class="menu-item menu-item-type-post_type menu-item-object-page menu-item-5670"><a href="http://www.zerotohero.hu/java-oktatas/">Haladó Java Oktatás</a></li>
+<li class="menu-item menu-item-type-post_type menu-item-object-page menu-item-4640"><a href="http://www.zerotohero.hu/">Java online tréning</a></li>
+<li class="menu-item menu-item-type-post_type menu-item-object-page menu-item-5559"><a href="http://www.zerotohero.hu/big-data-4-hetes-trening/">Big data online tréning</a></li>
+<li class="menu-item menu-item-type-post_type menu-item-object-page menu-item-3987"><a href="http://www.zerotohero.hu/rolunk/">Rólunk</a></li>
+<li class="menu-item menu-item-type-post_type menu-item-object-page menu-item-has-children menu-item-3883"><a href="http://www.zerotohero.hu/kapcsolat/">Kapcsolat</a>
+<ul class="sub-menu"><li class="back"><a href="http://www.zerotohero.hu/generikusok/#"> Back </a></li>
+	<li class="menu-item menu-item-type-custom menu-item-object-custom menu-item-3874"><a href="http://pcf.hu/">PCF</a></li>
+	<li class="menu-item menu-item-type-post_type menu-item-object-page menu-item-3875"><a href="http://www.zerotohero.hu/blog/">Blog</a></li>
+</ul>
+</li>
+		
+					</ul></div>
+				</div>
+			
+		</div>
+
+		
+	</div>
+
+
+</div> <!--/ajax-content-wrap-->
+
+
+	<a id="to-top" class="" style="bottom: 17px;"><i class="icon-angle-up"></i></a>
+
+
+
+
+<script type="text/javascript" src="./Generikusok _ zeroToHero_files/core.min.js.letöltés"></script>
+<script type="text/javascript" src="./Generikusok _ zeroToHero_files/widget.min.js.letöltés"></script>
+<script type="text/javascript" src="./Generikusok _ zeroToHero_files/position.min.js.letöltés"></script>
+<script type="text/javascript" src="./Generikusok _ zeroToHero_files/menu.min.js.letöltés"></script>
+<script type="text/javascript" src="./Generikusok _ zeroToHero_files/wp-a11y.min.js.letöltés"></script>
+<script type="text/javascript">
+/* <![CDATA[ */
+var uiAutocompleteL10n = {"noResults":"Sajnos, nincs a keres\u00e9si felt\u00e9teleknek megfelel\u0151 tal\u00e1lat.","oneResult":"1 tal\u00e1lat. Haszn\u00e1ljuk a fel \u00e9s le gombokat a navig\u00e1l\u00e1shoz.","manyResults":"%d tal\u00e1lat. Haszn\u00e1ljuk a fel \u00e9s le gombokat a navig\u00e1l\u00e1shoz."};
+/* ]]> */
+</script>
+<script type="text/javascript" src="./Generikusok _ zeroToHero_files/autocomplete.min.js.letöltés"></script>
+<script type="text/javascript">
+/* <![CDATA[ */
+var MyAcSearch = {"url":"http:\/\/www.zerotohero.hu\/wp-admin\/admin-ajax.php"};
+/* ]]> */
+</script>
+<script type="text/javascript" src="./Generikusok _ zeroToHero_files/wpss-search-suggest.js.letöltés"></script>
+<script type="text/javascript" src="./Generikusok _ zeroToHero_files/jquery.form.min.js.letöltés"></script>
+<script type="text/javascript">
+/* <![CDATA[ */
+var _wpcf7 = {"loaderUrl":"http:\/\/www.zerotohero.hu\/wp-content\/plugins\/contact-form-7\/images\/ajax-loader.gif","recaptchaEmpty":"Er\u0151s\u00edts\u00fck meg, hogy emberb\u0151l vagyunk.","sending":"K\u00fcld\u00e9s...."};
+/* ]]> */
+</script>
+<script type="text/javascript" src="./Generikusok _ zeroToHero_files/scripts.js.letöltés"></script>
+<script type="text/javascript" src="./Generikusok _ zeroToHero_files/prettyPhoto.js.letöltés"></script>
+<script type="text/javascript" src="./Generikusok _ zeroToHero_files/superfish.js.letöltés"></script>
+<script type="text/javascript">
+/* <![CDATA[ */
+var nectarLove = {"ajaxurl":"http:\/\/www.zerotohero.hu\/wp-admin\/admin-ajax.php","postID":"2153","rooturl":"http:\/\/www.zerotohero.hu","pluginPages":[],"disqusComments":"false"};
+/* ]]> */
+</script>
+<script type="text/javascript" src="./Generikusok _ zeroToHero_files/init.js.letöltés"></script>
+<script type="text/javascript" src="./Generikusok _ zeroToHero_files/infinitescroll.js.letöltés"></script>
+<script type="text/javascript">
+/* <![CDATA[ */
+var mejsL10n = {"language":"hu-HU","strings":{"Close":"Bez\u00e1r\u00e1s","Fullscreen":"Teljes k\u00e9perny\u0151","Download File":"F\u00e1jl let\u00f6lt\u00e9se","Download Video":"Vide\u00f3 let\u00f6lt\u00e9se","Play\/Pause":"Lej\u00e1tsz\u00e1s\/Sz\u00fcnet","Mute Toggle":"N\u00e9m\u00edt\u00e1s","None":"Egyik sem","Turn off Fullscreen":"Teljes k\u00e9perny\u0151 kikapcsol\u00e1sa","Go Fullscreen":"Teljes k\u00e9perny\u0151 bekapcsol\u00e1sa","Unmute":"N\u00e9m\u00edt\u00e1s felold\u00e1sa","Mute":"N\u00e9m\u00edt\u00e1s","Captions\/Subtitles":"K\u00e9pal\u00e1\u00edr\u00e1s\/Felirat"}};
+var _wpmejsSettings = {"pluginPath":"\/wp-includes\/js\/mediaelement\/"};
+/* ]]> */
+</script>
+<script type="text/javascript" src="./Generikusok _ zeroToHero_files/mediaelement-and-player.min.js.letöltés"></script>
+<script type="text/javascript" src="./Generikusok _ zeroToHero_files/wp-mediaelement.min.js.letöltés"></script>
+<script type="text/javascript" src="./Generikusok _ zeroToHero_files/comment-reply.min.js.letöltés"></script>
+<script type="text/javascript" src="./Generikusok _ zeroToHero_files/wp-embed.min.js.letöltés"></script>
+			<script type="text/javascript">
+				jQuery.noConflict();
+				(function( $ ) {
+					$(function() {
+						// More code using $ as alias to jQuery
+						$("area[href*=\\#],a[href*=\\#]:not([href=\\#]):not([href^='\\#tab']):not([href^='\\#quicktab']):not([href^='\\#pane'])").click(function() {
+							if (location.pathname.replace(/^\//,'') == this.pathname.replace(/^\//,'') && location.hostname == this.hostname) {
+								var target = $(this.hash);
+								target = target.length ? target : $('[name=' + this.hash.slice(1) +']');
+								if (target.length) {
+								$('html,body').animate({
+								scrollTop: target.offset().top - 150  
+								},800 ,'easeOutSine');
+								return false;
+								}
+							}
+						});
+					});
+				})(jQuery);	
+			</script>				
+					
+
+
+<div id="wp-a11y-speak-polite" role="status" aria-live="polite" aria-relevant="additions text" aria-atomic="true" class="screen-reader-text wp-a11y-speak-region"></div><div id="wp-a11y-speak-assertive" role="alert" aria-live="assertive" aria-relevant="additions text" aria-atomic="true" class="screen-reader-text wp-a11y-speak-region"></div></body></html>

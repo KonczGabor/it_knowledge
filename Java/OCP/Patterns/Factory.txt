@@ -1,0 +1,7 @@
+Akkor használjuk, ha csak futás idõben derül ki hogy valójában milyen típusú objektumot szeretnénk használni.
+
+A Factory-t érdemes beletenni az osztály név végére, pl.: FoodFactory
+
+Érdemes bele Exceptiont tenni, arra az esetre ha nem megfelelõ paramétereket kap.
+
+A cél osztály konstruktorát érdemes package private-on hagyni, hogy a Factroy elérhesse, a csomagon kívüleiknek meg nem muszáj tudniuk a konstruktorról.

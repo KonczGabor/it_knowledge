@@ -1,0 +1,153 @@
+SLF4J csak egy aPI ami alá olyan logoló rendszert teszek be amilyet csak akarok.
+	Az egyik legjobb ez alá a logback.
+	
+//Hasznos: http://memorynotfound.com/logback-logback-xml-configuration-example/ 	
+
+1, pom.xml módosítása. 
+	commons-logging kiszedése
+		exclusion rész:
+		
+	<dependencies>
+		<dependency>
+			<groupId>org.springframework</groupId>
+			<artifactId>spring-context</artifactId>
+			<version>4.3.9.RELEASE</version>
+			<exclusions>
+				<exclusion>
+					<groupId>commons-logging</groupId>
+					<artifactId>commons-logging</artifactId>
+				</exclusion>
+			</exclusions>
+		</dependency>
+	</dependencies>
+	
+2, Meg kell adni az az slf4j jcl-t (java common loggings) Connector amivekl be tudjuk fûzni a Springbe. Fölfelé úgy fog kinézni mint a Java Common Loggings mint amit eddig ismert.
+
+	<dependencies>
+		<dependency>
+			<groupId>org.slf4j</groupId>
+			<artifactId>jcl-over-slf4j</artifactId>
+			<version>1.7.5</version>
+		</dependency>
+	</dependencies>
+	
+3, Meg kell adni az SLF4J API-t.
+
+	<dependencies>
+		<dependency>
+			<groupId>org.slf4j</groupId>
+			<artifactId>slf4j-api</artifactId>
+			<version>1.7.5</version>
+		</dependency>
+	</dependencies>
+	
+4, És végül ez alá berakjuk a logback-et.
+
+	<dependencies>
+		<dependency>
+			<groupId>ch.qos.logback</groupId>
+			<artifactId>logback-classic</artifactId>
+			<version>1.0.13</version>
+		</dependency>
+	</dependencies>
+	
+5, Szükség van egy logback konfigurációs file-ra (általában a src/main/resources alkönyvtárba (ne sima folderként, hanem resource folderként hozzuk létre) kell tenni a logback.xml-t):
+	
+	<configuration>
+
+	  <appender name="STDOUT" class="ch.qos.logback.core.ConsoleAppender">
+		<encoder>
+		  <pattern>%d{HH:mm:ss.SSS} [%thread] %-5level %logger{36} - %msg%n</pattern>
+		</encoder>
+	  </appender>
+
+	  <root level="info">
+		<appender-ref ref="STDOUT" />
+	  </root>
+	  
+	  <logger name="com.epam" level="debug" />
+  
+	</configuration>
+	
+6, 
+	private static final Logger logger = LoggerFactory.getLogger(adottOsztaly.class);	//import: org.slf4j.Logger
+	logger.info("kiírva");
+	
+7, végeredmény valami ilyesmi:
+
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+	<modelVersion>4.0.0</modelVersion>
+
+	<groupId>com.epam</groupId>
+	<artifactId>botor</artifactId>
+	<version>0.0.1-SNAPSHOT</version>
+	<packaging>jar</packaging>
+
+	<name>botor</name>
+
+	<build>
+		<pluginManagement>
+			<plugins>
+				<plugin>
+					<groupId>org.apache.maven.plugins</groupId>
+					<artifactId>maven-compiler-plugin</artifactId>
+					<version>3.1</version>
+					<configuration>
+						<source>1.7</source>
+						<target>1.7</target>
+					</configuration>
+				</plugin>
+			</plugins>
+		</pluginManagement>
+	</build>
+
+	<dependencies>
+		<dependency>
+			<groupId>org.springframework</groupId>
+			<artifactId>spring-context</artifactId>
+			<version>3.2.6.RELEASE</version>                 //Ez már régi verzió!
+			<exclusions>
+				<exclusion>
+					<groupId>commons-logging</groupId>
+					<artifactId>commons-logging</artifactId>
+				</exclusion>
+			</exclusions>
+		</dependency>
+
+		<dependency>
+			<groupId>org.slf4j</groupId>
+			<artifactId>slf4j-api</artifactId>
+			<version>1.7.5</version>
+		</dependency>
+
+		<dependency>
+			<groupId>org.slf4j</groupId>
+			<artifactId>jcl-over-slf4j</artifactId>
+			<version>1.7.5</version>
+		</dependency>
+
+		<dependency>
+			<groupId>ch.qos.logback</groupId>
+			<artifactId>logback-classic</artifactId>
+			<version>1.0.13</version>
+		</dependency>
+
+	</dependencies>
+
+	<properties>
+		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+	</properties>
+
+</project>
+
+-----------------------------------------------
+
+
+private static final Logger LOG = LoggerFactory.getLogger(Application.class);
+
+	LOG.trace("This will be printed on trace");
+		LOG.debug("This will be printed on debug");
+		LOG.info("This will be printed on info");
+		LOG.warn("This will be printed on warn");
+		LOG.error("This will be printed on error");

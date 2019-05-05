@@ -1,0 +1,10 @@
+https://docs.spring.io/spring-shell/docs/current/reference/htmlsingle/
+
+El kell hozzá indítani a .. 
+	@SpringBootApplication
+	public class App {
+
+	  public static void main(String[] args) {
+		SpringApplication.run(App.class, args);		//..magát az alkalmazást				
+	  }
+	}

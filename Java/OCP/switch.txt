@@ -1,0 +1,18 @@
+Támogatja ezen primitív típusokat:
+	byte, short, char int
+	
+Támogatja ezen Osztályokat:
+	String, Character, Byte, Short, Integer
+	
+Támogatja az Enumokat.
+
+De NEM támogatja a lebegőpontos típusokat:
+	float, double
+	
+És nem látomgatja longot/Longot
+	
+Nem kell h tartalmazzon defult ágat.
+
+Nem kell h a default ág az utolsó legyen.
+
+Nem muszáj h legyen case ág, ha van default.

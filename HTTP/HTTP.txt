@@ -1,0 +1,98 @@
+Hypertext Transfer Protocol
+	
+	Formális szabályok összessége, mely megmondja hogyan cseréljünk adatot egy hálózaton.
+	Plain text protocol.
+
+Applikéciós réteg szintû protokoll melynek segítségével a web alapú alklamzások adatcserével kommunikálhatnak.
+A web postása.
+TCP/IP alapú.
+A következõ tartalmakat lehet átküldeni:
+	Képek, videók, dokumentumok. Bármilyen adat átvihetõ, amit a két komputer olvasni tud.
+	
+Request-Response Cycle:
+		A requestet kérõ a kliens - response-t adó a szerver.
+		
+Connectionless:
+	Miután a kliens megteszi a kérést, bontja akapcsolatot a szerverrel,
+	miután kész a válasz, a szerver újra kiépíti a kapcsolatot és leszállítja a repsonse-t.
+	
+Stateless:
+	A kliens és a szerver csak az adott request idõintervalluma alatt tud egymásról, 
+	ha újra kapcsolódni akarnak egymáshoz az olyan mintha most elõször épülne ki a kapcsolat köztük.
+	//REST provides state.
+	
+	
+
+Request-nek ezekbõl kell állnia
+	Request-Line: carries actual data 
+		GET vagy POST	
+		RESOURCE: (URI (Unified Resource Identifier))
+		PROTOCOL: HTTP, SMTP, FTP
+		VERSION: pl.: HTTP/[1.1, 2]
+
+	Headers: Meata infos: Name-Value pairs: Host: www.mywebsite.com; Accept:text/html; Accept-language:en-us
+		Pl.:
+			Host
+			User-Agent: telnet
+			Accept-Language: en-US (Milyen választ szeretnénk)
+			..
+			
+	Blank Line
+	
+	Request Body (Másnéven: Payload) (Binárist is tartalmazhat) (GET-tel nem küldõdik body(?))
+		Itt mehetnek át egy kitöltött form adatai
+
+	//URI: set of readable characters, a way to locate the resource
+		Az URL valójában egy URI
+	
+Response ezekbõl áll:
+	Status-Line:
+		Protocol: HTTP, SMTP, FTP [Version:]
+		Status code: 200
+		Status message: OK
+		
+	Headers: Name-Value pairs
+		Pl.:
+			Server: nginx
+			Data: When the repsonse was sent
+			Content-Type_ application/xml
+	
+	Blank Line
+	
+	Body: pl.:Requested file - response message					
+								
+
+GET: Hey Server! Give me data! No Seide-effects. Nem akarok változtatást.
+	get?atttribute=value&attribute2=value2
+
+POST: Making a change
+
+Mind a Get, mind a Post valójában egy QueryString-gé áll össze:
+	A QueryString az összeállított attribute-value párok 
+	//Note: A form TAG-ek tartalma "name" és nem "id" alapján kerülnek be a QueryString-be.
+	Get esetén az URI-hoz fûzõdik hozzá, POST esetén ez a Payloadba kerül be.
+
+Paramtere VS Header:
+	
+	Parameter:
+		Let's say you're requesting an image for a product. 
+		The product id may be one parameter. The image size (thumbnail vs full size) might be another parameter. 
+		The product id and requested image size are examples of "some detail" (or parameter) being supplied as part of the content of a request.
+
+	Header:
+		But things like the request is JSON or x-www-form-urlencoded are not the content of the request, 
+		but rather information about the request (esp since that's necessary for web service 
+		to know how to parse the body of the request). 
+		
+Methods
+
+Create	->	POST	(Beküldök egy FORM-ot)		Ha POST-tal küldök paramétereket azok nem a HEADER-be, hanem a BODY-ba kerülnek.
+Read	->	GET		(Klikkelek a böngészõben)	HA GET-tel küldök paramétereket akkor azok az url-be kerülnek kérdõjellel elválasztva
+Update	->	PUT
+Delete	->	Delete
+
+
+
+
+
+

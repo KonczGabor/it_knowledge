@@ -1,0 +1,4 @@
+A kezdõ kapacitás csak memóriát foglal, a lista mérete a benne létrejött objektumok számossága, size().
+
+List<? super Object> be prmitívek is beletehetünk (add()), mert lejátszódik egy autoboxing.
+	Probléma lehet h null-t is beletehetünk, de ilyenkor ha meg

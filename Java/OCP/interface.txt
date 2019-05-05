@@ -1,0 +1,89 @@
+Az interfész egy szerzõdés.
+
+interface-ek csak interfacekbõl származtathatóak (még absztrakt osztályból sem), extendes kulcsszóval és egyszerre "többtõl is örökölhet".
+Azonos defaultokat ilyenkor egyértelmûsíteni kell, a gyerekben új default metódust kell írni.
+
+Az osztályok számára lehetõvé teszi a multiple inheritance-et. (Vagy elgalábbis olyasmit)
+
+Egy interface lehet static, de csak akkor ha egy osztályon belül van.
+	Interfésznek is lehetnek belsõ osztályai és interface-i;
+	static kulcsót ilyenkor kitettni rájuk redundáns hiszen amúgy is minden static lesz.
+
+Interfész maga csak public vagy package private lehet.
+
+Interfész nem implementálhat más osztályt vagy metódust.
+
+Minden metódusa autómatikusan absztrakt és public. Nem adható meg más típusú láthatóság. A default kulcsszó nem láthatóság, nem egyenlõ a packageprivate-tal
+
+Minden változó public, static, final. Konstans. Tehát nem adhatunk neki új erteket.
+	El lehet érni az interfész konstansát anélkül hogy implementálnánk azt. Elég csupán beimportolni az interfészt.
+
+default metódusnak rendelkezni kell törzzsel.
+
+defult metódus nem lehet static!
+
+Még a default metódusok láthatósága is public, mert egy interface-n minden metódus láthatósága public.	
+	
+Egy absztakt metódust a származtatott interfészben default-tá lehet tenni, vagy fordítva, defaultból absztrakttá.
+
+Subinterfész örökölt defaultból nem csinálhat static metódust, viszont fordaítva igaz: static metódust feülírhat defaulttal. (S->D igen, D->S nem) 
+
+Az interfészeket implementáló osztályban egyértelmûen kasztolni kell az adott változót, hogy melyik helyrõl szeretnénk elérni.
+
+Eset: Õs osztály rendelkezik egy metódussal (public láthatóság játszik ebben az esetben, mindjárt kiderül h miért!), a gyerek megörökli azt, és implementál egy interfész metódust pont ugyanolyan néven, és
+mivel a metódus szignatúra ütközik, logikus h itt override fog történni, tehát az õs osztály metódusa is public kell h legyen (lásd fönt!).
+Itt viszont nem kell egyértelmûsíteni semmit, az õstõl kapott metódus lesz az alapértelmezett, hacsak mi magunk felül nem definiáljuk.
+
+Interfészben nem lehet olyan default metódust létrehozni, ami megegyezik az Object metódusaival, mert Errort kapunk.
+	default boolean equals (Object obj){	//Ezt nem fogja engedni
+        return false;
+    }
+
+A metódusok felhasználása lehet: 2 csoport megállapodik egy közös interfészben, 
+az egyik implementálja azt, a másik elkezdi fejleszteni a saját alkalmazását ami fehasználja az interfészt (mockolhatja). 
+
+--------------------------------------
+Ha öröklünk egy default és egy abstract metódust ugyanolyan szignatúrával, akkor is override-olni kel nekünk megfelelõen, nem lesz a deafult erõsebb mint az abastract.
+
+abstract class MyAbstractClass{
+    abstract void implementMe();
+}
+
+interface MyInterFace{
+    default void implementMe(){}
+}
+
+public class waaa extends MyAbstractClass implements MyInterFace{
+    @Override						// Nem fogja az interfész default metódusa autómatikusan implementálni az absztrakt osztálytól megörökölt absztrakt metódust.
+    public void implementMe() {}
+}
+
+
+--------------------------------------
+
+Ha több interfészbol is öröklünk megegyezo szignatúrájú metódusokat, akkor is overrideolni KELL az elso konkrét osztályban hogy melyiket szeretnénk használni.
+
+BrainFuck:
+	Interface statikus metódusait csak az Interfacen referencián lehet meghívni, példány referencián keresztül fordítási hibát eredményez.
+	
+	Interface default metódusait csak az interface példányon keresztül lehet meghívni, osztály referencián keresztül nem.
+		
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

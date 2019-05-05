@@ -1,0 +1,11 @@
+Probléma: Konstruktor fej túl hosszú, sok változás és változat átláthatatlanná, nehezen karbantarthatóvá teszi a kódot.
+Anti-pattern: Egy nehezen használható kódséma, mely sokszor elõfordul. 
+Ilyen az elburjánzó konstruktor, más néven: telescoping constructor anti-pattern.
+
+Megoldás egy beállító(builder) objektum kétrehozása, mely setterein keresztül beállítja a saját változóit, és minden builder visszatérési típusú setter önmagát adja vissza (return this), azért hogy a metóduokat láncolni lehessen.
+
+Gyakran a builder objektumot nem hozzuk létre konkrét névvel, csak a new kulcsszón keresztül, s hívjuk meg rajta a settereket, hogy a kifejezés bal oldalán az adott értékekkel jöjjön létre az immutable objektum.
+
+Az így létrejött osztályok (immutable-builder) Tightly Coupled-nek minõsülnek.
+
+A builder osztályokat gyakran a cél osztály mellé csomagolják, vagy beléje építik mint statikus belsõ osztály.

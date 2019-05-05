@@ -1,0 +1,73 @@
+http://flukeout.github.io/
+
+div-re:
+	div-neve
+
+classra:
+	.class-name
+	
+id-ra:
+	#id-neve
+	
+Egymásba ágyazott div-ek:
+	szülõ-div gyerek-div
+	
+id-n belüli div:
+	#id div
+	
+div-en belül class:
+	div .class
+	
+div, ami valamilyen class-ú:
+	div.class
+	
+diven  belüli div, ami valamilyen class-ú
+	div1 div2.class
+
+egy dolog plusz egy másik dolog
+		div1, div2
+		
+minden
+	*
+
+minden a div en belûl:
+	div *
+	
+Select an element that directly follows another element
+	A + B
+	div +
+	
+General Sibling Selector
+Select elements that follows another element
+
+A ~ B
+You can select all siblings of an element that follow it. This is like the Adjacent Selector (A + B) except it gets all of the following elements instead of one.
+Examples
+A ~ B selects all B that follow a A
+	div1 ~ div2  (csak div2 követõk)
+	
+	
+child Selector
+Select direct children of an element
+A > B 
+You can select elements that are direct children of other elements. A child element is any element that is nested directly in another element. 
+Elements that are nested deeper than that are called descendant elements.
+Examples
+A > B selects all B that are a direct children A
+
+Only Child Pseudo-selector
+Select an element that are the only element inside of another one.
+:only-child
+You can select any element that is the only element inside of another one.
+Examples
+span:only-child selects the span elements that are the only child of some other element.
+ul li:only-child selects the only li element that are in a ul.
+	plate>:only-child
+	
+Nth Child Pseudo-selector
+Select an element by its order in another element
+:nth-child(A)
+Selects the nth (Ex: 1st, 3rd, 12th etc.) child element in another element.
+Examples
+:nth-child(8) selects every element that is the 8th child of another element.
+div p:nth-child(2) selects the second p in every div

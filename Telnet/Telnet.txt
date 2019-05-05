@@ -1,0 +1,12 @@
+olyan kis szoftver, mely csatlakozik és kommunikál távoli eszközzel,
+Nem muszály h HTTP protokollon keresztül történjen a kommunikáció
+
+Homokozó:
+	httpbin.org
+ 	[ Base URL: httpbin.org/ ]
+	A simple HTTP Request & Response Service.
+
+A telnet semmilyen titkosítást nem tartalmaz, 
+ezért helyette biztonsági okokból manapság már szinte kizárólag csak az SSH-t hasznáják.
+
+httpbin.org egy tipikus teszt doamin

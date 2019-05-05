@@ -1,0 +1,33 @@
+
+<!-- saved from url=(0043)http://zerotohero.hu/minitrening/code1.html -->
+<html><head><meta http-equiv="Content-Type" content="text/html; charset=windows-1252">
+<link rel="stylesheet" href="./github.css">
+<script src="./highlight.pack.js.letöltés"></script>
+<script>hljs.initHighlightingOnLoad();</script>
+</head>
+<body>
+<pre><code class="xml hljs ">
+<span class="hljs-tag">&lt;<span class="hljs-title">plugin</span>&gt;</span> 
+	<span class="hljs-tag">&lt;<span class="hljs-title">groupId</span>&gt;</span>org.liquibase<span class="hljs-tag">&lt;/<span class="hljs-title">groupId</span>&gt;</span> 
+	<span class="hljs-tag">&lt;<span class="hljs-title">artifactId</span>&gt;</span>liquibase-maven-plugin<span class="hljs-tag">&lt;/<span class="hljs-title">artifactId</span>&gt;</span> 
+	<span class="hljs-tag">&lt;<span class="hljs-title">configuration</span>&gt;</span> 
+		<span class="hljs-tag">&lt;<span class="hljs-title">changeLogFile</span>&gt;</span> src/main/resources/db/changelog.xml <span class="hljs-tag">&lt;/<span class="hljs-title">changeLogFile</span>&gt;</span> 
+		<span class="hljs-comment">&lt;!-- jdbc driver --&gt;</span> 
+		<span class="hljs-tag">&lt;<span class="hljs-title">driver</span>&gt;</span><span class="hljs-tag">&lt;/<span class="hljs-title">driver</span>&gt;</span> 
+		<span class="hljs-comment">&lt;!-- jdbc url --&gt;</span> 
+		<span class="hljs-tag">&lt;<span class="hljs-title">url</span>&gt;</span><span class="hljs-tag">&lt;/<span class="hljs-title">url</span>&gt;</span> 
+		<span class="hljs-tag">&lt;<span class="hljs-title">username</span>&gt;</span><span class="hljs-tag">&lt;/<span class="hljs-title">username</span>&gt;</span> 
+		<span class="hljs-tag">&lt;<span class="hljs-title">password</span>&gt;</span><span class="hljs-tag">&lt;/<span class="hljs-title">password</span>&gt;</span> 
+	<span class="hljs-tag">&lt;/<span class="hljs-title">configuration</span>&gt;</span> 
+	<span class="hljs-tag">&lt;<span class="hljs-title">executions</span>&gt;</span> 
+		<span class="hljs-tag">&lt;<span class="hljs-title">execution</span>&gt;</span> 
+			<span class="hljs-tag">&lt;<span class="hljs-title">phase</span>&gt;</span>process-resources<span class="hljs-tag">&lt;/<span class="hljs-title">phase</span>&gt;</span> 
+			<span class="hljs-tag">&lt;<span class="hljs-title">goals</span>&gt;</span> 
+				<span class="hljs-tag">&lt;<span class="hljs-title">goal</span>&gt;</span>update<span class="hljs-tag">&lt;/<span class="hljs-title">goal</span>&gt;</span> 
+			<span class="hljs-tag">&lt;/<span class="hljs-title">goals</span>&gt;</span> 
+		<span class="hljs-tag">&lt;/<span class="hljs-title">execution</span>&gt;</span> 
+	<span class="hljs-tag">&lt;/<span class="hljs-title">executions</span>&gt;</span> 
+<span class="hljs-tag">&lt;/<span class="hljs-title">plugin</span>&gt;</span>
+</code></pre>
+
+</body></html>

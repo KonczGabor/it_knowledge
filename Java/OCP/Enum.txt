@@ -1,0 +1,119 @@
+Final autómatikusan(implicitly). Nem lehet extendelni az Enum típusú osztályt. Még egy másik Enumnak sem.
+
+Õ sem extendelhet mást, mert autómatikusan a java.lang.Enum-ból származik, de megvalósíthat interfészeket.
+
+Nem lehet belõle példányt létrehozni new-val.
+
+A metódusokat a példánytól kell lekérni, nem az Enumól. Kivéve ha static. //SEASON.myStaticMethod(); SEASON.FALL.getLenghtOfFall();
+
+
+Az enum inherently static. //Statikus tagok nem szerepelhetnek locális inner classokban.
+Lehetnek static metódusai.
+
+
+----------------------------------
+
+Az enumok felsorolása elott nem állhat semmi az Enum-ban:
+	enum TrafficLight {
+        private String message;					
+        GREEN("go"), AMBER("slow"), RED("stop");	//Ezt nem elozheti meg semmi.
+        
+        TrafficLight(String message) {
+            this.message = message;
+        }
+        
+        public String getMessage() {
+            return message;
+        }
+    }
+    
+    public static void main(String[] args) {
+        System.out.println(TrafficLight.AMBER.getMessage().toUpperCase());
+    }
+
+----------------------------------
+
+Enum construktora annyiszor meghívódik ahány enumot tartalmaz, már az elso példány létrehozásakot, WTF!!!
+
+  enum Flags {
+        TRUE, FALSE;
+        Flags() {
+            System.out.println("HELLO");
+        }
+    }
+    public static void main(String[] args) throws IOException {
+        Flags flags = Flags.TRUE;		// = > "HELLO" \n "HELLO" : mert két enum van: egy TRUE és egy FALSE
+    }
+	
+----------------------------------
+
+Enum és a treemap: Amilyen sorrendben deklarálva vannak az enumok az Enumban úgy tárolódnal le a TreeMap-ben:
+
+	import java.util.*;
+ 
+	enum TrafficLight {
+		RED, YELLOW, GREEN
+	}
+	 
+	public class Test {
+		public static void main(String[] args) {
+			Map<TrafficLight, String> map = new TreeMap<>();
+			map.put(TrafficLight.GREEN, "GO");
+			map.put(TrafficLight.RED, "STOP");
+			map.put(TrafficLight.YELLOW, "READY TO STOP");
+	 
+			for(String msg : map.values()) {		// => STOP \n READY TO STOP \n GO
+				System.out.println(msg);
+			}
+		}
+	}
+
+----------------------------------
+foreach bejárás:
+	for(Season season: Season.values()) {
+		System.out.println(season.name() + " " + season.ordinal());
+	}
+
+Az Enum enum-jai dekaráslási sorrendben számozódnak, 0-tól:
+WINTER 0
+SPRING 1
+SUMMER 2
+FALL   3
+
+Ha felsoroláson kívül nincs más a fileban, akkor nem kötelezõ a statement végére kitenni a pontosvesszõt(;), amúgy igen, különben fordítási hiba. 
+Még ha csak egy Cstr-t írunk is bele, akkor is ki kell tenni a felsorolások végére a ";"t!
+
+Enum constructora csak private lehet. Ha nem adunk meg neki láthatóságot akkor nem package private lesz, hanem implicite private. 
+	Mégegyszer megadni a private láthatóságot redundáns.
+	Ha nem adunk meg konstruktort, akkor autómatkusan létrehoz egyet.
+	Enum konstruktora csak egyszer fut le.
+
+Az egyes enumok megvalósíthatnak az Enumban deklarált absztrakt metódust. Ha nem akarunk mindegyiknek egyet, akkor elég csak egy sima, amit a kívánt enum felülír. 
+Ez lesz a default. Nem összetévesztendo az interfészek default-jával itt csupán nem kell láthatóságot megadni(~package private).
+
+Implementálja a java.lang.Comparable -t, szóval át lehet adni SortedSet, TreeSet, vagy TreeMap -nak.
+
+Metódusai:
+	-name(): Visszadja az enum nevét.
+	-ordinal(): az enum indexét adja vissza (0-tól indul)
+	-values(): konstansok tömmbjét adja vissza, az enumokat.
+	-valueOf(String): KonstansOsztaly.valueOf("van-eIlyenEnum, akkor kéremSzépen!")
+	
+----------------------------------
+
+Ha switch(beRakjuk),
+
+akkor a case(ben nem lehet megadni az Enumot, csak az enumot)
+
+pl.: Swith az ENUM, ON és OFF az enumjai.
+---
+switch(s) { 
+	case Switch.OFF : System.out.println("It is off!"); 	//NEM jó!
+	break; 
+}
+--
+switch(s) { 
+	case OFF : System.out.println("It is off!"); 			//Ez már jó!
+	break; 
+}
+----------------------------------

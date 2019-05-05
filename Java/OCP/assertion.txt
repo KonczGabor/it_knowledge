@@ -1,0 +1,108 @@
+Ez egy Boolean kifejezés amit a kód egy olyan helyére kell tenni, ahol azt várjuk h valami "true" legyen.
+
+Ha nincs bekapcsolva az assertion az olyan, mintha konkrétan ki lenne az assertion ütve a forráskódból. 
+	Ha engedélyezzük akkor már újra kell értelmezni az if utasítások zárójek nélküli blokk sorrendjét!
+
+A zárójelek és a hibaüzenet <: message> opcionálisak.
+
+Változónak nem adhatjuk az assert nevet, mert az fenntartott.
+ 	
+Nem az inputok validálására valók hiszen prodon ki van az assertion kapcsolva.
+
+Ha false ra értékelõdik ki, akkor kapjuk az errort, majd kiírjuk a hibaüzenetet.
+
+Ha az assertion engedélyezett és false-ra értékelõdik ki, akkor java.lang.AssertionError lesz dobva. 
+Az általános irányelvtõl, miszerint nem szabad errort dobni, ilyen esetben eltekinthetünk, viszont lekezelni nem kötelezõ, hiszen Errort kezelni bad practice.
+
+Maga a boolean kifejezés megengedett hogy zárójelben álljon, amit kettõspont "String", szám, vagy épp semmi sem követ.
+
+java –ea Assertions: //-ea enabe to use asertions, or -enableassertions
+
+public class Assertions {
+	public static void main(String[] args) {
+		int numGuests = -5;
+		assert numGuests > 0;			Ha az assert false-re értékelodik ki AssertionError -t dobunk!
+		System.out.println(numGuests);
+	}
+}
+
+----------------------------------
+
+assert boolean_expression: bármilyenVisszaterés, metódus, null (void fgv nem lehet, vigyázzunk ha csak kiíratunk egy értéket out-ra, az még egy void fgv, ami ugye az szintaktikailag nem érvényes)
+	assert true: true;
+	assert true: "true";
+	
+A kifejezés állhat zárójelben:
+	assert (n < 0): "OhNo";
+	
+A message blokkban deklarálhatunk ternális operátort:
+		assert age!=age : (1<age ? "Error" : 10);
+		De lamdbát és return-t nem!:
+			assert name.equals("") : () -> "Oops";				//Fordítási hiba!
+			assert name.length()<(long)age : return "Mistake";	//Fordítási hiba!
+
+----------------------------------
+
+Enables Assertions:
+
+	java -enableassertions MyClass
+	Rövidítve:
+		java -ea MyClass
+
+	Leszûkíteni package és annak sub-packageire:
+		java -ea:com.wiley.demos... my.programs.Main
+		A "..." azt jelenti hogy minden class ebben a packageben és minden class a subpackage-ekben
+		
+----------------------------------
+
+Disable Assertions:
+	
+	java -ea:... -da:good... -da:bad... Main
+	java -ea:com.wiley.demos... -da:com.wiley.demos.TestColors my.programs.Main
+
+	Mindenre -ea, 
+	-ea a good package és azok gyerekire,
+	-da a bad package és azok gyerekire,
+	Indítsd a Main-t!	
+
+----------------------------------
+
+Nincs összefüggés az -ea és -da egymás közötti sorrendjében, a logikai halmaz muvelet számít:
+		java -ea:Watch -da Watch
+		//a -da Watch a végén csak annyit jelent h -da mert az utolsó paraméter a futtatandó file.
+		//a -da tehát kikapcsol midenhol
+		//az -ea pedig engedélyezi a Watch osztályon.
+		
+----------------------------------
+
+Többször is ki lehet adni az enable vagy disable parancsot:
+	Legyen mindenhol engedélyezve, kivéve eme kér packageben:
+		java -ea:... -da:package1 -da:package2 MyApp
+
+You can disable assertions using the -disableassertions (or -da ) fl ag for a specified 
+class or package that was previously enabled. For example, the following command enables
+assertions for the com.wiley.demos package but disables assertions for the TestColors
+class:
+java -ea:com.wiley.demos... -da:com.wiley.demos.TestColors my.programs.Main
+
+
+//ilyet is célszerû lehet betenni egy vezérlési ágba, pl defualt egy switch case-ben :
+assert false: "Invalid season";
+
+
+Assertions should not contain any business logic that affects the outcome of code!
+int x = 10;
+assert ++x > 10; // Not a good design!
+
+
+Assertions are used for debugging purposes, allowing you to verify that something that
+you think is true during the coding phase is actually true at runtime.
+
+
+public metódusok paramétereinek ellenõrzésére nem szabad használni, helyette:
+if( args.length  != 2 ) throw new RuntimeException("Must give two arguments");
+helyette: EX -t kell dobni.
+----------------------------------
+
+
+

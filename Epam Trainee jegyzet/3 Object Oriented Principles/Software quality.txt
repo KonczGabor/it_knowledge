@@ -1,0 +1,15 @@
+Correctness: Mennyire felel meg a specifikációnak, amit mi fejlesztünk. 
+
+Robosztusság: Nem megfelelõ esetek esetén mennyire tud alkalmazkodni az alkalmazás
+
+Extendibility (Bõvíthetõség): Változik a specifikáció és mennyire tudjuk hozzáigazítani a programunkat.
+
+Maintainability (Karbantarthatóság): Jön egy új fejlesztõ mennyire tud becsatlakozni a fejlesztési ciklusba. Busz faktor: Hány embert tud elütni a busz hogy a projekt ellehetetlenüljön.
+
+Reusability (Újrafelhasználhatóság): A kód egyes elemei mennyire tudják részét képezni más alkamazásoknak.
+
+Functionality (Használathóság):
+
+Compatibility: Hordozhatóság, Mennyire könnyen használható
+
+Performance: Mennyit kell várni a felhasználónak egy-egy változásra. 

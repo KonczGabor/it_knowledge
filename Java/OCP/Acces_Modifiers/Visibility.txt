@@ -1,0 +1,73 @@
+Megengedősség foka szerint csökkenve:
+
+Public:
+	Mindenhonnan elérhető a változó/metódus osztály
+	
+Protected:
+	Csak metódus és field lehet. 
+	Az adott package-en belül bárki elérheti, illetve a packagen kívűl azok akik leszármaznak belőle.
+	Ilyenkor a leszármaztatott osztály példányváltozóján keresztül el lehet érni az adott protected 
+	láthatóságú metódust/fieldet, de ha az ős osztály tpusú változón keresztül akarom meghívni, akkor már nem, mivel
+	így megkerüljük az öröklődést. 
+	When you think protected, think package + kids.
+	Protected does not mean the subclass can treat the protected superclass member as though it were public.
+	Az öröklődés segítségével nem kell a származtatott osztály referenciáján direktbe rámutatni, a származtatott
+	osztályban olyan a származtatott protected member mintha a sajátja lenne. Tehát this.protectedMember, vagy
+	egyszerűen csak protectedMember.
+	Packeg-en belül el lehet érni az ős osztály példányán keresztül, de package en kívül csak öröklődéssel látható a
+		
+Package Private (~default, de nem ugyan az mint a default metódus az interfészeken): 
+	Az adott package-en belül bárki elérheti.
+	When you think of default access, think package restriction. No exceptions.
+	
+Private:
+	Csak az adott osztályban elérhető. 
+	
+	 class A {
+		private int i;
+		public void modifyOther(A a1){
+			a1.i = 20;  //Ez itt elérhető, mert nem az adott objektum szemszögéből nézi, hanem az osztály szemszögéből. És a privát elérhető a saját osztályában, minden máshol nem.   
+		}
+	}
+	
+	Private means private to the class and not to the object. In other words, members marked private can't be accessed by code in any class other than the class in which the private member was declared.
+
+/alap osztály láthatósága csak private v default lehet. Attól mert egy osztályt még behivatkoztunk egy másikba még publicnak is kell lennie.
+
+Attól mert egy member (változó/method) még public még nem biztos h elérhető lesz kívülről is. Magának az osztályank 
+is public láthatóságúnak kell lennie.
+
+Ha egy ős típusú referencián keresztül hivatkozunk az ős privát metódusára amit mi a gyerekben kinyitottunk az már fordítási hiba lesz, mert fordítás időben eldőlnek a láthatóságok és 
+nem fog megvalósulni a polimorfizmus.
+	class A{
+		A(){
+			print();
+		}
+		private void print(){
+			System.out.println("A");
+		}
+	}
+	
+	class B extends A{
+	   int i =   Math.round(3.5f);
+	   public static void main(String[] args){
+		  A a = new B();
+		  a.print();							//Fordítási hiba! Inenn nem látjuk "A" privát print()-jét, senkit nem érdekel h nekünk van sajátunk.
+	   }
+		void print(){ 
+			System.out.println(i);
+		}
+	}
+
+
+
+
+
+
+
+
+
+
+
+
+

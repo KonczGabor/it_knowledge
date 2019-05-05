@@ -1,0 +1,2 @@
+&&:
+	csak boolean kifejezések közt tud dönteni.

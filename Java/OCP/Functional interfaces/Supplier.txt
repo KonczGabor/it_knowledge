@@ -1,0 +1,34 @@
+Not excepts arguments but do returns a result           //Opposite of a Consumer
+
+Supplier<T> {
+
+    /**
+     * Gets a result.
+     *
+     * @return a result
+     */
+    T get();
+}
+
+Supplier<String> s  = ()-> "Java is fun";
+        System.out.println(s.get());
+
+() -> createLogMessage();
+
+--------------------
+Supplier<LocalDate> s1 = LocalDate::now;
+Supplier<LocalDate> s2 = () -> LocalDate.now();
+
+LocalDate d1 = s1.get();
+LocalDate d2 = s2.get();
+System.out.println(d1);
+System.out.println(d2);
+--------------------
+
+
+Retruns primitives:
+
+	BooleanSupplier
+	DoubleSupplier
+	IntSupplier
+--------------------

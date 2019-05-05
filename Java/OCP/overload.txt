@@ -1,0 +1,9 @@
+Overloadolt az, amikor már meglévő néven, de eltérő szignatúrával metódust definiálunk.
+-Eltérő paraméter típus, szám, sorrend.
+Ha csak a visszatérési értéket, láthatóságot, kivétel továbbdobást változatjuk meg, az fodítási hiba.
+
+// int[] length ugyanaz mint az int..Already at the first time when I have met with David (//Clean Code Training in the Junior mentoring program) he made a strong impact not just on me but the on other candidates too - as we talked about it much later. He was the guy who can almost instantly provide a detailed technical solution for a difficult problem with a more complex implementation :-) Joking aside, I think that David can be justly proud of his technical skills, and I am quite sure that he has a sixth gear in his brain.
+Almost two months ago, when I come to my actual project he was the first who offered a helping hand, and provided thematic background and well-detailed explanations too. Kindly.
+I would like to emphasize his willingness to help, because it's easy to misunderstand his strong motivation to fix a problem in the most efficient way.  (//let me not that this is a characteristic of a good leader)
+He takes his responsibilities strictly, trying to take as much effort in his duty as could be enough for two.
+Sometimes he is prone to involve himself in technical debates and clarify the problem/situation/solution with

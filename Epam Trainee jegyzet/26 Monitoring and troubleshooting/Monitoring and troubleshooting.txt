@@ -1,0 +1,169 @@
+How not to measure latency
+
+	Latency: Az idő hogy egy művelet megtörténjen
+	
+	Rosszúl értelmezzük a grafikonokat.  
+	
+	Response time vs Service Time: 
+	
+	
+GC: 
+
+Finalizer minden referenciát nullára állít
+
+Concurrent gc: az aklkalmazással együtt, konkurenssen fut. <->Stop the world
+
+Parallel gc: több CPU-t használ a szemétszállításhoz (Több mint egy thread-et használ)
+
+	Lehetsz konkurens, de nem parallel,és vica versa.
+	
+Conservative Collector: nem figyel arra h a mező referencia vagy nem. <-> Precise Collector (annak kell lennie ha objektumokat akar mozgatni)
+
+
+
+Safepoint
+
+Mark
+
+
+Sweep
+
+Compact
+Compacting collector: Az azonosokat egymás mellé rendezi, defragments
+
+Parallel collectors:
+	A process-hez rendelt erőforrásokat párhuzamosan használjuk a gc végrehajtása céljából.
+	Minden app thread leáll
+	Jobb hatékonyság és áteresztőképesség
+	A válaszidőre nagy kihatása lehet
+	
+Concurrent collectors:
+	Azon appokra, amelyek érzékenyek a válaszidőre
+	Kihívás eldönteni h mikor fusson le
+	Nehéz implementálni
+	
+	
+Mark and Sweap Collector:
+	Tracing: Felkeresi és megjelöl az összes objektumot.
+		Előnyei: 
+			Egyszerű implementálni
+			Könnyen felfedezi a köröket
+
+		Hátrányai:
+			sokáig tarthat
+			Az egész heap-et bejárja
+			A heapet-fragmentálva hagyja
+			
+			
+Concurrent Mark Swee:
+	1, inicializálás -leállít minden app thread-et
+	2, Concurrent Mark
+	3, Konkurens előtörlés (Preclean)
+	4, Remark -leállít minden app thread-et
+	5, Konkurens sweap,
+	6, Konkurens Reset
+			
+Copying Collector:
+	A heap két egyelő részre van osztva.
+	Amikor leáll minden (a world) akkor az életben maradt objektumok az aktívól az inaktívba kerülhetnek
+	
+
+
+Nyomkövetés alapú szemétgyűjtés:
+A legelterjedtebb szemétgyűjtő módszer. Először meghatározza, mely objektumok elérhetőek, majd törli a megmaradtakat.
+
+
+Mark and Compact Collector:
+	A Mark and Sweap-re épít
+	Önkényesen két részre bontja a heap-et (to/from).
+		Két phase-ből áll:
+			-mark(trace)
+			-az élő objektumokat a heap aljára tömöríti.
+
+			
+Garbage-First Garbage Collector	
+		A Heap egyenlő méretű régiókra van osztva.
+		Konkurens globális marking phase-ek.
+		Párhuzamos kiértékelődés
+			
+	Azokat a régiók, amelyek nem tartalmaznak élő objektumokat azonnal használatba lehet venni.
+	Evacuation: Azokkal kezdi amik szeméttel vanak feltöltve, hogy hamar fel tudjon memória szabadúlni.
+	
+	Baj akkor van ha elfogytak a szabad régiók, a heap elérte maximális méretét.
+	
+	
+JRockit Realtim Garbage Collector
+	A user kezébe adja a maximum lellási idő meghatározását, az egy időkereten belül lévő leállások számát.
+	Általában sokszor áll le rövid időre.
+	Back off, split work and reschedule if nearing QoS limit
+	
+	
+Zing pauseless Garbage Collector
+	Teljesen konkurens, tömörít.
+	Uses a Loaded Value Barrier (LVB) to verify each heap reference as correct when loaded
+	5Gigásnál nagyobb heapek fölött ajánlott
+	
+		Megoldást szolgáltat:
+			Konkurens Marking problémára
+			Konkurens Relocating problémára
+
+
+Allocation rate: How fast you allocate
+
+Mutation rate: How fast your program updates referecincies: milyen gyorsan tudom mozgatni a pointert
+
+Cycling time: Mennyi ideig tart h a kollektor felszabadítsa a memóriát.
+
+Marking time: mennyi ideig tart h a kollektor megtalálja az összes élő objektumot.
+
+Sweep time. mennyi ideig tart megtatláltni a dead objecteket.
+
+Compaction time: Mennyi ideig a relokáció általi memórai felszabadítás.
+
+Object lifetime: mennyi ideig él az objektum.
+
+Heap population: a heap hány százaléka(?) van életben
+
+Memóriaszivárgás (memory leak): a már nem használt memória lefoglalva marad, anélkül, hogy felszabadulna. 
+Megkülönböztetünk fizikai és logikai memóriaszivárgást. Fizikainak nevezzük, ha a lefoglalt memória törlésre került, de nem szabadult fel. 
+Logikai szivárgásról beszélünk, ha a területre van élő hivatkozás, de azt nem használjuk. Ebben az esetben a GC sem tehet semmit.
+
+Prallel GC a default 
+
+
+Egy JIT környezetben a bájtkódra fordítás az első lépés, azaz a forráskód hordozható és optimalizálható köztes reprezentációra alakítása. A bájtkódot telepítik a célrendszerre. 
+A kód végrehajtása során a futtatókörnyezet fordítója fordítja azt natív gépi kódra. 
+Ezt meg lehet fájl vagy függvény alapon tenni: a függvényeket csak végrehajtáskor szükséges lefordítani, (innen jön a „just-in-time”, éppen időben kifejezés).
+
+A cél a natív- és a bájtkódfordítás előnyeinek egyesítése. Az eredeti forráskód feldolgozása és az alapvető optimalizálás fordítási időben történik, jóval a futtatás előtt – a bájtkódról gépi kódra történő fordítás jóval gyorsabb, mint forráskódról. 
+A keletkezett bájtkód hordozható, nem úgy, mint az architektúrához kötött gépi kód. A bájtkódról gépi kódra fordítók megírása is egyszerűbb, mivel a bájtkódfordító elvégzi a munka nehezét.
+
+	AOT: Ahead Of Time: előre fordított
+
+	Lehet optimalizálni a CPU-ra.
+	
+	
+ Hátrányai:
+	Compile time budget:
+	
+	Hot method: too large to optilamize inlinie
+	
+	//In java every non static call is virtual.
+	
+	
+JITWatch monitoring tool
+
+	Kód optimalizácó: Konstansok regiszterekben történő eltárolása.
+	
+	
+Bimorphic/Monomorhic situtation:
+
+final keyword hasznos multithreading szempontjából, de JIT compiler esetén nincs jelentősége.
+
+Minél egyszerűbb a küd annál több optimalizációt tud belevinni a firdító.
+
+A rövíd metódusok az ájánlottak.
+ 
+A túlzott optimalizáció drawback is lehet, hagyjuk h a JIT hadd tegye a dolgát.
+
+Kerüljük a speciális szituációkat. 

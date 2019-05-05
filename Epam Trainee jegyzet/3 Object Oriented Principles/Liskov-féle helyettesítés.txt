@@ -1,0 +1,16 @@
+Ha leszármaztatunk egy osztályból, akkor csak olyan változásokat eszközölhetünk, amik nem módosítják az eredeti osztálynak a felelõsségét és mûködését.
+
+Ha õsosztályként tekintek egy leszármaztatott osztályra akkor nem szabad hogy lássam a különbséget a kettõ között.
+
+Lehetõségek:
+
+Metódusok szignaturája meg kell hogy egyezzen
+
+Amilyen paraméterekkel meghívhattunk az õsben egy metódust, azokkal a leszármaztatottban lévõ metódus paramétereit is meg kell tudnunk hívni.
+
+A visszaadott eredménynek kompatibilisnek kell lennie. 
+
+History constraint:
+Nem módosíthatja a belsõ állapotot olyan formán hogy ez megzavarja az õs osztály mûködését. (protected változókon való hozzáférés)
+
+Iterátorok: (van-e következõ, kérem a következõt, távolítsd el a legutolsót(ezt nem vagyunk kötelesek megvalósítani))

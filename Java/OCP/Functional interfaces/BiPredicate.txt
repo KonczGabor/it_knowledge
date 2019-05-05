@@ -1,0 +1,14 @@
+Takes two argument  //(&&)
+test();
+returns true or false (returns a Boolean)
+
+//Static methods: and, or, negate, isEqual
+
+  String [] arr = {"A", "ab", "bab", "Aa", "bb", "baba", "aba", "Abab"};
+        BiPredicate<String, String> predicate = String::startsWith;
+ 
+        for(String str : arr) {						//Írj ki mindent ami nem "A" -val kezdődik!
+            if(predicate.negate().test(str, "A"))
+                System.out.println(str);
+        }
+    }

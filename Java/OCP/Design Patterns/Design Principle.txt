@@ -1,0 +1,1 @@
+Design principle: Megalapozott ötlet, vagy módszer ami megkönnyít a szoftver tervezési folyamatot.

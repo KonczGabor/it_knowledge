@@ -1,0 +1,4 @@
+Annak a megközelítése hogy kiszervezzük az objektumok létrehozását és menedzselését.
+The approacf of outsourcing the construction and management of objects.
+
+Segíségével az applikáció kívülről jobban konfigurálhatóvá válik kívülről.

@@ -1,0 +1,64 @@
+Kell hogy legyen egy, és csakis egy absztrakt metódusa.
+Az se baj ha azt örökli egy másik interfésztõl és önmaga "üres", attól még õ is funkcionális interfésznek minõsül.
+Bármennyi NEM absztrakt metódussal rendelkezhet.
+Bármennyi NEM absztrakt metódussal rendelkezhet.
+
+default metódust közvetlenül az Interfészen nem lehet hívni, csak annak példányán keresztül.
+Static metódust csak az Interface-en keresztül, lehet hívni, annak példányán nem lehetséges.
+
+When the compiler is unable to assign a functional interface to a lambda expression,
+it is referred to as an ambiguous lambda expression. Megoldható explicit kasztolással.
+use((Callable<Integer>)() -> {throw new IOException("");}); // COMPILES
+
+
+--------------------
+
+A metódus hívásának pillanatában nem csak lambda kifejezéssel, hanem metódus refereniával is implementálhatjuk a funkcionális interfész absztrakt metódusát, így lehetõség van más, már meglévõ metódusokat az interfész paraméter helyére tenni:
+//Nem kell hogy a metódus neve egyezzen(? nem is adhatunk meg), csak a paraméterlista és a visszatérési érték.
+
+
+mport java.util.Arrays;
+import java.util.List;
+
+interface Carnivore {
+    default int calories(List<String> food) {
+        return food.size() * 100;
+    }
+
+    int eat(List<String> foods);
+}
+
+class Tiger implements Carnivore {
+    public int eat(List<String> foods) {
+        System.out.println("Eating " + foods);
+        return foods.size() * 200;
+    }
+
+}
+
+public class TestClass {
+    public static int size(List<String> names) {
+        return names.size() * 2;
+    }
+
+    public static void process(List<String> names, Carnivore c) {
+        c.eat(names);
+        c.calories(names);
+    }
+
+    public static void main(String[] args) {
+        List<String> fnames = Arrays.asList("a", "b", "c");
+        Tiger t = new Tiger();
+
+        process(names, (List<String> x)->1);
+
+        process(names, t::eat);
+        process(names, t::calories);
+        process(names, TestClass::size);
+
+// Wrong  process(names, Carnivore::calories);		//default metódust közvetlenül az Interfészen nem lehet hívni, csak annak példányán keresztül.
+// Wrong  process(names, Tiger::eat);				//Az eat statikus.
+    }
+}
+
+--------------------

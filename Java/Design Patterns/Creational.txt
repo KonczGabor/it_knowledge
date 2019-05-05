@@ -1,0 +1,5 @@
+Ezek a petternek főleg a példányosításra koncentrálnak.
+A rendszert úgy hozzuk létre hogy az független legyen objektumainak
+	-létrehozásától
+	-begyűjtésétől (collected)
+	-megjelenítésétől (represented)
