@@ -1,3 +1,0 @@
-StringBuilder does not override Object's .equals() function, which means the two object references are not the same and the result is false.
-
-For StringBuilder, you could use s1.toString().equals(s2.toString())

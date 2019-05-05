@@ -1,5 +1,0 @@
-java.lang.reflect
-Ez egy Class manipulator h mindent meg tudjunk változtatni magán a classon belül is.
-Ez egy library
-Mivel dinamikus le tudja lassítani a programot
-Nem lehet használni appletekkel, biztonsági problémák miatt.

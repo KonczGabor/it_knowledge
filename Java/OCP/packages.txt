@@ -1,9 +1,0 @@
-Az alap default package, amit nem kell importolni (already implicitly exported):
-	java.lang
-	
-java.util (should be explicitly imported)
-
-Kötelező sorrend:
-	1. package (Nem kötelező h legyen)
-	2. import  (Nem kötelező h legyen)
-	3. class

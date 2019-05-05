@@ -1,5 +1,0 @@
-Takes two argument  //(&&)
-test();
-returns true or false (returns a Boolean)
-
-//Static methods: and, or, negate, isEqual

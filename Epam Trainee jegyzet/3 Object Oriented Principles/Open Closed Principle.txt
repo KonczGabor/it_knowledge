@@ -1,9 +1,0 @@
-A szoftver entitások (osztályok) legyenek nyitottak a bõvítésre, de zártak legyenek a módosításra.
-
-A függõségek esetén történõ módosítások tovaterjedésének megakadályozására hivatott.
-
-Megoldás: absztrakciók használata: örököltetés, kompozíciók használata.
-
-Sokmindent megoldhatunk funkcionális dekompozíciókkal, elágazásokkal, függvényekkel, de sokkal jobb volna ha absztrakciókat használnánk.
-
-Példa: Állatok megszólaltatása CASE helyett polimorfizmus.

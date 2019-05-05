@@ -1,1 +1,0 @@
-A jelszavak soesem vándorolnak a szerverek között az OAuth 2.0-ás framework-ben.

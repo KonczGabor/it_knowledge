@@ -1,3 +1,0 @@
-apt intall mc
-
-exit: F10

@@ -1,5 +1,0 @@
-Nem kéne rákénszeríteni a kliensekre függõségeket.
-
-Az interfész összes metudusát meg kell valósítani, olyat is amit nem akarunk. 
-Egy nagy interfészt szét kell bontani szerepkörököre, több kisebbre.
-Kerülni kell az összetett interfészeket.

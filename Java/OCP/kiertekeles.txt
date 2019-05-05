@@ -1,2 +1,0 @@
-A Javaban balról jobbra, történik.
-Természetesen a preferencia sorrendet figyelembe véve.

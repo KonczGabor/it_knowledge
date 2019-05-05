@@ -1,7 +1,0 @@
-Accepts two arguments and returns a result
-
-All of the types can be different
-
-BiFunction<T, U, R>
-
-//Useful static methods: -compose, andThen

@@ -1,4 +1,0 @@
-Data Definition Language
-
-
-Data Manipluation Language

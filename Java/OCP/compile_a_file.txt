@@ -1,4 +1,0 @@
-javac a parancs amivel a .java fileokat bytecode-dá fordítjuk, ami elfut a JVM en.
-A parancsnek a teljes relatív, vagy abszolút útvonalat tartalmaznia kell, 
-a futtató java myClass parancsnak elég ha csak benne állunk a projektben, nem kell kiírni a .class file kiterjesztést a futtatan file végére.
-A lefordított bytecode bináris és a mappa szerkezete követi a projektszerkezetét a .java fileoknak, tehát a bin folder kvázi az src tükörképe.

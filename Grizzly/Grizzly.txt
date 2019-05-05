@@ -1,6 +1,0 @@
-Ez egy HTTP konténer, egy framwork
-Egy NIO keretrendszer, amit arra terveztek hogy a fejlesztõk jobban ki tudjkák használni a  JAVA NIO API elõnyeit.
-A célja hogy sálázható és robosztus szervereket hozhassunk létre ami egyaránt támogatja a NIO-t és más framework komponenseket:
-web framework (HTTP/S), WebSocket, Comet.
-
-HTTP, vs Servlet Container

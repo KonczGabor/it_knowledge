@@ -1,7 +1,0 @@
-•The delete operator can be used to remove a property
-•will remove a property if it has one
-•do not affect the prototype linkage
-
-spiderMan.identityKnown// true
-delete spiderMan.identityKnown
-spiderMan.identityKnown// revealing the value from hero object

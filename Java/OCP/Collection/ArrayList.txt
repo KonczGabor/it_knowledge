@@ -1,4 +1,0 @@
-A kezdõ kapacitás csak memóriát foglal, a lista mérete a benne létrejött objektumok számossága, size().
-
-Annak ellenére h csak <? extends> Objecteket lehet beletenni, prmitívek is belekerülhetnek, mert lejátszódik egy autoboxing.
-	Probléma lehet h null-t is beletehetünk, de ilyenkor ha meg

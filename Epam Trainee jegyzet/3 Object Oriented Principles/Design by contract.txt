@@ -1,7 +1,0 @@
-Van olyan felelõsség ami két szék közé esik. Ezeket a felelõsségeket tudjuk jól megállapítani ezzel a módszerrel.
-Ha ezt kapja, ezt a választ kell adnia eredményül. Megfelelõek-e paraméterek. Megfelelõ-e a visszakapott érték.
-Pontosan tudjuk h mi a kliens és mi az osztály felelõssége.
-Többletmunkával jár, mert paramétereket kell csekkelni.
-A kliens felelõssége hogy jó adatokat adjon. Prekoncepció
-Az osztály felelõssége hogy jó visszatérést adjon. Posztkoncepció.
-

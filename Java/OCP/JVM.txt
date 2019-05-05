@@ -1,7 +1,0 @@
-Platform függetlenséget biztosít.
-Kezeli a memóriát az alkalmazás számára.
-Java utasításokat tud fordítani gép utasításokká.
-
-A byte code-ot vissza lehet fordítani Java forrásfile-á.
-
-A GC nem periódikus, hanem ha elfogy a memórai akkor igyekszik meghívni magát, de már előtte is próbálkozik.

@@ -1,7 +1,0 @@
-Keep It Stupid Simple
-Egyszerü megoldást adjunk a problémára. Elegánsan.
-
-YAGNI
-You ain't gonna need it.
-Ne fejlessz le olyan dolgot, amire nem lesz szükség. 
-Inkább az idõt a teszteléssel töltsük, ne bonyolítsuk feleslegesen funkciók implementálásával a meglévõ kódbázist.

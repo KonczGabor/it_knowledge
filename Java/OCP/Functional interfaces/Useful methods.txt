@@ -1,5 +1,0 @@
-List<String> myList = ...
-myList.forEach(s -> System.out.println(s));
-myList.forEach(System.out::println);
-
-

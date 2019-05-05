@@ -1,4 +1,0 @@
-public static <T> Crate<T> ship(T t) {
-	System.out.println("Preparing " + t);
-	return new Crate<T>();
-}

@@ -1,4 +1,0 @@
-Időtartam:			150 perc
-Kérdések száma:		85	(~1perc 45 sec/kérdés)
-Passing score:		65%
-Ár:					66718 Ft. (2018.08.12)

@@ -1,8 +1,0 @@
-subclassból superclassba nem szükséges a kasztolás.
-
-Visszafele, superclassból subclassba szükséges a cast.
-
-A fordító az egymással rokonsági kapcsolatban álló kasztolásokra fordítási hibát dob.
-
-Fordításon átmehet olyan kasztolás ami során az adott objektum nem példánya a megadott osztálynak, de ez futás idõben exception-t fog dobni.
-

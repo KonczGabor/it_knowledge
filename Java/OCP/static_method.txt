@@ -1,6 +1,0 @@
-Statikus metódusok egymást nem felülírják, hanem kitakarják.
-A gyerekben objektumon keresztül is el tudjuk érni az õs statikus metódusát.
-A gyerek Osztályán keresztül is el tudjuk érni az õs statikus metódusát.
-
-Gets called every time an instance of the class is constructed. The static block only gets called once, 
-when the class itself is initialized, no matter how many objects of that type you create.

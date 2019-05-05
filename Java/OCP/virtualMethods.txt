@@ -1,2 +1,0 @@
-Ha egy metódus példány változót használ akkor az adott szinten meghívott metódus osztályával megegyezõ példány változót fogja meghívni, nem megy végig a láncon és keresi ki a leg specifikusabb metódus osztályához tartozó változót.
-Ha másik metódust hív és az felül van definiálva, akkor kikeresi a legspecifikusabbat.

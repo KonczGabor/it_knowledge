@@ -1,1 +1,0 @@
-Le fordított ozstályok és az azokhoz szükséges dependenciák.

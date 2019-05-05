@@ -1,2 +1,0 @@
-Longba mindenféle következmény nélkül belefér egy int:
-	Long compute(){return 10;}

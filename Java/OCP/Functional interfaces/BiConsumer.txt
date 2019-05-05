@@ -1,3 +1,0 @@
-Accepts two arguments with no return value
-
-(k,v) -> Systam.out.println("key: " + k + ", value: " + v );

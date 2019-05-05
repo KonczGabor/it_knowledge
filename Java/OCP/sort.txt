@@ -1,9 +1,0 @@
-String alap:
-0. Space
-1. Számok
-2. Nagybetûk
-3. Kisbetûk
-
-binarySearch: adott egy 4 elemü lista. A visszadott találat, ha van range nem lehet több hátomnál, mert a negyedik elem indexe a három.
-Ha nincs találat, akkor a feltételezett hely, ahol lennie kéne, jelen esetben 0-4 es zárt intervallumú range. Ezt kell negálni és még hozzáadni (-1) et.
-Tehát a teljes scenário: (-5) tõl +3 ig egy 4elemszámú lista esetén.

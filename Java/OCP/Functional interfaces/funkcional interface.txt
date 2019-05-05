@@ -1,7 +1,0 @@
-Kell hogy legyen egy, és csakis egy absztrakt metódusa.
-Az se baj ha azt örökli egy másik interfésztõl és önmaga "üres", attól még õ is funkcionális interfésznek minõsül.
-Bármennyi NEM absztrakt metódussal rendelkezhet.
-
-When the compiler is unable to assign a functional interface to a lambda expression,
-it is referred to as an ambiguous lambda expression. Megoldható explicit kasztolással.
-use((Callable<Integer>)() -> {throw new IOException("");}); // COMPILES

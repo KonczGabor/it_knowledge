@@ -1,5 +1,0 @@
-File->Export...->General->Preferences, then choose to "Export all" your preferences or just the "Keys Preferences"; 
-make sure to point out the file where you want your preferences to be saved, and finally click "Finish".
-
-File->Import...->General->Preferences, then point the preference file you created when exporting your preferences; 
-choose to "Import all" or specific preferences, and finally click on "Finish".

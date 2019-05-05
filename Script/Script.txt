@@ -1,6 +1,0 @@
-Egy nyelv akkor script, ha nem kell lefordítani(compile), hanem lehet egybõl futtatni. 
-Kapásból értelmezhetõ.
-Eseményvezérelt.
-
-Esetleg még: Valamilyen célkörnyezetnek írt dolog, ami nem annyira általános. 
-	Valami nagyon dinamikus, pár sorból látványos dolgok születhetnek.

@@ -1,2 +1,0 @@
-Más nyelvekkel ellentétben a Java nem konvertálja az integereket autómatikusan boolean értékekké,
-tehát az if(1) nem lesz true, hanem fordítási hiba.

@@ -1,5 +1,0 @@
-•when return statement called, the control is returned to the place where function were invoked
-•remaining statements will not be called
-•if there's no return value defined, undefinedis returned
-•if the function was invoked with newprefix and return value is not an object, then thisis returned (the new object)
-•for methods, returning with thiscan allow method chaining

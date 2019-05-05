@@ -1,5 +1,0 @@
-Ez egy if-the-else döntési szerkezet, ami kényelmes.
-Tehát csak az egyik eredmény-ág értékelődik ki.
-A feltétel fejben csak boolean értékek között történhet döntés.
-
-Megköveteli h a lehetséges két ág visszatérési értéke kompatibilis legyen. Szóval az egyik ág nem lehet String, a másik meg int.

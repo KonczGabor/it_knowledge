@@ -1,3 +1,0 @@
-Létrehozunk egy ResourceBundle referenciát, ami rámutat egy PropertyResourceBoundle-re, aminek a konstruktorában megaddjuk a file helyét és a locale-t.
-Alapból a package route-ben keres, de célszerû a resources mappába tenni a nyelvi file-okat.
-Ha a resoource elérési útja /-re kezdõdik, akkor a root-ban keres. Ha nem akkor a resources mappában létrehozhatjuk ugyanazt a könyvtárstruktúrát, hátha segít.
