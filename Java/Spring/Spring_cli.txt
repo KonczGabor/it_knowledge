@@ -1,0 +1,10 @@
+Nem csak itt tudunk összerakni a szájunk íze szerint projektet:
+https://start.spring.io/
+
+Hanem a cli segítségével is:
+spring init -list
+	gives all the options
+	
+spring int -d=web my-app
+	-d:dependencies
+	my-app => name

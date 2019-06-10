@@ -1,24 +1,35 @@
-Angular by Gooogle
+Angular
+Why?
+	Complete
+	Code reduction 80-90% less than jQuery
+	Two Way Bindind & Forms
+	Easy to learn
+	Popular
+	Open source
+	Backed by Gooogle
+	Testable
+	I18n nagyon könnyen implementálható
+	
 Client side JS programming Framework
 Dinamikus funkcionlaitások elérése kliens oldalon (egy oldalon történjen minden újrahívások nélkül.)
 Angular 2 nem kompatibilis visszafele.
 
 	Amik biztos h működnek kliens oldalon	
-		HTML	Az elemtjei a dom fa node-jai.
-		CSS		meg lehet adni inline/block/külön file
+		HTML	Az elementjei a DOM fa node-jai.
+		CSS		meg lehet adni inline/block/külön file legyen
 		JS		Dynamic programming langugage, Compiled and Interpreted language. Arra van h változtassa dom-ot a browser-ben (User interaction). SPA=SinglePageApplication (már említett ne kllejen újrahívni az oldalt feeling.)
 		
 	Angular JS lets you extend HTML vocabulary.
 	Custom elements in HTML.
 	
 		Eddig a JQerry-s megközelítésben (Imperatív programozás - How to do it):
-			Találjuk meg az elemtet
+			Találjuk meg az elementet
 			Futtasunk valamiféle logikát
-			Updateeljük az elementet
+			Updateljük az elementet
 			
 		Ezzel szemben az Anguláros módszerrel (Deklaratív progrmozás - What to do)
 			Deklaráljunk egy element típust
-			Definiáljunk valamilyne logikát (call date)
+			Definiáljunk valamilyen logikát (call date)
 			Használjuk az elemet típust
 			
 	Custom elements:
@@ -43,9 +54,6 @@ Angular 2 nem kompatibilis visszafele.
 			}
 		<script/>
 		
-		
-		
-		
 	</body>
 </hmtl>	
 
@@ -66,8 +74,7 @@ ng-init
 		<p>The name is <span ng-bind="firstName"></span></p>
 	</div>
 	You can use data-ng-, instead of ng-, if you want to make your page HTML valid.
-	
-	Don't use this tag, depricated, useless.
+		Don't use this tag, depricated, useless.
 
 ng-if
 	if the expression is true an element will be added to the dom.
@@ -108,18 +115,18 @@ app.controller('myCtrl', function($scope) {		//Erre a változóra kösd fel a my
 </script>
 
 
-Angular célja: Egy idő után már a JS és Jquerry karbantartása nehézkes. Loosely Coupled structures.
+Angular célja: Egy idő után már a JS és jQuery karbantartása nehézkes. Loosely Coupled structures.
 Könnyebben tesztelhető, unit tesztek is lehtségesek.
 
 Archtecture:
 	Front-end: ami a browseren fut (HTML, CSS, TypeScropt, Angular)
 	Backend: data, processing.
-	Az API (Application Programming Interface) -ek általában endpointok, amik elérhetőek HTTP reqiestek segítségével.
+	Az API (Application Programming Interface) -ek általában endpointok, amik elérhetőek HTTP requestek segítségével.
 	
 nodejs =a böngészőn kívül is végre tud hajtani js-t.
-	Ha fel van téve akkor az npm tool is települ, aminek a segítségével ThirdPratyLibaries-ekekt is tudunk telepíteni.
+	Ha fel van téve akkor az npm tool is települ, aminek a segítségével ThirdPratyLibary-ket is tudunk telepíteni.
 
-Angular CLI = angular command line interface. Angular projecteket és boiler plate kódokat lehet vele geneérálni, illetve depolyable package-eket.
+Angular CLI = angular command line interface. Angular projecteket és boiler plate kódokat lehet vele generálni, illetve depolyable package-eket.
 	npm install -g @angular/cli
 		a -g azt jelenti h global, tehát mindneki számára elérhetővá válik.
 	ng --version
@@ -142,11 +149,11 @@ Mappa struktúra:
 	package.json:fontos!
 	protractor.conf.js. e2e ang tests
 	tsconfig: a typeScript compiler számára vannak beállítások.
-	tslint.json: sttaikus kódanalizátor a ts számára.
+	tslint.json: statikus kódanalizátor a ts számára.
 	
 Webpack HMR: Hot Module Replacement
 
-AngularJS (2010) Túl komplex volts
+AngularJS (2010) Túl komplex volt
 Angular2 (2016) Teljesen új. Angular néven szoktak rá hivatkozni. Angular2+
 Angular3: nincs
 Angular4:
@@ -167,7 +174,7 @@ TypeScript a külső halmaz, benne van a JS.
 	
 	let != var
 		var: nem blokkhoz, hanem a legközelebbi function-höz kötött.
-		let: ez már normálisan működik, mint pl.: Javában, csak a legközelebbi lokkban látszik.
+		let: ez már normálisan működik, mint pl.: Javában, csak a legközelebbi blokkban látszik.
 		let-tel nem lehet dinamikusan váltani a változók típusát.,ha deklarálásnál nem definiáljuk azt.
 		Ha csak deklarálunk, akkor utólag is változhat. Viszont olyan in van h deklarálásnál típust megadunk, 
 		de értéket nem, ilyenkor is típusossá válik. let a: number;
@@ -211,17 +218,128 @@ ng g s komponens//g: generate s:service
 npm install bootstrap --save: store bootsrap in an npm location
 
 CTRL+SHIFT+P: package.json =>bekerült a bootstrap dependencia	
+
+Testability: This is the place where Angular really shines
+	Unity
+		ngMock
 	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
+	End to End test	
+		Protractor:
+			Built on Webdriver képes emulálni egy UAT-ot
 		
+	Karma: Mindkettőre jó, egyszerre tudja futtatni a teszteket több browswerben is, autó tesztekre kíváló, s nem csak Angularral használható
+		Built on Node
+		Akárhányszor megváltozik a kód, a tesztek megfutnak
+		Frame Agnostic:
+			Mindegy h Angulart, React-ot, Plain JS-t futtatunk.
+		Fast
+		Command Line
+	
+Architecture:
+	Direktíva: Az a módszer ahogy a megjelenítést és a logikát összeillesztjük egy komponensben
+		Ahogy az Angular bejárja a DOM-ot keres egy speciális ng-app attribútumot. 
+			<html ng-app="app"> ,de nem kötelező h itt legyen
+		Utána a controllert keresi meg:
+			 <body ng-controller="ezen_a_néven">
+		Button tehetünk:
+			ng-click event, amit majd le akarunk kezelni
+		h1:
+			Ahova a fgv return-je beeseik és kiértékeőlidk: 
+				{{value}}
 		
+	Change detection	
+		Dirty Checking : miez?
+	
+	Dependency Injection 
+	
+	
+	jQuery: e legelterjedtebb JS library a világon. Az Angular és a jQuery nagyon közel vannaka kötve egymáshoz, 
+		ami azt jelenti h a jQuery egy minimális változatát tartalmazza az Angular core, tehát a a 
+		 Selection és a Manipulation adott, de a Full verziós is valahogy elérhető.
+		 A jQuery Angularos direktívákban is felhasználásra kerül
+		
+	Ionic: Mobile App optimalizáció	
+		
+Angular Problems:
+	Browser compatibility:
+		Main problem: IE
+		
+	SEO(Search Engine Optimalization)
+	Performance
+		If there is too many bindings
+	Very LArge Code Base
+	
+	
+Server-Side rendering (Amikor a html teljes mértékben a szerveren készül el és után küldetik ád a kliensnek):
+	Advantages:
+		SEO
+		Familiarity: több developer ismeri
+		Language: jobban ismert nyelvek
+	Disadvantages:
+		Usability: nem kell lenyomni egy tripet a szerverig
+
+	
+	
+Ang Vs React(DEveloped by Facebook)
+	React Advantages:
+		Performance in big size
+		Great Browser Support IE
+		
+	React Disadvantages:
+		Popularity is lesser
+		Frankenstein Framework: Több darabból kell összeállítani: Senior architectek kellenek hozzá
+
+	
+Ang2 nem jompatibilis visszafele, miért:
+	Mert 5-10 így szer gyorsabb!
+	Simplified Conceptual Model
+	Removed configuration overhead	
+	Mobile friendly
+	
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+	
+			

@@ -1,0 +1,20 @@
+Webappok gyors és egyszerű szerkezetének generálására szolgál.
+Összegyűjti a leghasznosabb túlokat.
+Beépül a CLI-be és a "yo".n keresztül lehet meghívni.
+Egy workflown-n keresztül (amit egy adott "generátor biztosít") végigvezet a késztermékig.
+	Scaffolding tool: yo
+	Build System: Grunt, Gupl, ...
+	Package manager: npm, Bower
+	
+Lépések:
+		 npm install generator-webapp -g // -g: globally, ha nem adjuk meg akkor az adott feolderbe tepelül, ahol állunk, így ide jön létre:  C:\Users\koncz\AppData\Roaming\npm\node_modules\generator-webapp\node_modules\spawn-sync
+
+		 yo webapp						// -creating scaffold
+		 
+		 Szerver indítása:
+			grunt server
+	
+
+
+
+

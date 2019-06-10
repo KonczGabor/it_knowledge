@@ -1,7 +1,7 @@
 Web Service: technológiák és szabályok halmaza, amelyek lehetõvé teszik hogy kettõ vagy több komponens egymással kommunikálhasson a weben.
 
 A szabályok, amik meghatározzák:
-	Hogy kommunikélnak a komponensek?
+	Hogy kommunikálnak a komponensek?
 	Milyen típusú üzeneteket küldenek egymásnak?
 	Hogyan kezelik a request-et, hogyan kezelik a response-t?
 	
@@ -29,8 +29,9 @@ TransformProtocols:
 							http://								:protocol
 							services.explorecalifornia.org/		:host
 							pox/tours.php						:resource root
-							?									
-							packageid=5							:paramteres
+							?									:Innentõl paraméterek jönnek
+							packageid=5							:paramter
+							&									:a paramétereket hivatott egymástól elválasztani //A paramétereknek nem kell tetszõleges sorrendben követniük a mappert. Ha felesleges paramokkal nem foglalkozunk. Nyilván a legszûkebbre meccselnek a kezelõk.
 				
 				POST - add data
 					Anatomy of a POST Request:

@@ -1,3 +1,4 @@
+https://www.tutorialspoint.com/spring/spring_ioc_containers.htm
 A spring egy framework ami széleskörû infrastruktúrális támogatást biztosít enterprise java alaklamzások fejlesztéséhez.
 Lightweight mert a komponenseket külön tudjuk behúzni, csak azt ami nekünk kell.
 
@@ -44,7 +45,18 @@ Autowired típusai:
 	no-default
 	byName
 	byType
-	konstruktor: konstruktor argumentum típus szerint
+	
+	Construktor:
+		@Autowired
+		public MyClass(SpyGirl spicy){
+			this.spicy = spicy;
+		}	
+	
+	Setterre is lehet tenni: //Ez a változat könnyebben tesztelhetõ
+		@Autowired
+		public void setSpicy(SpyGirl spicy){
+			this.spicy = spicy;
+		}
 	
 BeanFactoryPostProcessor abban különbözik a Bean PostProcessoroktól:
 	Nem beaneket, hanem még elõtte, bean definitionöket kap (a recepteket tudja manipulálni), akkor futnak le amikor még beanünk nincs. 
@@ -69,6 +81,34 @@ JPA: Java Persistence API: Official API fow rorking with realtional data.
 	
 	javax-is the implementation waht we looking for in the IDEAS multi suggestions.
 	
-ORM-Object Relational Mapping
+ORM: Object Relational Mapping
+
+Spring Bean Scopes:
+	Singleton: 1 példány létezhet csak	(pl.:RestController)  
+	Prototype: Mindig új példány keletkezik
+	Request: Request-enként új pédány keletkezik 
+	Session: Session-önként új példány keletkezik (Feilsmer egy embert én nem fog minden requestenként újat visszaadni, bevásárló kocsi esetén használjuk)  @Scope("session")
+	GloblaSession: (Portleteknél)
+	
+application.properties:
+	A java kód kapcsolata a külvilággal
+	A kód újra fordítása nélkül tudjuk változtatni(dinamikusan) az értékeket. A Hardcode ellentéte.
+	
+	Paraméter priority (Felül az erõsek, alul a gyengék):
+		Terminal paraméterek
+		JNDI attribútumok(java:comp/env)
+		Java System properties(System.getProperties())
+		OS környezeti változók
+		Profil alapú konfiguráció
+		Application.poperties(.jar file mellett)
+		Application.poperties(.jar file belsejében)
+		
+	//ConfigurationProperties:(?)	https://www.youtube.com/watch?v=dA_2QUiWVOQ&list=PLyriihBWoulywcSbZijjeSIHH19uJZG5q&index=12
+	//@EnableConfigurationProperties:(?)
+		
+	
+	
+	
+	
 	
  

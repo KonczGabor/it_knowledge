@@ -2,13 +2,121 @@ O'Reilly Spring MVC for Java Developer kurzus alapján.
 
 MVC: pattern, principle, architecture
 
-Model: Az objectek a rendszerünkben
+Spring MVC: building webapplications for Java
+	
+	Miért használjunk ilyet?
+		Segíti a web requestek állapotának kezelést
+		Validálja a processzálásra váró adatokat
+		A vew layer könnyen konfigurálható (JSP, ThymeLeaf, Velocity, FreeMarker, Grovy)
+	
+	Process flow modell:
+		Bejön a kérés a Browsertõl
+		Elkapja a Spring MVC Front Controller, azaz DispatcherServlet (ez már autómatikusan létezik a Spring Framework-ben)
+		Ami delegálja a kérést egy Controller-nek
+		Az készít egy modellt amit vissza ad a Front Controllernek
+		Ami a kapoptt modellel keres egy View-t
+		És a kirenderelt View-t visszaküldi a Browsernek
+		
+	Controller: performs the logic.
+		Contains business logic .> Inkább egy Service-t hív, de van ahol elfér a controllerbe is.
+		Kezeli a requesteket
+		Letároltatja, visszakéri az adatokat.
+		Feltölti az adatokkal a modellt
+		Elküldi a megfelelõ viewnak a modellt
+		
+	Modell:
+		Közvetíti az adatokat, így ideiglenesen tárolja azokat, de nem a perzisztencia a lényeg, hanem a transmit.
+		Egy controller és egy adott view között él csak és az a kibaszott csavar h a Model-t a Controller paraméter listájában fel kell tüntetni h át lehessen adni a View-nak.
+		"Model is an object that ferries data between a controller and whatever view is charged with rendering that data. Ultimately, data that’s placed in Model attributes is copied into the servlet response attributes, where the view can find them."
+		~Spring bean
+		
+	View: renders the model
+		Számos view templatet kezel
+			A legelterjedtebb a JSP, JSTL
+		Kiolvassa a modell-bõl a datát és a megjeleníti
+		
+	Elõs lépések(Ha Spring Boot ot használunk mindez nem kell):
+		Létre kell hozni: WEB-INF/web.xml
+			<web-app>
+				<servlet>
+					<servlet-name>dispatcher</servlet-name>		//Ennek *1
+					<servlet-class>org.springframework.web.servlet.DispatcherServlet</servlet-class>
+					<init-param>
+						<param-name>contextConfigLocation</param-name>
+						<param-value>/WEB-INF/spring-mvc-demo-servlet.xml</param-value>
+					</init-param>
+				</servlet>
+				
+				<servlet-mapping>								//URL mapping
+					<servlet-name>dispatcher</servlet-name>		//És ennek *1 meg kell egyezni
+					<url-pattern>/</url-pattern>				//Ami erre a pattern-re illik, azokra mappel.
+				</servlet-mapping>
+				
+			</web-app>
+		
+		
+		Konfigurálni a DispatcherServlet-et
+			spring-mvc-demo-servlet.xml		
+		
+			<beans>
+				<context:component-scan base-package="mybsepackage"/>	//Component scanninget meg kell adni:
+				
+				<mvc:annotation-driven/>								//Meghatározzuk a bean definíció típusát
+				
+				<bean class="org.springframework.web.servlet.view.InternalResourceResolver">	//Konfigurálni a Spring MVC View Resolvert
+					<property name="prefix" value="/WEB-INF/view/" />
+					<property name="suffix" value=".jsp" />
+				</bean>				
+			</beans>
+		
+	Development process:
+		Create Controller class
+			Annotate a class with @Controller
+				@Controller inherits from @Component, támogatja a scanninget.
+			@Controller
+			public class HomeController{}
+		
+		Define controller method
+			@RequestMapping("/")
+			public String showMyPage(){}
+			
+		
+		Add request mapping to Contorller Method
+		
+		Return view Name
+		@RequestMapping("/")
+		public String showMyPage(){
+			return "main-menu"			//InternalResourceResolver majd megoldja =>/WEB-INF/view/main-menu.jsp
+		}
+		
+		Develop View page
+			
+-----------------------
 
-View: renders the model
+@Controller vs @RestController:
+	A restcontroller autómatikusan jsont ad vissza, nem kell átalakítgetni
+		
+-----------------------
 
-Controller: performs the logic.
+Pareméter átadás:  		
 
-A spring project egy Spring MVC template alapján elkészólõ maven project
+@RestController
+@RequestMapping("/")
+public class LoginController {
+
+  @GetMapping						//Szofisztikáltabb mint a @RequestMapping, csak a Get, ekre hallgat
+  public Map<String, Long > doSomething(@RequestParam long id, Model model){ //Ezt kell bírni az url-be különben ha nem adunk meg paramétert akkor nem is tud rámatchelni a metódusra : http://localhost:8080/?id=13
+    Map<String, Long >  myMap =  new HashMap<>();
+    myMap.put("Key", id);
+    model.addAttribute("sajt", "medve");
+  return myMap;		//Visszajön jsonként
+  }
+}
+
+
+
+
+A spring project egy Spring MVC template alapján elkészülõ maven project
 
 	A web.xml-ben lehet többek között a dispatcher servletet is konfigurálni (azon belül saját xml-jében (dispatcher-servlet.xml)), 
 		ami a front controllerünk, ami fogadja a kéréseket és szolgáltatja a válaszokat.

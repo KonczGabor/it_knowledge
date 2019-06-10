@@ -1,68 +1,115 @@
 https://learngitbranching.js.org/
 	-undo or reset to fix mistakes, nem kell újrahívni az oldalt.
+	
+Azert erdemesebb CLI-t használni:
+	Mert néhány GUI nem implementálja a teljes funkció készletet,
+	Mert más CLI toolokat is ha használunk akkor gyorsítjuk a munkát,
+	Mert neten több segítséget kaphatunk az egéyrtelmú parancsok miatt.
+
+GIT:
+	Decentralizált/elosztott verzió kezelő rendszer. //Mégis a gyakorlatban egy centrál repót használunk általában.
+	Eredetileg Linux Kernel projektek verziózására hozta létre Linus Torvalds.
+	Csak egy pár parancshoz szükséges net kapcsolat, nagyon sok minden működik lokálban.	
+	
+Repository:
+		A verzió kezelés alatt álló fileok(és mappák) illetve azok történelmi gyűjteménye.
+		A struktúra gyökerében található a .git folder
+		
+A commit egy pillanatfelvétel/snapshot a jelenlegi változásainkról ami mindenazon fileokat tartalmazhatja amiket a vágólapra (stage) tettünk.
+	A git fileokat kezel, nem foldereket. Ha mappa szerkezet változásokat szeretnénk megörökíteni akkor hozzunk létre az új mappákban üres dummy fielokat.
+	
+A branch csak az idővonal neve, amire fel vannak fűzve a commitok. 
+	A branch törlése csak a labelt törli.
+		
+GitHub:
+	Git repository hosting service.
+	Unlimited frre repo if public is it.
+	+szolgáltatások:
+		IssueTracking
+		Web Pages		
+		
+Install:
+	Recommended:
+		Checkout as-is, commit Unix-style linde endings
 
 Create new SSH public_key:
-		$ ssh-keygen -t rsa
+		$ ssh-keygen -t rsa	
 	
+Show own config file:
+		git config --global -e
 	
 $ git config --global user.name "John Doe"
 $ git config --global user.email "johndoe@example.com"
+$ git config --global core.editor "notepad++ -multiInst -nosession"
 
 Checking Your Settings:
-$ git config --list
-git config -l
+	$ git config --list
+	git config -l
 
+P4Merge for Windows (perforce.com):
+		Visual Compare and Merge tool
+		A Command Line Merge idegesítő
+		During installation deselect all others but Visual Merge Tool
+		git config --global diff.tool p4merge
+		git config --global diff.tool p4merge.path "C:/Program Files/Perforce/p4merge.exe"
+		git config --global diff.tool.prompt false
+		git config --global merge.tool p4merge
+		git config --global merge.tool p4merge.path "C:/Program Files/Perforce/p4merge.exe"
+		git config --global merge.tool.prompt false
+		
 ssh-agent sh -c 'ssh-add ~/AsusWin7_private; 
-git fetch git@bitbucket.org:KonczGabor221/pxtrlandingpage.git'
+
+
+Working Directory: contains all the files and folders for your application (Nem minden áll verziókezelés alatt, de a git attól még figyeli őket, legfeljebb ignorálja. Ennek az állandó figyelés eredménye h észre tudja venni az újonnan született fileokat is)
+Staging Area: used to prepare for the next commit. Ezen keresztül visszük át a Working Directorynakban történt módosulásokat commitok formájában a Repositoryba
+Repository(.git folder): contains all the committed or saved changes to the Git repository. Anything here is a part of Git's history
+Remote repository: Ez valójában csak egy sima repó a maga 3 belső állapotával, általában ez a centrál repó 
 
 help:
-$ git help config
+	$ git help config
 
 
 Initializing a Repository in an Existing Directory:
-$ git init
-
-git init [folder]
-Creates a new directory and Git repository.
+	$ git init [folder]
+	Vagy ha már a folder kész van akkor álljunk bele és:
+		$ git init .
 
 Cloning an Existing Repository:
-$ git clone https://github.com/libgit2/libgit2
+	$ git clone https://github.com/libgit2/libgit2
 
 Checking the Status of Your Files:
-$ git status
+	$ git status
 
 $ git status -s:
-New files that aren’t tracked have a ?? next to them, new files that have been added to the staging area have an A, modified files have an M and so on. There are two columns to the output - the left hand column indicates that the file is staged and the right hand column indicates that it’s modified.
+	New files that aren’t tracked have a ?? next to them, new files that have been added to the staging area have an A, modified files have an M and so on. There are two columns to the output - the left hand column indicates that the file is staged and the right hand column indicates that it’s modified.
 
-
-git add [file]
 Add a specific file to the Git staging area of your repository.
-git add file1 file2
-git add *.html
+	git add .
+	git add [file]
+	git add file1 file2
+	git add *.html
 
-git add .
+	git add -u : a merge conflict során újra hozzá kell adni az érintett fileokat, így az összeset egy mozdulattal meg lehet tenni.
+	Add all new/modified files inside the current directory to the staging area of your repository.
 
-git add -u : a merge conflict során újra hozzá kell adni az érintett fileokat, így az összeset egy mozdulattal meg lehet tenni.
-Add all new/modified files inside the current directory to the staging area of your repository.
+	
+Commit everything has been changed	
+	git commit -a
 
-git commit -a
-Commit everything has been changed
-
-git reset [file]
-Removes a single file from the Git staging area but keeps any changes to that file.
-
-git reset 
-Removes all files from the Git staging area but keeps all changes
-to the files.
-
-git clean -df
-	remove untracked files
+Leszedni vmit a stage-ről. Maga fileokon végzett módosítások maradnak. //Ezzel szemben a git checkout . el dodbja a változásokat
+	git reset [file]
+	git reset 
+		Removes all files from the Git staging area but keeps all changes
 
 
-git checkout [file]
-Gets rid of your local changes to a file and instead checks out
-(or uses) the contents of the file from the last commit.
+remove untracked files	
+	git clean -df
+	
 
+Megszabadulunk egy file lokális változáisaitól és visszaállunk annak utolsó commitolt változatára:
+	git checkout [file]
+	git checkout .
+		Eldobunk minden file össze változását és visszaállunk az utolsó commitbeli állapotukra.
 
 git revert [commit] 
 Provides a way to safely remove a previous commit. Git will
@@ -70,21 +117,28 @@ automatically remove the changes, and then create a new
 commit. This way you still have a history of the change being
 removed.
 
-git log = megmutatja a commitokat
-
 
 git help log 
 
-git log 
-command to get an idea of what our commit history has been.
-You can exit from the log view with the q button.
+
+git log = megmutatja a commit historyt (A legaktuálisabb van felül)
+	q-val lépünk ki
+	git log --oneline
+		Egysorosított kiíratás
+	git log --oneline --graph --decorate --all
+		Színesít, minden branchre
+	
+	git log --author="Kevin"
 
 
-git log --author="Kevin"
-
-
-git log --grep="init"
-
+	git log --grep="init"
+	
+git show
+	Csak az utolsó commitot mutat és a diff-t ami tartalmazza a változásokat.
+	q-val lépünk ki
+	
+git ls-files	
+		Megmutatja h mely fileok állnak verziókezelés alatt
 
 //New branch creates from the particular branch where from it has been created. 
 
@@ -133,10 +187,8 @@ git mergetool
 Opens up an external Diff viewer or merge tool for
 merging conflicts.
 
-git 
-
- add [remote-name] [remote-url]
-Adds a remote repository called [remote-name] located at [remote-url]. We can now push and pull from this repository (assuming we have permission).
+git  add [remote-name] [remote-url]
+	Adds a remote repository called [remote-name] located at [remote-url]. We can now push and pull from this repository (assuming we have permission).
 
 
 git push -u origin master 
@@ -151,9 +203,9 @@ git remote set-url origin git@github.com:<Username>/<Project>.git
 
 
 git remote -v 
-Provides more information about your Git remotes,
-such as the location and what operations can be
-performed.
+	Provides more information about your Git remotes,
+	such as the location and what operations can be
+	performed.
 
 git remote set-url origin https://github.com/USERNAME/OTHERREPOSITORY.git
 
@@ -178,13 +230,15 @@ $ git remote show origin
 If you git fetch, then 'git branch -r' will get the updated list at remote.
 
 git diff
-shows the changes of the stage
+	Két commitot hasonlít össze, nem kell h szomszédosak legyenek
+		git diff randomCommitNumber HEAD
+	
 
-git diff --staged
-The last changes on the stage
+	git diff --staged
+	The last changes on the stage
 
-
-koco@koco-UX31E:~/Munka/mediplanet/drupal_upgrade_prep$ git clone --branch drupal_upgrade_prep git@bitbucket.org:pronovix/mediplanet_site.git
+git difftool
+	Ugyanezen^ logika mentén csak meghívja a bekonfigurélt difftolt (pl.: p4merge) 
 
 
 Branch
@@ -212,16 +266,15 @@ Checkout
 	Navigate between created branches
 	checkout -b newBranch and cheheck it out
 
-	
-	Create the text file gitignore.txt on Windows
-Open it in a text editor and add your rules, then save and close
-Hold SHIFT, right click the folder you're in, then select Open command window here
-Then rename the file in the command line, with ren gitignore.txt .gitignore
+.gitignore	
+	Ő maga is verziókezelt, ha nem jön létre alapból. tegyük be a working directory gyökerébe:
+	touch .gitignore
+	Minden ami generált nem kell h verziókezelés alatt álljon.
 
 Ha nem akarjuk leszedni a projekt mappját akkor álljunk bele ahová le sszeretnénk klónozni és a végére tegyünk egy szóközt és egy pontot:
 	git clone git@gitbud.epam.com:Gabor_Koncz/mep-linux.git .
 
-git commit -am"ha nem akarunk előtte külön git add .-tal hozzáadni mindent, hanem mehet egybe";
+git commit -am"ha nem akarunk előtte külön git add .-tal hozzáadni mindent, s írhatjuk is a commit messaget";
 
 gir commit -a --amend	:	az előző kommitot tudjuk módosítani h ne legyen messy a line. Megnyílik a message editor arra az esetre ha az üzenetet szeretnénk módosítani.
 
@@ -231,7 +284,7 @@ Merging in Git creates a special commit that has two unique parents. A commit wi
 "I want to include all the work from this parent over here and this one over here, and the set of all their parents."
 
 
-Reabase
+Rebase
 	Rebasing essentially takes a set of commits, "copies" them, and plops them down somewhere else.
 	While this sounds confusing, the advantage of rebasing is that it can be used to make a nice linear sequence of commits. 
 	The commit log / history of the repository will be a lot cleaner if only rebasing is allowed.
@@ -240,7 +293,7 @@ Reabase
 		ahol állunk azt beteszi a master után és megszűnik ahol álltunk. vessző lesz'
 
 		
-HEAD: Az a commit amire aktuálisan ki vagy checkoutolva.
+HEAD: Az a commit amire aktuálisan ki vagyunk checkoutolva.
 
 Amikor detach-cseljük a head-et akkor valójában csak annyi történk hogy egy commitra mutatunk, nem pedig egy branch-re.
 
@@ -259,18 +312,18 @@ git branch -f master HEAD~3
 A brancheket a branch utasítással lehet mozgatni, a HEAD-et a commit-tal.
 
 git reset HEAD~1
-git reset reverts changes by moving a branch reference backwards in time to an older commit. 
-In this sense you can think of it as "rewriting history;" 
-git reset will move a branch backwards as if the commit had never been made in the first place.
-Valóban kinyírja az aktuális kommitot és visszaáll az egyel előrébb lévőre.
+	git reset reverts changes by moving a branch reference backwards in time to an older commit. 
+	In this sense you can think of it as "rewriting history;" 
+	git reset will move a branch backwards as if the commit had never been made in the first place.
+	Valóban kinyírja az aktuális kommitot és visszaáll az egyel előrébb lévőre.
 
 
 git revert HEAD
-While reseting works great for local branches on your own machine, 
-its method of "rewriting history" doesn't work for remote branches that others are using.
-In order to reverse changes and share those reversed changes with others, we need to use git revert.
-Előre megy és csinál egy C2' -t
-Ne adjunk ^-t meg ha csak egyet akarunk mozogni, mert akkor kettőt megy "előre", nem az előtte lévőrőre áll vissza, hanem az azt megelőzőre.
+	While reseting works great for local branches on your own machine, 
+	its method of "rewriting history" doesn't work for remote branches that others are using.
+	In order to reverse changes and share those reversed changes with others, we need to use git revert.
+	Előre megy és csinál egy C2' -t
+	Ne adjunk ^-t meg ha csak egyet akarunk mozogni, mert akkor kettőt megy "előre", nem az előtte lévőrőre áll vissza, hanem az azt megelőzőre.
 
 
 Ha a head ugyanitt áll mint a branch akkor lehet felváltva használni? Nem tudom van amikor megy.
@@ -302,9 +355,15 @@ interactive rebase
 
 Amíg valamit be nem kommentelek az az összes branchez tartozik, nem csak azon amin állok.
 
-Aliasok:
+Aliasok file-ba , command line ba kell ""(:git config --global alias.hist "log --oneline --graph --decorate --all") :
 	git config --global alias.st status 
 	git config --global alias.co checkout 
+	git config --global alias.hist log --oneline --graph --decorate --all
+	//Az alias után is tudunk még írni: 
+		git hist -- AdottFile
+	
+		
+	global = user lvl, not repo lvl
 	
 Csatlakozás már kész repóbol egy már meglévő távoliba:
 	git remote add origin ssh://...
@@ -327,3 +386,13 @@ Delete/Remove commits:
 Stash:
 	A stash egy verem amibe be lehet pakolni azokat a változtatásokat amiket nem szeretnénk az aktuélisan branchünkön látni/át akarjuk lapátolni máshova/később vissza akarjuk hozni.
 	A stash levesz mindent amit nem commiteltünk és ehy stash@{id} val beteszi egy verembe, amibe gyűjthetjük a többi stash-el együtt.
+	
+Merge típusok:
+	Fast Forward:
+		Legegyszerűbb eset: A parent branchen nem történt munka és mi csak ráolvasszuk a feature-ünket.
+	
+	Automatic:
+		Nincs konfliktus a parent branch-csel, a git aoutómatikusan meg tudja oldani. Ilyenkor merge commit jön létre.
+		
+	Manual:
+		Az autómatikus merge nem lehetséges, merge commit keletkezik a feloldás végén.

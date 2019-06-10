@@ -1,3 +1,4 @@
+https://www.tutorialspoint.com/spring/spring_ioc_containers.htm
 Getting Started is easy
 Convention Over Configuration
 Spring CLI (Command Line Tool)	Groovy Sintax = similar like java
@@ -13,6 +14,7 @@ devtools:
 		Spring Loadaed, J Rebel
 	Live reload 
 	Remote Debug Tunneling
+	Szerencsére érzékeli h IDE-ben van és éles szerveren(prod environment) nem indítja újra magát (?)
 	
 	IJ:
 		Help
@@ -76,17 +78,17 @@ Dependency Inversion:
 			}
 		}
 		
-	@SpringBootApplication egy összefoglaló, ami ezeket tartalmazza magában:
-		@Configuration
+	@SpringBootApplication egy összefoglaló, ami ezeket tartalmazza magában:  //Az annotációkat egybeírjuk CamelCase-zel, az első is nagy.
+		@Configuration: A megszólítja a konténert hogy ez az osztály lesz az információk forrása.
 		@EnableAutoConfiguration
-		@ComponentScan
+		@ComponentScan({"külső.pakcage1",külső.package2}): Megszólítja a konténert hogy abban a package-ben amelyikben ez az annotáció van(és subpackage-ek(Ezért érdmes legfelülre tenni)) abban nézze végig az összes osztályt és amelyik felett @Component típus van azt regisztrálja be aa konténer magának.
 		
 	Ahhoz h valamit be tudjunk húzni @Autowired-del, ahhoz Bean-nek kell lennie.
 		
 	Mik lehetnek Beanek?
 		@Bean
 		@Contoller("itt megadhatjuk a nevét")
-		@RestController
+		@RestController		//Bármit visszadhat (xml, json, html)
 		@Service
 		@Component
 		@Repository
@@ -145,18 +147,21 @@ Anemic domain model POJO-ját fel lehet tölteni @ConfigurationProperties(prefix
 application.properties file-t autómatikusan felolvassa az alkalmazás				
 	Melyik porton fusson az alkalmazás, mekkora legyen a heap.
 
+Struktúra:				
+	View: HTML5+CSS+JS
+	@RestController: bármit vissza ad /@Controller : alapból nézetet keres 
+	Controller: csak forgalomirényító
+	@Service
+	Service: Kollekciók, business logic
+	Model: Adattárolási feladatok
+	Repository: Kommunikál az adatbázissal Entities
 
-
-
-
-
-
-
-
-
-
-
-
+Ha be akarunk húzni egy POJO-t a konténerbe, ami nincs ellátva annotációval és továbbra sem akarjuk akkor egy olyan osztályban, ami bír @Configuration-nel (@SpringBootApplication ugye alapból tartalmazza):
+	akkor csináljunk egy fgv-t ami vissza ad egy beant:
+		@Bean
+		public Person giveMeAPerson(){
+			return new Person("Gyula, 20");	//Ilyenkor a bean neve giveMeAPerson lesz.
+		}
 
 
 

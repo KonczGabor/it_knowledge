@@ -1,0 +1,62 @@
+th: starting node 
+
+th: fragment="common-header"									//fragment típus, common-header névre fog hallgatni erre tudunk majd referálni más templatekből
+
+< a th: href="@{/account/praimaryAccount}">link_name</a>		//creating URL path, linkek esetén is megy
+
+th:replace="common/header :: common-header"						//innen: common/header ezt a filet: common-header szeretnénk behúzni arra helyre ahol ez a tag deklarálva lett. Az adott filehoz képest relative path
+																//A scripteket külön be kell hivatkozni a fragmentekben. Egy fragmentben kell megírni, és azt hívjuk be: <div th:replace="common/header :: body-bottom-scripts"/> az összes többi helyről.
+
+																
+th:if="${param.error}"											//Ha az adott paraméter igaz, akkor a div meg lesz jelenítve
+
+Ha el akarjuk érni a Modell egy atribútumának értékét a templaten, akkor:
+Controller:
+	@GetMapping
+	public String getIndex(Model model){
+		model.addAttribute("key", "value");
+		return "index";
+	}
+	
+Template:
+	<!DOCTYPE HTML>
+	<html xmlns:th="http://www.thymeleaf.org">
+		<head>
+		  <title>ÁÁÁÁÁ</title>
+		</head>
+		<body>
+			<div th:text="${key}"></div>		//Fontos h csak pure HTML-ként nem tudjuk kiírni, csak TAG-eken keresztül.
+		</body>
+	</html>
+
+
+Alapból a static mappa az aléprtelmezett a resourceoknak:
+resources/static/img/TacoCloud.png	
+<img th:src="@{/img/TacoCloud.png}" alt="img notfound logo"/>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
