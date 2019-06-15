@@ -1,6 +1,9 @@
 https://learngitbranching.js.org/
 	-undo or reset to fix mistakes, nem kell újrahívni az oldalt.
 	
+https://www.bogotobogo.com/DevOps/SCM/Git/Git_GitHub_Fast-Forward_Merge.php
+	Sok hasznos tutorial a végén
+	
 Azert erdemesebb CLI-t használni:
 	Mert néhány GUI nem implementálja a teljes funkció készletet,
 	Mert más CLI toolokat is ha használunk akkor gyorsítjuk a munkát,
@@ -59,6 +62,8 @@ P4Merge for Windows (perforce.com):
 		
 ssh-agent sh -c 'ssh-add ~/AsusWin7_private; 
 
+Merge conflict:
+	Mikor ugyan annak a filenak ugyanazon sorában történt módosítás a két összeolvasztandó branch commitjaiban, akkor nekünk kell beavatkozni manuálisan.
 
 Working Directory: contains all the files and folders for your application (Nem minden áll verziókezelés alatt, de a git attól még figyeli őket, legfeljebb ignorálja. Ennek az állandó figyelés eredménye h észre tudja venni az újonnan született fileokat is)
 Staging Area: used to prepare for the next commit. Ezen keresztül visszük át a Working Directorynakban történt módosulásokat commitok formájában a Repositoryba
@@ -120,7 +125,6 @@ removed.
 
 git help log 
 
-
 git log = megmutatja a commit historyt (A legaktuálisabb van felül)
 	q-val lépünk ki
 	git log --oneline
@@ -143,25 +147,25 @@ git ls-files
 //New branch creates from the particular branch where from it has been created. 
 
 git branch [branch_name] 
-Create a new branch (copy of the code) to use to
-develop a new feature or fix a bug.
+	Create a new branch (copy of the code) to use to
+	develop a new feature or fix a bug.
 
 
-git branch 
-Lists all of the available branches
-The * character indicates the branch we currently have checked out.
- branch -a: show all branches
+git branch
+	Lists all of the available branches
+	The * character indicates the branch we currently have checked out.
+	 branch -a: show all branches
 
 
 git checkout [branch_name] 
-Checks out an existing Git branch. This simply
-switches your code to a different Git branch.
+	Checks out an existing Git branch. This simply
+	switches your code to a different Git branch.
 
 
 git checkout -b [branch_name] 
-Creates a new Git branch and checks it out. This is
-a shortcut so you do not have to create the branch
-and check it out using two steps.
+	Creates a new Git branch and checks it out. This is
+	a shortcut so you do not have to create the branch
+	and check it out using two steps.
 
 
 
@@ -179,6 +183,7 @@ git branch --no-merge
 
 git branch -d branchName
 	Delete branch
+	Maga a commitok NEM törlődnek, csak a timeline labelje.
 	
 git branch -D branchName
 	Forced Delete branch
@@ -252,7 +257,7 @@ Push
 
 Merge
 	Merge to branch to one
-	git merge master	//ahol állunk oda mergeli be azt amit megadunk.
+	git merge feature_branch_name	//ahol állunk (jelen esetneben a master) oda mergeli be azt amit megadunk. Így "húzunk be" ebben az esetben
 
 Pull
 	Is a fetch and a merge
@@ -293,7 +298,9 @@ Rebase
 		ahol állunk azt beteszi a master után és megszűnik ahol álltunk. vessző lesz'
 
 		
-HEAD: Az a commit amire aktuálisan ki vagyunk checkoutolva.
+HEAD: Egy speciális marker(pointer) Az a commit amire aktuálisan ki vagyunk checkoutolva.
+	Általában az adott branch utolsó commitjára mutat, de lehet manuálisan is mozgatni.
+	Ha branch-et váltunk akkor annak utolsó commitjára fogunk mutatni.
 
 Amikor detach-cseljük a head-et akkor valójában csak annyi történk hogy egy commitra mutatunk, nem pedig egy branch-re.
 
@@ -365,6 +372,20 @@ Aliasok file-ba , command line ba kell ""(:git config --global alias.hist "log -
 		
 	global = user lvl, not repo lvl
 	
+Az aliasokat az adott user alatt lévő .gitconfig file-ba is menthetjük közvetlen:
+	[user]
+	name = Calindyl
+	email = caridniss@gmail.com
+	[alias]
+		st = status
+		co = checkout
+		hist = log --oneline --graph --decorate --all
+		lol = log --graph --abbrev-commit --decorate --format=format:'%C(bold blue)%h%C(reset) - %C(bold green)(%ar)%C(reset) %C(white)%s%C(reset) %C(dim white)- %an%C(reset)%C(bold yellow)%d%C(reset)' --all
+		
+	[core]
+		autocrlf = true
+		
+	
 Csatlakozás már kész repóbol egy már meglévő távoliba:
 	git remote add origin ssh://...
 	
@@ -390,6 +411,8 @@ Stash:
 Merge típusok:
 	Fast Forward:
 		Legegyszerűbb eset: A parent branchen nem történt munka és mi csak ráolvasszuk a feature-ünket.
+		Ebben az esetben nem keletkezik merge commit, kivéve ha használtuk a "--no-ff" paramétert is.
+			git merge --no-ff amit_be_szeretnenk_mergelni
 	
 	Automatic:
 		Nincs konfliktus a parent branch-csel, a git aoutómatikusan meg tudja oldani. Ilyenkor merge commit jön létre.
