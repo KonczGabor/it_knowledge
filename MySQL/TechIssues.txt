@@ -1,0 +1,10 @@
+Ha nem akarja elindítani a WorkBranch (On Windows):
+
+	Open Run Window by Winkey + R	
+		Type services.msc
+			Search MySQL service based on version installed.
+				Click stop, start or restart the service option.
+	
+	Or you can start/stop MySQL from the command prompt:
+		C:\> "C:\Program Files\MySQL\MySQL Server 8.0\bin\mysqld"
+		C:\> "C:\Program Files\MySQL\MySQL Server 8.0\bin\mysqladmin" -u root shutdown

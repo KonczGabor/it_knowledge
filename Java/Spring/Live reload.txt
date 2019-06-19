@@ -1,0 +1,4 @@
+Add LiveReload extension in your browser.
+Add devtools dependencies to your pom.xml(if it's maven (spring-boot-devtools)).
+In your intellij IDEA go to: file->settings->build,execution,deployment. Go to ->compiler->build project automatically.
+In your intellij IDEA: SHIFT+Ctrl+A ->registry-> compiler.automake.allow.when.app.running

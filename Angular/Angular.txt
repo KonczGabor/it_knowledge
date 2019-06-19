@@ -213,7 +213,8 @@ Akárhányszor amikor olyan direktívát használunk amely változtatja a dom-ot
         </li>
     </ul>
 	
-ng g s komponens//g: generate s:service	
+ng g s komponensLocation/komponensNeve//g: generate s:service
+	A .ts kiterjesztést autómatikusan hozzáteszi.
 
 npm install bootstrap --save: store bootsrap in an npm location
 

@@ -282,6 +282,11 @@ Ha nem akarjuk leszedni a projekt mappját akkor álljunk bele ahová le sszeret
 git commit -am"ha nem akarunk előtte külön git add .-tal hozzáadni mindent, s írhatjuk is a commit messaget";
 
 gir commit -a --amend	:	az előző kommitot tudjuk módosítani h ne legyen messy a line. Megnyílik a message editor arra az esetre ha az üzenetet szeretnénk módosítani.
+	hozzá is tudunk adni új file-t amit előzőleg elfelejtettünk a commentben.
+	Tegyük fel az új filet- a stage re ( git add <new_File>), majd 
+	git commit -- amend
+	Ne írjunk bele semmit a párbeszéd ablakba, csak mentsük amikor kilépünk. 
+	Így bekerül az utolsó commitunkbe a kifelejtett fileunk, s maga a commit hash is megváltozik.
 
 A brench nen más, mint egy pointer ami egy adott kommitra mutat.
 

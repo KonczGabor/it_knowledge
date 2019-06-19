@@ -35,3 +35,9 @@ npm prune		//mély takarytás
 npm dedupe		//ha több modulenak is ugyanaz a dependenciája akkor ezel át lehet azt mozgatni h olyan helyre kerüljön ahol közösen elérik.
 
 npm list		//all dependencies
+
+npm local vs global:
+	The main difference between local and global packages is this:
+	local packages are installed in the directory where you run npm install <package-name>, and they are put in the node_modules folder under this directory
+	global packages are all put in a single place in your system (exactly where depends on your setup), regardless of where you run npm install -g <package-name>
+	

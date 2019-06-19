@@ -154,7 +154,7 @@ Struktúra:
 	@Service
 	Service: Kollekciók, business logic
 	Model: Adattárolási feladatok
-	Repository: Kommunikál az adatbázissal Entities
+	Repository: Kommunikál az adatbázissal. Entities
 
 Ha be akarunk húzni egy POJO-t a konténerbe, ami nincs ellátva annotációval és továbbra sem akarjuk akkor egy olyan osztályban, ami bír @Configuration-nel (@SpringBootApplication ugye alapból tartalmazza):
 	akkor csináljunk egy fgv-t ami vissza ad egy beant:
