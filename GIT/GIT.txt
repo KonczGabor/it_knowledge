@@ -1,24 +1,94 @@
 https://learngitbranching.js.org/
-	-undo or reset to fix mistakes, nem kell újrahívni az oldalt.
+	: type "undo" or "reset" to fix mistakes, nem kell újrahívni az oldalt.
 	
 https://www.bogotobogo.com/DevOps/SCM/Git/Git_GitHub_Fast-Forward_Merge.php
 	Sok hasznos tutorial a végén
+	
+https://ndpsoftware.com/git-cheatsheet.html#loc=stash;	
+	
+http://gitimmersion.com/
+
+https://git-scm.com/book/en/v2
+	
+.gitconfig locations (Minél általános érvényűbb, annál gyengébb):
+	-System
+		/etc/.gitconfig
+		
+	-Global
+		~/.gitconfig
+		username/.gitconfig
+	-Local
+		adott-repo/.git/config
 	
 Azert erdemesebb CLI-t használni:
 	Mert néhány GUI nem implementálja a teljes funkció készletet,
 	Mert más CLI toolokat is ha használunk akkor gyorsítjuk a munkát,
 	Mert neten több segítséget kaphatunk az egéyrtelmú parancsok miatt.
+	Az elosztott szemlélet nem csak a felhasználónkénti biztonsági másolatokat nyújtja, hanem a lehetőséget h offine is tudjunk dolgozni.
+	Mivel nincs Igazi-Egy központi szerver, egy másik fejlesztőhöz is csatlakozhatunk és tőle, közvetlenül is el tudjuk kérni a változtatásokat. A Github/Lab csak egy általánosan elfogadott standard, amit hivatalosnak tekintünk.
 
+Verzió: az összes file adott állapota.	
+
+.git dir:
+	hooks: kilens oldali hookok (pl:ellenőrizze commit előtt h ki van-e töltve a commit message issue azonosítóval [lehet ilyet szerver oldalon is {pl pull-ra}]).
+	info: globálisan ignorált dolgok: olyan forráskódok amiket nem akarunk betenni a repositoryba, hasonlóan mint a .gitignore file-ban.
+	logs: vissza lehet nézni h mi történt a repositoryban, milyen parancsok lettek lefuttatva, adott branch-re lebontva akár. 
+		A HEAD file a közös history gyűjtőhelye: első oszlop: eredeti commit, második: az új commit, a többi egyértelmű.
+	objects: ebben van az object database, a loose objectek, a packek
+	refs:
+		heads: lokális branchek
+		tags
+		remotes: távoli repók és azok brancheik			
+	HEAD: a working directorynk éppen hova mutat. A file tartalma a refs/ mappa valamely eleme amennyiben nem vagyunk Detached állapotban. Ilyenkor egy 40 hosszú hash lesz a tarrtalma, a commit azonosítója, amire ki vagy checkoutolva.
+	config: projekt specifikus beállítások, ez a legspecifikusabb, a lokál config (alapból 3 van: lokál, global, system)
+		remotes
+	index: staging area, az ami a következő committal be fog menni.
+	
+	
+	
+Timeline:
+	Alapkoncepciók:
+		A commitok immutable-k.
+		A timelineban nem látszódnak csak bizonyos commitok.
+		A branch csak egy pointer ami egy adott commitra mutat.
+		A HEAD csak egy pointer ami egy adott commitra mutat (könnyen léptethető az öröklődési lánc mentén [ancestry pointers]).
+		A különbség h a branch-ek egy ág utolsó commitjára mutatnak rendeltetésszerűen és autómatikusan átíródnak ha az ágon új commit jön létre, aktualizálván magukat.
+		Ha kicheckoutolunk (átállítjuk a HEAD-et egy nem timeline végi commitra-ra) akkor detached állapotba kerülünk.
+		Nyugodtan commitolhatunk, akár egymás után detached állapotban, csak arra kell vigyázni h mielőtt kicheckoutolnánk egy másik branch-re, a commitjainkat vezessük rá egy újonnan létrehozottra, különben később nehezen fogjuk csak megtalálni. (console prompt jelzi hova mutattott a HEAD)
+		A timeline nem más mint a branchektől indulva, származási láncon visszafelé haladva felfűzhető commitok sora. 
+		Ez nem zárja ki azt h egy commitnak több őse is legyen(merge commit, több branch egyidejű mergelése), de azt kizárja h a default timeline-ra a detached állapotban született, és branch-csel le nem zárt commit láncok megjelenítésre kerüljenek.
 GIT:
-	Decentralizált/elosztott verzió kezelő rendszer. //Mégis a gyakorlatban egy centrál repót használunk általában.
 	Eredetileg Linux Kernel projektek verziózására hozta létre Linus Torvalds.
+	Decentralizált/elosztott verzió kezelő rendszer. //Mégis a gyakorlatban egy centrál repót használunk általában.
+	Az összes file összes különböző verziója megtalálható az összes gépen.
+	
 	Csak egy pár parancshoz szükséges net kapcsolat, nagyon sok minden működik lokálban.	
+	Nem diffeket tárol, azaz nem csak az eredetihez képest az azóta történt módosításokat(delta), hanem a megváltozott fileok teljes állapotáról készít egy snapshotot.
+		Nyílván amihez már régóta nem nyúltunk azt nem fogjuk minden egyes commit(snapshot) során eltárolni, így valahogy ezt meg kellet oldani (kvázi tömörítéssel.).
+	Nem lináris fejlesztés: 
+		lehet branch-elni, különböző részein dolgozni a kódnak, amik majd időben lejet h csak később kerülnek élesítésre.
 	
 Repository:
-		A verzió kezelés alatt álló fileok(és mappák) illetve azok történelmi gyűjteménye.
+		A verzió kezelés alatt álló fileok(és mappák) illetve azok verzióinak gyűjteménye.
 		A struktúra gyökerében található a .git folder
+		A git adatbázisa(object data base) + meaadatok.
 		
-A commit egy pillanatfelvétel/snapshot a jelenlegi változásainkról ami mindenazon fileokat tartalmazhatja amiket a vágólapra (stage) tettünk.
+Working Directory:
+		A verzió kezelés alatt álló gyökér mappa (a .git folder közvetlen itt található).
+		Ebben a mappában minidig az van amivel éppen aktuálisan dolgozunk, ebből teszünk át a stage-en keresztül a local repóba, és ide szedünk ki(checkout) verziókat (frissítjuk a Working Directoryban lévő filokat) a local repóbol.	
+
+stage: /index: Az a vágólap, mely azon fileokat tartalmazza, melyek változásait szeretnénk a következő commitunkban megörökíteni.
+	Leszedni vmit a stage-ről (Maga a fileokon végzett módosítások meg maradnak, csak úgy döntöttünk h már nem akarjuk őket betenni a commitba. //Ezzel szemben a git checkout . el dodbja a változásokat):
+		Untrack a file or folder:
+				git rm --cached :path_to_unstage
+		git reset [file]
+		git reset: Removes all files from the Git staging area but keeps all changes
+		
+commit:
+	Immutable object, azaz soha nem fog módulni ha egyszer a "Hármas" a "Kettes" után következett, akkor az őse neki mindig a "Kettes" lesz.
+	Egy pillanatfelvétel/snapshot a verzió kezelés alatt álló, working directory-nkban lévő megváltozott filejainkról (ha új fileokat hozunk létre az is egy módosulás).
+	Az elkészült commit bekerül a local repóba, nem töltődik fel autómatikusan a remote-ba.
+	
 	A git fileokat kezel, nem foldereket. Ha mappa szerkezet változásokat szeretnénk megörökíteni akkor hozzunk létre az új mappákban üres dummy fielokat.
 	
 A branch csak az idővonal neve, amire fel vannak fűzve a commitok. 
@@ -64,16 +134,44 @@ ssh-agent sh -c 'ssh-add ~/AsusWin7_private;
 
 Merge conflict:
 	Mikor ugyan annak a filenak ugyanazon sorában történt módosítás a két összeolvasztandó branch commitjaiban, akkor nekünk kell beavatkozni manuálisan.
-
+	Conflict esetén merging állapotba kerül a Head, amit jelez is egy |-pal elválasztva, pl.: (master|MERGING)
+	Ilyenkor az Auto conflict resolving nem volt sikeres és a filebe mindkét lehetőséget beleírja, elválasztva
+	<<<<<<<HEAD  --Utolsó commitra mutat
+	======= //Ez szeparálja el a két lehetséges kimenetelt
+	>>>>>>> A másik branch ahonnan mergelni szeretnénk.
+		//Ha manuálisan akarjuk reseolválni akkor töröljük ki az összes markert és csak a kívánt módosítást hagyjuk bent.
+	Ezek után ne felejtsük feltölteni a kész commitot.		
+	
 Working Directory: contains all the files and folders for your application (Nem minden áll verziókezelés alatt, de a git attól még figyeli őket, legfeljebb ignorálja. Ennek az állandó figyelés eredménye h észre tudja venni az újonnan született fileokat is)
 Staging Area: used to prepare for the next commit. Ezen keresztül visszük át a Working Directorynakban történt módosulásokat commitok formájában a Repositoryba
 Repository(.git folder): contains all the committed or saved changes to the Git repository. Anything here is a part of Git's history
 Remote repository: Ez valójában csak egy sima repó a maga 3 belső állapotával, általában ez a centrál repó 
 
+
+git life cycle:
+	Két fő állapotot különböztetünk meg:
+		Az adott file a working are-ában verzió kezelés alatt áll, vagy nem.
+		Ha létrehozunk egyet akkor még autómatikusan nem kerül alá, ezért hozzá kell adni a git add -dal, így fog bekerülni tracked állapotba.
+			Ha ki szeretnénk vonni valamit a verzió kezelés alól azt tegyük a .gitignore file-ba.
+			
+	Unmodified/Modified
+	Staged
+	Unmodified	
+
+
 help:
 	$ git help config
 
 
+config:
+	/.git/config
+	General settings:
+	 Itt vannak bekonfigurálva a remote is.
+	 
+add:
+	git add new_fiel : trackertté tesz az adott filet("." -okat),
+	Vagy hozzáadja az adott filet("." -okat)	
+	
 Initializing a Repository in an Existing Directory:
 	$ git init [folder]
 	Vagy ha már a folder kész van akkor álljunk bele és:
@@ -100,11 +198,9 @@ Add a specific file to the Git staging area of your repository.
 	
 Commit everything has been changed	
 	git commit -a
+	Mi a különbség a -a és a . közt?
 
-Leszedni vmit a stage-ről. Maga fileokon végzett módosítások maradnak. //Ezzel szemben a git checkout . el dodbja a változásokat
-	git reset [file]
-	git reset 
-		Removes all files from the Git staging area but keeps all changes
+
 
 
 remove untracked files	
@@ -116,16 +212,21 @@ Megszabadulunk egy file lokális változáisaitól és visszaállunk annak utols
 	git checkout .
 		Eldobunk minden file össze változását és visszaállunk az utolsó commitbeli állapotukra.
 
-git revert [commit] 
-Provides a way to safely remove a previous commit. Git will
-automatically remove the changes, and then create a new
-commit. This way you still have a history of the change being
-removed.
+git revert:
+	Megadunk neki egy commitot és csinál az ellen egy ellencommitot pl.:
+		Ha csinált a commitom egy olyat h beszúrt egy új sort, akkor az ellen commitban az kitörlődik.
+		git revert HEAD: ha azt szeretnénk ellen commitálni amin állunk, akkor 
+		
+	Provides a way to safely remove a previous commit. Git will
+	automatically remove the changes, and then create a new
+	commit. This way you still have a history of the change being
+	removed.
 
 
 git help log 
 
-git log = megmutatja a commit historyt (A legaktuálisabb van felül)
+log:
+	Megmutatja a branch commit historyját (A legaktuálisabb van felül), gyakorlatilag kiírja a .git/logs/refs/heads/branch_name tartalmát
 	q-val lépünk ki
 	git log --oneline
 		Egysorosított kiíratás
@@ -134,8 +235,9 @@ git log = megmutatja a commit historyt (A legaktuálisabb van felül)
 	
 	git log --author="Kevin"
 
-
 	git log --grep="init"
+	
+	git log --graph
 	
 git show
 	Csak az utolsó commitot mutat és a diff-t ami tartalmazza a változásokat.
@@ -189,8 +291,8 @@ git branch -D branchName
 	Forced Delete branch
 
 git mergetool 
-Opens up an external Diff viewer or merge tool for
-merging conflicts.
+	Opens up an external Diff viewer or merge tool for
+	merging conflicts.
 
 git  add [remote-name] [remote-url]
 	Adds a remote repository called [remote-name] located at [remote-url]. We can now push and pull from this repository (assuming we have permission).
@@ -201,8 +303,8 @@ Push our master Git branch to the remote called origin.
 $ git commit --allow-empty -m "Trigger notification"
 
 git remote
-Lists the available remotes for your current Git
-project.
+	Lists the available remotes for your current Git
+	project.
 
 git remote set-url origin git@github.com:<Username>/<Project>.git
 
@@ -234,9 +336,10 @@ $ git remote show origin
 'git branch -r' only shows unupdate version of remote, git ls-remote will query the remote, thus will list the current version.
 If you git fetch, then 'git branch -r' will get the updated list at remote.
 
-git diff
-	Két commitot hasonlít össze, nem kell h szomszédosak legyenek
-		git diff randomCommitNumber HEAD
+diff:
+	Két commitot hasonlít össze, nem kell h szomszédosak legyenek, alapból az utolsóhoz hasonlít
+		git diff randomCommitNumber HEAD 
+		$ git diff HEAD^1
 	
 
 	git diff --staged
@@ -246,47 +349,217 @@ git difftool
 	Ugyanezen^ logika mentén csak meghívja a bekonfigurélt difftolt (pl.: p4merge) 
 
 
-Branch
-	Mirroring a repository to another
+branch:
+	Egymástól elkülöníteni való fejlesztések timeline-jára mutató 40 bytos pointer. Egy adott commitra mutat.
+	A legfontosabb h megértsük h gyakorlatilag két dolgot értünk alatta!:
+		Az egyik a pointer, ami egy adott commitra mutat,
+		A másik a line, ami az a füzér ami az adott utolsó commit és a gyökér között "feszül".
+	Egy commit több branchhez is tartozhat.		
+		
+	.git/refs
 	
-Clone
-	Make a copy from a repository
+	műveletek:
+		git branch
+		git branch --merged: azok a branchek amik már be lettek mergelve
+		git branch --no-merged: azok a branchek amik még nem lettek mergelve		
+		git checkout
+		git merge
+		git branch -d <branch_name>: adott branch törlése //Csak akkor töröl ha már a branch be lett húzva
+		git branch -D <branch_name>: adott branch törlése //Abban az esetben is kitörli ha még nem lett bemergelve.
+		git branch -r : távoli branchek kiíratása.
+		git branch -m <branch_name>: átnevezi azt amelyiken állunk.
+		git show-branch: grafikus kiíratás
+		
+	branch management:
+		Long running branches:
+			master: ebből készül a release
+			develop: stabil, tesztelhető főverzió
+		Short-lived	branches:
+			topic: egy adott feature, vagy bugfix
+		Áttolni tolni egy branchet (az adott commithoz képest hátrébb toljuk a mostani címkét/vagy rámutatunk egy commitra, branchre):
+			git branch -f branch_name HEAD~3/hash/branch_name
+		
+clone:
+	A távoli repositoryt letölt a gépüankre.
 
-Push
-	push a files to a remote repository
+push:
+	Így tudunk feltölteni a local repónkból a távoli repónkba. Working are-ból közvetlenül nem lehet. 
+	Nem minden távoli repóba lehet pusholni, lehet h csak fetch-cselni szabad a jogok alapján.
+	git push <name_of_remote_repo> <origin_branch>  git push origin myFeatureBranch
+	git push <name_of_remote_repo> <origin_branch>:<destination_branch> 
+	Delete remote branch:
+		git push origin : destination_branch //Itt nem adtunk meg lokális branchet h mit szeretnénk hova pusholni, tehát a semmit töltjük fel valahová, ami törlést jelent 
+	
+	
+merge:
+	Egy elágazás(oka)t tudunk visszavetni egy másik branch-be.
+	Egy olyan speciális commit fog létrejönni aminek legalább két szülője van.
+	git merge masik_branch_name	: ahol állunk, abba mergeli beele azt amit megadunk. Így "húzunk be" ebben az esetben.
+	git merge az_igenyelt_branch_neve ahova_branch_neve : from -> into
+	
+	Multiple merge(2+ szülő):
+	       C---D  =>b1
+		  /    
+		 /  E---F  =>b2
+		 | /   
+	  A--B =======> master
+		 | \
+		 \  G---H  =>b3
+		  \ 
+		   I---J   =>b4
+		git checkout master
+		git merge b1 b2 b3 b4
+	
+	Merge típusok:
+		Fast Forward:
+			Legegyszerűbb eset: A parent branchen nem történt munka és mi csak ráolvasszuk a feature-ünket.
+			Ebben az esetben nem keletkezik merge commit, kivéve ha használtuk a "--no-ff" paramétert is, azzal ki tudjuk eszközölni h fast-forward esetén is keletkezzen merge commit.
+				git merge --no-ff amit_be_szeretnenk_mergelni
+		
+		Automatic:
+			Nincs konfliktus a parent branch-csel, a git aoutómatikusan meg tudja oldani. Ilyenkor merge commit jön létre.
+			
+		Manual:
+			Az autómatikus merge nem lehetséges, merge commit keletkezik a feloldás végén.
 
-Merge
-	Merge to branch to one
-	git merge feature_branch_name	//ahol állunk (jelen esetneben a master) oda mergeli be azt amit megadunk. Így "húzunk be" ebben az esetben
+mergetool:
+	Conflict esetén elég csak kiadni a:
+		git mergetool 
+			Atómatikusan meghívódik a defult mergetool(P4Merge a javasolt)
+			A "local" ilyenkor amibe, a "remot" az a branch amit be akarunk húzni
+			Ha nem áll fel conflict akkor ezt dobja: No files need merging
+			
+			fel is kell ám commitolni a változtatásunkat.
 
-Pull
-	Is a fetch and a merge
-	 --rebase
+			
+merge vs rebase
+	Merge:
+		Előny:
+			Nyomonkövethetőség
+		Hátrány:
+			A rengeteg merge commit hatására vasúti rendezőpályaudvar lesz a history
+			
+	Rebase:
+		Előny:
+			A kód history nem ágazik szerteszéllyel és olvasható.
+			Egyetlen commitot módosítani könnyebb (revert),//? mintha egy olyan commitot szeretnénk eldobni ami egy merge commit.
+		Hátrány:	
+			Nem egyértelmű a kontextus //?
+			Nem működik igazán jól a pull requestekkel
+			Mivel újraírja a történelmet ezért force pusholni kell a remote branchekre.
+			Újrírja a "történelmet", mert kirántom mások alól azt a branchet emin dolgoztak, ezt csak force-szal lehet, ami meg gyakran le van tiltva.
+	
+	Aranyszabály: Soha ne rebaselj olyan commitot, amit már feltoltál a public repóba. 	
+		Pl.: Kétszer fog bekerülni egy commit a history-ba, egyszer az eredeti, egyszer annak másolata.
+			
+			Hogy lehetséges ez?
+				Adott a remote-on:
+					1
+					| \
+					2 3
+					| /
+					4 (merge commit)
+					
+				Ugyanez nálam lokálban szintén + 5:	
+					1
+					| \
+					2 3
+					| /
+					4 (merge commit)
+					|
+					5
+					
+				Közben más úgydönt hogy visszavonja a merge commitot és helyette rebasel egy force push-sal:
+					1
+					| 
+					2 
+					| 
+					3' (Az eredeti 3-as másolata) 
+					
+				Én ezek után fetch-cselek (lehozom az összes commitot):	
+					1
+					| \
+					2 3
+				  /	| /
+				 3' 4 (merge commit) 
+					|
+					5 (itt áll a masterem), nem fog menni a pusholás! 
+				Rebaselnem, vagy mergelnem kell. Merge esetén:
+					1
+					| \
+					2 3
+				  /	| /
+				 3' 4 (merge commit) 
+				 |	|
+				 |	5 
+				 | /
+				 6	(ezt már fel fogom tudni pusholni)
+				 
+				Így az a baj h kétszer szerepel a 3-as commit, egyszer eredetiben, egyszer annak másolata:
+						Ugyanaz commitolta, ugyanolyan kommentel, ugyanakkor.
+						Ezért nem javasolt h megváltoztatom azt ami szerverre már egyszer fel lett pusholva.		
+					
+					
+fetch:
+	Az összes file összes verziója lejön az én local repómba remote-ból, de természetesen nem integrálódik be a working directoryba, ahhoz merge kell vagyrebase.
+	Oda töltődik le ahol az "origin/master" címke állt. Azóta köbe lehet h a mi "masterünk" elmászott. Hogy bekerüljön a lokális repómba vagy mergelnem, vagy rebaselnem kell.
+	Ha kihagyjuk a fetch utasítást és egyből a pullal kezdünk akkor valójában nem hagyjuk ki a fetch-cset, hiszen working directoryba csak a local repón keresztül kerülhet be bármi,
+	tehát "titokban" megfut egy fetch és az után egy merge-amivel a frissen letöltött commitot össze olvassza azzal ahol állunk, de ez merge conflictot okozhat.
+	Ha nem történt azóta változtatás nállam akkor simán át tudok állni az új commitra.
+	A fetch "teljesen ártalmatlan", mert nem manipulál/töröl semmit. (fetch is a Pull without a Merge)
+	Handy if you want to compare your code with others.
+	 
+pull:
+	Egy fetch, majd egy merge utasítás összevonása.
+	Updateli a HEAD-et azaz amely branch-re a HEAD mutat, abba integráljuk a remote leagktuálisabb állapotát.
+	Kialakulhat így a merge conflict, mert lehet h mi is ugyan azon sorokat módosítottuk, ugyanazon fileokban, ugyanazon branchen.
+	Célszerű tehát hogy pull előtt tegyük clean-né a working directory-nkat: commiteljünk, vagy stash-eljünk.	
+		
+	
 
-Fetch
-	is a Pull without a Merge
-	Handy if you want to compare your code with others
-
-Checkout
-	Navigate between created branches
+checkout:
+	Ezzel a paranccsal tudunk ráálni egy adott commitra, vagy eldobni változtatásokat.
 	checkout -b newBranch and cheheck it out
+	Ha nem olyan commiton állunk, amelyre egy branch is mutat, akkor Deatached állapotba kerülünk.
+		Ilyenkor minden további nélkül dolgozhatunk, commitokat gyárthatunk egymás után sorban és mindiig a legutolsóra fog mutatni a Headünk.
+		Ilyenkor minden további nélkül dolgozhatunk, commitokat gyárthatunk egymás után sorban és mindiig a legutolsóra fog mutatni a Headünk.
+		Mielőtt lelépnénk erről a commitról egy másikra(checkout), célszerű láthatóvá tenni a munkánkat a history line-ban, ugyanis abban csak azok a commitok látszanak, melyek felfűzhetőek egy branch és a gyökér elem között feszülő szálra.
+		Szóval a checkot -b new_beanch az eddigi detached állaputunkból kivezet úgy h a magunk mögött gyártott commitok felfűzűdnek a new_branch -re így könnyebben vissza fogunk tudni majd hozzájuk találni.	
+	
+	git checkout file_name : visszaállítjuk a file állapotát arra, ami az utolsó commitban volt.
+	git checkout . 		   : minden filet visszaállít arra az állapotra ami ahhoz a commithoz tartozik amin állunk.
+	
+nem lokális műveletek:
+		push,
+		pull,
+		fetch
 
-.gitignore	
-	Ő maga is verziókezelt, ha nem jön létre alapból. tegyük be a working directory gyökerébe:
-	touch .gitignore
-	Minden ami generált nem kell h verziókezelés alatt álljon.
+.gitignore:	
+	Ő maga is jó ha verziókezelt, tegyük be a working directory gyökerébe ha nem jönne létre alapból:
+		//touch .gitignore
+	A lényeg tehát: Minden ami generált nem kell h verziókezelés alatt álljon mert ebben a fileban fel tudjuk sorolni a kivételeket, mit hagyjon figyelmen kívül a git a working directorynkból.
 
 Ha nem akarjuk leszedni a projekt mappját akkor álljunk bele ahová le sszeretnénk klónozni és a végére tegyünk egy szóközt és egy pontot:
 	git clone git@gitbud.epam.com:Gabor_Koncz/mep-linux.git .
 
-git commit -am"ha nem akarunk előtte külön git add .-tal hozzáadni mindent, s írhatjuk is a commit messaget";
+git commit -am:
+	ha nem akarunk előtte külön git add .-tal hozzáadni mindent akkor egybe vonhatjuk a commit message megadásával.
 
-gir commit -a --amend	:	az előző kommitot tudjuk módosítani h ne legyen messy a line. Megnyílik a message editor arra az esetre ha az üzenetet szeretnénk módosítani.
+amend:
+	Mivel a commitok nem módosíthatóak (immutable-ök) 	
+	git commit --amend	:	az előző commitot tudjuk kvázi módosítani (elvenni/hozzáadni/módosítani filet), valójában: csinál helyettünk a git egy új commitot (elég csak stage-re tenni a változtatásokat) h ne legyen messy a line, a régi lekerül a line-ról. Megnyílik a message editor arra az esetre ha az üzenetet szeretnénk módosítani.
+	git commit --amend -m "an updated commit message" : a message editor megnyitása nélkül közvetlenül be tudjuk írni az új commit message-t.	
+	git commit --amend	--no-edit :	Ha elfelejtettünk fileokat hozzáadni/módosításítani/törölni az előző commithoz most a commit message megadása nélkül tesszük meg:
+		az új fileokat/módosításokat/törléseket tegyük a stage-re és commitoljunk no-edittel. Úgy fog tűnni mintha az új commit lecserélte volna az előzőt úgy h már tartalmazza a hozzáadott fileokat is, mintha eleve ott lettek volna.
+	
 	hozzá is tudunk adni új file-t amit előzőleg elfelejtettünk a commentben.
 	Tegyük fel az új filet- a stage re ( git add <new_File>), majd 
 	git commit -- amend
 	Ne írjunk bele semmit a párbeszéd ablakba, csak mentsük amikor kilépünk. 
-	Így bekerül az utolsó commitunkbe a kifelejtett fileunk, s maga a commit hash is megváltozik.
+	Így bekerül az utolsó commitunkbe a kifelejtett fileunk, s maga a commit hash is megváltozik.	
+		
+	Hátrább lévőeket is tudunk módosítani, rá állunk és kiadjuk az amend parancsot, ilyenkor az, amire rááltunk, a mellé fog születni az új commit, és közös lesz az ősünk, az ami az előtt van amire rááltunk.
+		Amire rááltunk azt meg fog maradni a time-line ban hisz felfűzhető egy branch-re.
 
 A brench nen más, mint egy pointer ami egy adott kommitra mutat.
 
@@ -294,20 +567,31 @@ Merging in Git creates a special commit that has two unique parents. A commit wi
 "I want to include all the work from this parent over here and this one over here, and the set of all their parents."
 
 
-Rebase
+rebase:
 	Rebasing essentially takes a set of commits, "copies" them, and plops them down somewhere else.
-	While this sounds confusing, the advantage of rebasing is that it can be used to make a nice linear sequence of commits. 
-	The commit log / history of the repository will be a lot cleaner if only rebasing is allowed.
+	Mivel a commitok immutable-ök ezért megkeressük az utolsó közös őst azzal a branch-csel ahova vissza szeretnénk vezetni a változtatásainkat,
+	majd rá másoljuk annak az ágnak a végére a mi águnkat. Az eredetti feature branch megmarad.
+	Azon commitok, melyek az eredeti feature branch-en voltak már nem fognak látszódni a master history-jából, de
+	ha checkoutolok a feature branch-re annak a historyjában még látszódnak.
+	A  fő különbség tehát a merge és a rebase között h a main historyjában látszik mind két ág, a rebase esetén csak a featurében látszódnak az eredeti commitok.
+	Rebase esetén ha van konfliktus ugyanúgy fel kell oldani, csak míg merge esetén egyetlen merge commitban történik meg, 
+	addig rebase esetén egyesével végig kell menni azon ág commitjain melyhez hozzá szeretnénk fűzni magunkat.
+	Természetesen rebase conflict esetén ha masteren már feloldottunk egy konfliktust, akkor a későbbi commitokban már nem kell
+	Miután sikerült a rebase utána fel kell tolni a master új állapotát.
 	
-	git reabase master
-		ahol állunk azt beteszi a master után és megszűnik ahol álltunk. vessző lesz'
+	A rebas előnye hogy sokkal szebb, lineárisabb lesz a fő ág, nem lesz tele mindenféle elágazásokkal.
+	
+	git reabase master (//replay your work on top)
+		ahol állunk azt beteszi a master után.
+	git rebase master topic
+		A topicot ráteszei a masterre
 
 		
-HEAD: Egy speciális marker(pointer) Az a commit amire aktuálisan ki vagyunk checkoutolva.
+HEAD: Egy speciális marker(pointer), az a commit amire aktuálisan ki vagyunk checkoutolva. 
+	Az a commit ami reprezentálja a working directorynkat.
 	Általában az adott branch utolsó commitjára mutat, de lehet manuálisan is mozgatni.
 	Ha branch-et váltunk akkor annak utolsó commitjára fogunk mutatni.
-
-Amikor detach-cseljük a head-et akkor valójában csak annyi történk hogy egy commitra mutatunk, nem pedig egy branch-re.
+	Amikor detach-cseljük a head-et akkor valójában csak annyi történk hogy egy commitra mutatunk, nem pedig egy branch-re.
 
 Commitra annak hash-ével tudunk rámutatni. Nem kell közvetlenül az adott brenchen állni hogy az adott commitra rááljjak, 
 egy másik branchről is közvetlenül át lehet ugrani.
@@ -323,11 +607,19 @@ git branch -f master HEAD~3
 	
 A brancheket a branch utasítással lehet mozgatni, a HEAD-et a commit-tal.
 
-git reset HEAD~1
+reset:
+	resetelni tudjuk a HEAD-et egy meghatározott commitra, gyakorlatilag vele együtt visszírjuk branch-et ugyanarre a commitra így a mögöttünk lévők a levegőben fognak lógni.
+	git reset: HEAD~1
 	git reset reverts changes by moving a branch reference backwards in time to an older commit. 
 	In this sense you can think of it as "rewriting history;" 
 	git reset will move a branch backwards as if the commit had never been made in the first place.
 	Valóban kinyírja az aktuális kommitot és visszaáll az egyel előrébb lévőre.
+	3 típusa:
+		Soft: Visszaállítja a headet a megadott commitra, de a working area-ban meg fog maradni minden változtatás, a staging areat/index sem fogja visszaállítani.
+			git reset --soft HEAD^
+		Mixed: Ez a default option. Megtartja a working area-t, de kitörli az indexet(nincs feltéve a stage-re)
+			git reset --mixed HEAD^
+		Hard: Kitölri a staget(indext) és a working area-t is
 
 
 git revert HEAD
@@ -340,11 +632,12 @@ git revert HEAD
 
 Ha a head ugyanitt áll mint a branch akkor lehet felváltva használni? Nem tudom van amikor megy.
 
-cherry pick
-	Ahol állunk oda beteszi amit kiválasztunk és ráállunk a legutolsóra.
+cherry pick:
+	Ahol állunk, hozzánk fűzi a kiválasztott commito(ka)t és ráállunk a legutolsóra.
 	git cherry-pick C2 C4
 	ahol álltunk->C2'->C4'(ezen állunk mostmár)
-
+	//A rebase-zel szemben az tehát a különbség h azokra ráálunk, a cherry-pick esetén pedig magunkra húzzuk, s ráállunk. 
+	
 interactive rebase
 	Akkor ha nem pontosan tudjuk mely commitokat akarjuk.
 
@@ -360,16 +653,27 @@ interactive rebase
 	Lastly, you can squash commits, it allows you to combine commits.
 	
 	git rebase -i HEAD~4
-	A 4-gyel előttünk állóig meggyílik egy párbeszéd, amiben újrarendezhetjük, elvethetjük a rang-en belül történit commitokat,
-	ameddig tartott az ablak(~4) onnantól új szál jön létre a kívánt sorrendbe rakott/megtartott commit' -kkel, a régiek megmaradnak.
+	A 4-gyel előttünk állóig megnyílik egy párbeszéd, amiben újrarendezhetjük, elvethetjük a rang-en belül történit commitokat,
+	ameddig tartott az ablak(~4) onnantól új szál jön létre a kívánt sorrendbe rakott/megtartott commitok másolatával, a régiekről a branch áttevődik az új lánc végére.
 	Rmáutathatunk közvetlenül(direkt) az adott végpontra a commit hash-ével is, nem kell realtívka lennie.
 		git rebase -i C1
+		
+squash:
+	Ha több commitot egybe szeretnénk gyúrni:
+	1: Álljunk vissza arra a legrégebbi commitra amit még szeretnénk h benne legyen (git log --oneline hasznos h lássuk a hash-eket):
+		git rebase -i fromHash
+	2: a felnyíló párbeszédablakban a pick-kel válasszuk ki mit akarunk megtartani (akár fel is cserélhetjük a sorrendeket.)	
+	és ameddig össze akarjuk tömöríteni az elé tegyünk egy s-t, mint squash. Ilynekor a legalsó a legutolsó commit, ez lesz tehát az "-ig".
+	3: Mentsünk, Vim-ben a wq-val lépjünk ki.
 
-Amíg valamit be nem kommentelek az az összes branchez tartozik, nem csak azon amin állok.
+	
+Amíg valamit be nem kommentelek az az összes branchez tartozik, nem csak ahhoz amin állok.
 
 Aliasok file-ba , command line ba kell ""(:git config --global alias.hist "log --oneline --graph --decorate --all") :
 	git config --global alias.st status 
 	git config --global alias.co checkout 
+	git config --global alias.cm commit
+	git config --global alias.amend commit --amend 	
 	git config --global alias.hist log --oneline --graph --decorate --all
 	//Az alias után is tudunk még írni: 
 		git hist -- AdottFile
@@ -394,11 +698,17 @@ Az aliasokat az adott user alatt lévő .gitconfig file-ba is menthetjük közve
 Csatlakozás már kész repóbol egy már meglévő távoliba:
 	git remote add origin ssh://...
 	
-Hogy lássuk mi is a remote-unk:
+remote:
+	Remote branch-csel mindent lehet, kivéve commitolni. A push, pull, fetch, merge minden működik.
+	Megmutatja h milyen szerverek vannak bállítva elérhetőségnek. Először az aliasok, pl.: origin
+	.git/refs/remotes mappában vannak.  //remote-onként vannak a mappák
+	Ha kicheckoutolok az origin/master -re, akkor detached állapotba kerül a HEAD, mert nem egy címkére, hanem egy commitra mutat.
 	git remote -v
 	git config --get remote.origin.url
 	vagy:
 	git remote show origin
+	git bran -r : show remote branches
+	
 	
 Delete/Remove commits:
 	git reset --hard HEAD~1
@@ -409,18 +719,125 @@ Delete/Remove commits:
 	git push origin HEAD --force
 	
 	
-Stash:
-	A stash egy verem amibe be lehet pakolni azokat a változtatásokat amiket nem szeretnénk az aktuélisan branchünkön látni/át akarjuk lapátolni máshova/később vissza akarjuk hozni.
-	A stash levesz mindent amit nem commiteltünk és ehy stash@{id} val beteszi egy verembe, amibe gyűjthetjük a többi stash-el együtt.
-	
-Merge típusok:
-	Fast Forward:
-		Legegyszerűbb eset: A parent branchen nem történt munka és mi csak ráolvasszuk a feature-ünket.
-		Ebben az esetben nem keletkezik merge commit, kivéve ha használtuk a "--no-ff" paramétert is.
-			git merge --no-ff amit_be_szeretnenk_mergelni
-	
-	Automatic:
-		Nincs konfliktus a parent branch-csel, a git aoutómatikusan meg tudja oldani. Ilyenkor merge commit jön létre.
+stash:
+	Mivel adding nem tudunk átváltani egy másik branch-re amíg van módosulás, ezért vagy commitolni, vagy stashelni kell.
+	A stash egy lokális verem amibe be lehet pakolni azokat a változtatásokat(több file is lehet egyszerre) amiket nem szeretnénk az aktuálisan branchünkön látni/át akarjuk lapátolni máshova/később vissza akarjuk hozni.
+	A stash levesz mindent a working area-ból(olyan mintha a stage-re tennénk) és egy stash@{id} val megjelölve a "csomagot", beteszi a közös verem tetejére.
+	Hasznos lehet ha egy módosítást át akarunk vinni több branch-re is.
+	git stash 	: nem kell előtte semmit a stage-re tenni.
+	git stash apply : leveszi a legfelsőt bejegyzést a sthashről
+
 		
-	Manual:
-		Az autómatikus merge nem lehetséges, merge commit keletkezik a feloldás végén.
+pull request vs merge request:
+	A kettő ugyan az:
+		GitLab's "merge request" feature is equivalent to GitHub's "pull request" feature. Both are means of pulling changes from another branch or fork into your branch and merging the changes with your existing code. They are useful tools for code review and change management.
+
+	An article from GitLab discusses the differences in naming the feature:
+	Merge or pull requests are created in a git management application and ask an assigned person to merge two branches. Tools such as GitHub and Bitbucket choose the name pull request since the first manual action would be to pull the feature branch. Tools such as GitLab and Gitorious choose the name merge request since that is the final action that is requested of the assignee. In this article we'll refer to them as merge requests.
+	A "merge request" should not be confused with the git merge command. Neither should a "pull request" be confused with the git pull command. Both git commands are used behind the scenes in both pull requests and merge requests, but a merge/pull request refers to a much broader topic than just these two commands
+	Aki behúzza a requestet, az is felel a kódért nem csak aki fejlesztette.
+	
+	
+fork: 
+	Az én repómba lemásolódik egy másik repository. A parancsot kiadom online felületen, utána leklónozom és tudok vele dolgozni.
+	Ha létrehozok benne egy commitot és felpusholom akkor kérhetem az én fork repóm branch-ére a pull requestet. 
+	A merge most a két repó között fog megtörténni.	
+
+tag:
+	A commit history egy meghatározott pontjára ráteszek egy commit címkét (alapból arra amin állunk).
+	A későbbi visszatérést segíti. Olyan mint egy horgony, nem mozog, ellentétben a branch-csel.
+		Két típusa van:
+			Lightweight (git tag [tagname]): Olyan mint egy branch, kvázi egy 40 bájtos azonosító, viszont nem lehet módosítani
+			Annotált (git tag -a [tagname] -m [message]): Az object database-ben létrejön egy új object, hasonlüan mint egy commit, tartalmazhat:
+				name,
+				e-mail,
+				date,
+				...				
+				
+	git tag savepoint
+	git rebase sevepoint
+	Ha checkoutolok egy tag-re akkor detached állapotba kerülünk, kivéve ha épp branch is egyben.
+	taget a távoli repóba feltenni sima pusholással lehet:
+		git push origin v1.0
+	A .git/refs/tag mappában jönnek létre.
+	
+	
+branching model:
+		A masterbe nem commitolunk, hanem csak bemergeljük a developot. A masteren tag-elünk.
+		Nem közvetlenül a developon, hanem a featuron-ön dolgozunk.
+		Release branch
+		Hotfix: nem a developon fejlesztem, mert egy adott release verzióhoz tartozik, s majd a developra és a masterre is ki kell tenni.
+		
+
+Ancestry reference:
+	pl.: git diff HEAD^ Megmutatja h mit változtattunk az előző commit óta	
+	Mivel egy commitnak több szülője is lehet (több branchet is egymásba lehet olvasztani egyszerre), ezért horizontálisan azok között a "^"-vel (caret),
+	Vertikálisan a "~"-vel (tilede) tudunk magunkhoz viszonyítva közlekedni.
+	
+housekeeping:
+	A git tömörítve tárolja a fileokat, ahol "loose object format"-ban vannak tárolva az objektumok.
+	Bizonyos események hatására ezek az objektumok becsomagolásra kerülnek (kevesebb hálózati művelet)
+		túl sok loose object, pack, git push esetén pack fileok keletkeznek.
+	
+	git fsck --unreachable: kilistázza h milyen unreachable objektumaink vannak.
+	git prune : kitörli az unreachable objektumokat
+	git repack : összecsomagol, compresszál
+	git gc: egy csomagolás és egy prune egyben
+	
+	
+	
+	
+	
+
+
+
+
+
+
+
+
+
+
+	
+		
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	

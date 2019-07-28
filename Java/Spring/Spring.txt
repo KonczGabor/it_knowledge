@@ -1,4 +1,6 @@
 https://www.tutorialspoint.com/spring/spring_ioc_containers.htm
+https://medium.com/omarelgabrys-blog/spring-a-head-start-beans-configuration-part-2-4a8c239b070a
+
 A spring egy framework ami széleskörû infrastruktúrális támogatást biztosít enterprise java alaklamzások fejlesztéséhez.
 Lightweight mert a komponenseket külön tudjuk behúzni, csak azt ami nekünk kell.
 
