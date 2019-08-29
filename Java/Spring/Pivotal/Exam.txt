@@ -1,0 +1,12 @@
+https://pivotal.io/training/certification/spring-professional-certification
+
+NUMBER OF QUESTIONS: 50
+PASSING SCORE: 76% = 38 helyes válasz.
+DURATION: 90 minutes
+
+
+
+Container basics
+Aspect Oriented Programming (AOP)
+Data access and transactions
+Spring model-view-controller (MVC)
