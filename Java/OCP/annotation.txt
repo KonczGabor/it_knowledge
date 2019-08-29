@@ -14,12 +14,64 @@ Declaration of methods
 On other annotations
 Java 8 extends this list
 
+1.5-tõl
 
-@Override
-Ha egy absztrakt metódust megvalósítunk, az is Override. 
-Azért hasznos, hogy ha kitesszük, mert jelezzük a fordítónak a szándékunkat, és ha véletelenül nem lesz helyes a felülírás, pl túlterhelés lesz belõle, akkor fordítási hiba keletkezik.
+pl.:
+	@Override
+	Ha egy absztrakt metódust megvalósítunk, az is Override. 
+	Azért hasznos, hogy ha kitesszük, mert jelezzük a fordítónak a szándékunkat, és ha véletelenül nem lesz helyes a felülírás, pl túlterhelés lesz belõle, akkor fordítási hiba keletkezik.
 
-@Depricated
-Elavult, már ne használd, illik megadni h mit keressünk helyette.
+	@Depricated
+	Elavult, már ne használd, illik megadni h mit keressünk helyette.
 
+	@SuppressWarnings("unchecked")
+	public void showData(){
+		Arraylist obj = new Arraylist();
+	}
 
+	@FunctionalInterface
+	
+
+Annotation Types:
+	Marker annotation
+	Single Value: egyetlen metodus van benne
+	Multi Value
+	
+Creating annotations:
+
+	//@Inherited: ha azt akarjuk h a felannotált osztály leszármazottaiban is elérhetõek legyenek az annotáció value-i.
+	@Target(ElementType.TYPE)			//Hol akarom majd hasznalni: Class, Method, Constructor, Field
+	@Retention(RetentionPolicy.RUNTIME) //Source,..
+	@interface SmartPhone{
+		String os();				//This is a value
+		int version() default 1;	//This is a value too
+	}
+	
+	@SmartPhone(os="android",version=6)
+	class Nokia{
+	}
+	
+	
+	
+	
+	
+	
+
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	

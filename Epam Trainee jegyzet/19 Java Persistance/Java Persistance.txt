@@ -1,9 +1,24 @@
 Hibernate: Object Relational Mapping Framework(ORM) that implements the Java Persistence API (JPA) specification.
 
+ORM (Object-ralational mapping): A java objektumok és a relációs adattáblák közti kapcsolat megteremtése.
+	Kihíváok: öröklõdés a Jvan belül <-> relációs adatbázisban ilyen alapból nincs.
+
 Tárolt eljárásnak több különbözõ kimenete is lehet. A kódja vendorfüggõ.
 
 SQL
 	Having: aggregált funkciók feltétele (skalár szorzatoknál).
+	
+	Commands:
+		DDL (Data Definition Language): Create, aLter, Drop
+		DML (Data Manipulation Language): Select, Insert, Update, Delete
+		DCL (Data Control Language): Grant, Revok -privileges	
+		
+	JOIN: több táblának az eredményét akarjuk összevonni. Idegen kulcsok mentén kötünk össze.	
+		(INNER) JOIN
+		LEFT (OUTTER) JOIN
+		RIGHT (OUTTER) JOIN
+		FULL (OUTTER) JOIN
+			
 
 Az adatbázistáblában a mezõnevek_aláhúzással írandók, Javában pedig camelCase szolgálja a szóHatárt.
 
@@ -18,6 +33,12 @@ Tranzakciók: Lépssorozatok egyszerre történõ végrehajtása. Ez egy munkaegység. N
 		Bean által menedzselt.
 		
 	Tranzakciók propagálása:
+	
+Tárolt eljárások:
+	Bizonyos adatbáziskezelõkön is lehet futtatni programokat, amiket a rendszeren kívülrõl is meg lehet hívni:
+		CALL, EXECUTE
+		Minden vendor saját nyelvet szállít.
+		Elõnye a gyorsaság, több kimeneti paramétere is lehet egy eljárásnak.
 		
 
 	ACID:
@@ -43,7 +64,7 @@ Tranzakciók: Lépssorozatok egyszerre történõ végrehajtása. Ez egy munkaegység. N
 				Serializable: semmi
 		
 		
-	Tranzakciók kontollálása:
+	Tranzakciók kontrollálása:
 		set transaction
 		commit
 		rollback
@@ -87,6 +108,7 @@ SQL kliensek:
 		
 JDBC:
 	Ez eg API(Interfészek halmaz), hogy egy adatforráshoz(egy adat bázishoz) tudjunk utasításokat küldeni/fogadni.
+	Minden keretrendszer végül ezen keresztül fog csatlakozni a db-hez.
 	
 	Hierarchia:
 		Java Application

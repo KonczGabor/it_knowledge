@@ -1,4 +1,6 @@
-PackageManager JavaScript számára
+PackageManager JavaScript(?) számára
+
+//npm i npm@latest -g : updateld globálisan az npm legújabb verzióját.
 
 in npm CLI:
 
@@ -30,7 +32,7 @@ npm install module_name	//or npm  i module_name
 		
 npm remove module_name
 
-npm prune		//mély takarytás
+npm prune		//mély takarítás
 
 npm dedupe		//ha több modulenak is ugyanaz a dependenciája akkor ezel át lehet azt mozgatni h olyan helyre kerüljön ahol közösen elérik.
 

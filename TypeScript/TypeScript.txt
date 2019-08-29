@@ -1,3 +1,5 @@
+http://www.typescriptlang.org/play/
+
 TypeScript is a static type checker for JavaScript. This means that it will check for issues in your codebase 
 using the information available on different types. 
 Example: a String will have a toLowerCase() method, but not a parseInt() method. 
@@ -5,6 +7,12 @@ Of course, the type system of TypeScript can be extended with your own type defi
 
 As TypeScript is a superset of JavaScript, you can start using it by literally just renaming your .js files to .ts, 
 so you can introduce TypeScript gradually to your teams.
+
+TypeScript provides a static type checking operation that allows many bugs in the
+development cycle to be caught early. TypeScript enables type checking at compile time via
+type annotations. Types in TypeScript are always optional, so you can ignore them if you
+prefer the regular dynamic typing of JavaScript. It supports number, boolean, and string
+type annotations for primitive types and any for dynamically-typed structures.
 
 Note: TypeScript won't do anything in runtime, it works only during compilation time. 
 You will run pure JavaScript files.

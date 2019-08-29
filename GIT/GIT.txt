@@ -70,8 +70,11 @@ GIT:
 	
 Repository:
 		A verzió kezelés alatt álló fileok(és mappák) illetve azok verzióinak gyűjteménye.
+		Minden egyes .git folder egy teljes értékű repó, mivel elosztott verzió kezelő rendszerről beszélünk.
 		A struktúra gyökerében található a .git folder
 		A git adatbázisa(object data base) + meaadatok.
+		
+		A default remote repository az origin nevet kapja. Szóval origin/master a távoli master branch.
 		
 Working Directory:
 		A verzió kezelés alatt álló gyökér mappa (a .git folder közvetlen itt található).
@@ -269,6 +272,8 @@ git checkout -b [branch_name]
 	a shortcut so you do not have to create the branch
 	and check it out using two steps.
 
+	git checkout -b [branch_name] [origin/branch_name] : git checkout mitortent_a_masteren_anelkul_h_behuznam_a_sajt_masteremre origin/master
+		ha ezen állva commitolunk és felpusholjuk akkor az origin/masterbe fog menni, mert az a trackelt branch, nem fog látszani a mi lokális branchünk.
 
 
 git merge [branch_name] 
@@ -376,7 +381,7 @@ branch:
 			develop: stabil, tesztelhető főverzió
 		Short-lived	branches:
 			topic: egy adott feature, vagy bugfix
-		Áttolni tolni egy branchet (az adott commithoz képest hátrébb toljuk a mostani címkét/vagy rámutatunk egy commitra, branchre):
+		Áttolni egy branchet (az adott commithoz képest hátrébb toljuk a mostani címkét/vagy rámutatunk egy commitra, branchre):
 			git branch -f branch_name HEAD~3/hash/branch_name
 		
 clone:
@@ -501,10 +506,12 @@ merge vs rebase
 					
 					
 fetch:
-	Az összes file összes verziója lejön az én local repómba remote-ból, de természetesen nem integrálódik be a working directoryba, ahhoz merge kell vagyrebase.
-	Oda töltődik le ahol az "origin/master" címke állt. Azóta köbe lehet h a mi "masterünk" elmászott. Hogy bekerüljön a lokális repómba vagy mergelnem, vagy rebaselnem kell.
+	A remote repo lokális reprezentációját hozza szinkronba az távoli repó aktuális tartalmával.
+	Az összes olyan file, mely az én local repómban nincs meg, lejön a remote-ból, de természetesen nem integrálódik be a working directoryba, ahhoz merge kell vagy rebase.
+	Oda töltődik le ahol az "origin/master" címkém állt, majd az is beállítódik oda ahova a remoton mutatott.
+	Azóta közben lehet h a mi "masterünk" elmászott. Hogy bekerüljön a lokális repómba vagy mergelnem, vagy rebaselnem kell.
 	Ha kihagyjuk a fetch utasítást és egyből a pullal kezdünk akkor valójában nem hagyjuk ki a fetch-cset, hiszen working directoryba csak a local repón keresztül kerülhet be bármi,
-	tehát "titokban" megfut egy fetch és az után egy merge-amivel a frissen letöltött commitot össze olvassza azzal ahol állunk, de ez merge conflictot okozhat.
+	Pull esetén "titokban" megfut egy fetch és az után egy merge-amivel a frissen letöltött commitot összeolvassztja azzal ahol állunk, de ez merge conflictot okozhat.
 	Ha nem történt azóta változtatás nállam akkor simán át tudok állni az új commitra.
 	A fetch "teljesen ártalmatlan", mert nem manipulál/töröl semmit. (fetch is a Pull without a Merge)
 	Handy if you want to compare your code with others.
@@ -633,7 +640,7 @@ git revert HEAD
 Ha a head ugyanitt áll mint a branch akkor lehet felváltva használni? Nem tudom van amikor megy.
 
 cherry pick:
-	Ahol állunk, hozzánk fűzi a kiválasztott commito(ka)t és ráállunk a legutolsóra.
+	Ahol állunk, hozzánk fűzi a kiválasztott commito(ka)t és ráállunk a legutolsóra. Ahonnan kértük, ott megmarad az eredeti, "nem szedjük át".
 	git cherry-pick C2 C4
 	ahol álltunk->C2'->C4'(ezen állunk mostmár)
 	//A rebase-zel szemben az tehát a különbség h azokra ráálunk, a cherry-pick esetén pedig magunkra húzzuk, s ráállunk. 
@@ -661,10 +668,15 @@ interactive rebase
 squash:
 	Ha több commitot egybe szeretnénk gyúrni:
 	1: Álljunk vissza arra a legrégebbi commitra amit még szeretnénk h benne legyen (git log --oneline hasznos h lássuk a hash-eket):
-		git rebase -i fromHash
+		git rebase -i aLegrégebiAmitMégNemSzeretnénkÖsszegyútniAnnakAHashe
 	2: a felnyíló párbeszédablakban a pick-kel válasszuk ki mit akarunk megtartani (akár fel is cserélhetjük a sorrendeket.)	
-	és ameddig össze akarjuk tömöríteni az elé tegyünk egy s-t, mint squash. Ilynekor a legalsó a legutolsó commit, ez lesz tehát az "-ig".
-	3: Mentsünk, Vim-ben a wq-val lépjünk ki.
+		Az öszes olyan elé tegyünk s(quash)-t amit rá akarunk húzni egy olyanra ami előtt p(ick) van.
+		p legrégebbi, e "fölött" van a rebase targetje.
+		s régi
+		s közepes
+		s új
+		s legújabb
+	3: Mentsük el az összesquasholt commitok közös commitmessagét, //Vim-ben a wq-val lépjünk ki.
 
 	
 Amíg valamit be nem kommentelek az az összes branchez tartozik, nem csak ahhoz amin állok.
@@ -755,11 +767,26 @@ tag:
 				...				
 				
 	git tag savepoint
+	git tag tag_name commit_hash		//git checkout tag_name müködik
 	git rebase sevepoint
 	Ha checkoutolok egy tag-re akkor detached állapotba kerülünk, kivéve ha épp branch is egyben.
 	taget a távoli repóba feltenni sima pusholással lehet:
 		git push origin v1.0
 	A .git/refs/tag mappában jönnek létre.
+	
+diverged history:
+	Abban az esetben ha mi hétfőn leforkoltunk és pénteken szeretnénk pusholni a változtatásainkat szinte bizonyos h meg lesz változtatva a remote history és ilyen esetben a git nem tudja eldönteni h hogyan oldja fel a konfliktust:
+		Visszaállítsa a remote-ot abba az állapotba, ami akkor volt amikor mi leforkoltunk?
+		Hozzáadja a miénket úgy hogy közben meghadja az új változtatásokat is?
+		Teljesen figyelmen kívül hagyja a mi munkáknakt, lévén már úgy is outdated?
+	Egyik sem!
+		Addig nem fog engedni minket pusholni amíg be nem szedtük a remote aktuális állapotát:
+			git fetch; git rebase origin/master; git push
+				vagy
+			git co master; git pull; git co feature; git rebase master;	
+				vagy
+			git pull --rebase; push	//A sima pull-lal ellentétben itt nem születik merge commit. Leszedi a remotot, rárebaseli magát és pushol. 
+		
 	
 	
 branching model:
@@ -773,6 +800,8 @@ Ancestry reference:
 	pl.: git diff HEAD^ Megmutatja h mit változtattunk az előző commit óta	
 	Mivel egy commitnak több szülője is lehet (több branchet is egymásba lehet olvasztani egyszerre), ezért horizontálisan azok között a "^"-vel (caret),
 	Vertikálisan a "~"-vel (tilede) tudunk magunkhoz viszonyítva közlekedni.
+	Még láncolni is lehet őket sorban: HEAD~^2~2  : A felettem lévő szülő jobb oldali szüleje fölötti második
+		
 	
 housekeeping:
 	A git tömörítve tárolja a fileokat, ahol "loose object format"-ban vannak tárolva az objektumok.
